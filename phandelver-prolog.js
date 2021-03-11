@@ -4,7 +4,9 @@ session.consult("phandelver.prolog");
 
 // Array of variable bindings, one per answer, returned by prolog query
 var bindings = [];
+var filterString = '';
 
+// In starting, render the UI
 updateUI();
 
 // Clears the current list of characters then redisplays them
@@ -14,6 +16,8 @@ function updateUI() {
 	print_characters();
 }
 
+
+// Functionality for prolog / JS callbacks
 
 /*
  * Returns a callback function to pass to session.answers(). 
@@ -38,8 +42,9 @@ function get_callback(funcWhenDone) {
 // Gets a list of all the characters and prints them out
 function print_characters() {
 	var print_bindings = function(bindings) {
-		// Get output container
+		console.log(bindings);
 		for(var i = 0; i < bindings.length; i++) {
+			console.log(bindings[i]);
 			print_character(bindings[i]);
 		}
 	}
@@ -48,23 +53,28 @@ function print_characters() {
 	session.answers(get_callback(print_bindings));
 }
 
-
+// outputs a single character if they are found in the search
 function print_character(binding) {
 	if (binding != null) {
-		var result = document.getElementById("result");
 		// Look up term that has been bound to variable "Char"
 		character = binding.lookup("Char"); 
 		charName = character.toString().capitalize(); // Turn the Term into a string.
-		result.innerHTML = result.innerHTML + "<div>" + charName +  "</div>"; // Add name to HTML page
+		// Check if the character matches the search
+		if (charName.includes(filterString)) {
+			var result = document.getElementById("result");
+			result.innerHTML = result.innerHTML + "<div>" + charName +  "</div>"; // Add name to HTML page
+		}
 	}
 }
 
+// Addds a new character to the world from input 
 function add_character() { 
 	var name = document.getElementById("name").value;
 	name = name != "" ? name : "Y";
 	var charName = name.toString().lowercase();
 	var add_to_world = function(bindings) {
 		updateUI();
+		document.getElementById("name").value = "";
 	}
 	bindings = [];
 	session.query("asserta(character(" + charName + ")).");
@@ -79,4 +89,12 @@ String.prototype.capitalize = function() {
 // Add method to the String prototype to capitalize the first letter of the String.
 String.prototype.lowercase = function() {
     return this.charAt(0).toLowerCase() + this.slice(1);
+}
+
+// Updates the term being searched for when user hits search button
+function update_filter_string() {
+	var search_term = document.getElementById("search").value;
+	console.log("Search is: " + search_term);
+	filterString = search_term.toString();
+	updateUI();
 }

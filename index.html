@@ -10,10 +10,15 @@
 <body>
 	<main>
 		<h1>Characters: </h1>
+		<!-- Search bar -->
+		<input class="textinput" type="text" id="search" value="" placeholder="Search" />
+		<!-- Button -->
+		<input class="button" type="button" value="Search" id="button" onClick="update_filter_string(value);" />
 		<!-- Name input -->
-		<input class="textinput" type="text" id="name" value="" placeholder="Enter a name" />
+		<input class="textinput" type="text" id="name" value="" placeholder="Enter first name" />
 		<!-- Button -->
 		<input class="button" type="button" value="Add character" id="button" onClick="add_character(value);" />
+		<!-- Where names will be outputted --> 
 		<div class="result" id="result"></div>
 		
 		
