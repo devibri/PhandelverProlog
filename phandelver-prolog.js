@@ -50,27 +50,33 @@ function print_characters() {
 
 
 function print_character(binding) {
-	if (binding != null)
-	{
+	if (binding != null) {
 		var result = document.getElementById("result");
 		// Look up term that has been bound to variable "Char"
 		character = binding.lookup("Char"); 
 		charName = character.toString().capitalize(); // Turn the Term into a string.
-		console.log(charName); // Print out the name of the character. 
 		result.innerHTML = result.innerHTML + "<div>" + charName +  "</div>"; // Add name to HTML page
 	}
 }
 
-function add_character(name) {
+function add_character() { 
+	var name = document.getElementById("name").value;
+	name = name != "" ? name : "Y";
+	var charName = name.toString().lowercase();
 	var add_to_world = function(bindings) {
 		updateUI();
 	}
 	bindings = [];
-	session.query("asserta(character(" + name + ")).");
+	session.query("asserta(character(" + charName + ")).");
 	session.answers(get_callback(add_to_world));
 }
 
 // Add method to the String prototype to capitalize the first letter of the String.
 String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
+}
+
+// Add method to the String prototype to capitalize the first letter of the String.
+String.prototype.lowercase = function() {
+    return this.charAt(0).toLowerCase() + this.slice(1);
 }
