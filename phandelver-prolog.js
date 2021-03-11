@@ -4,23 +4,28 @@ session.consult("phandelver.prolog");
 
 // Array of variable bindings, one per answer, returned by prolog query
 var bindings = [];
-print_characters();
+
+updateUI();
+
+// Clears the current list of characters then redisplays them
+function updateUI() {
+	var result = document.getElementById("result");
+	result.innerHTML = "<div> </div>"; 
+	print_characters();
+}
+
 
 /*
  * Returns a callback function to pass to session.answers(). 
  * The parameter is the function for the callback to call (with the bindings as parameter)
  * when prolog has found all the answers. 
 */
-function get_callback(funcWhenDone) 
-{
-	var callbackFunc = function(answer) 
-	{
-		if (answer == false) 
-		{
+function get_callback(funcWhenDone) {
+	var callbackFunc = function(answer) {
+		if (answer == false) {
 			funcWhenDone(bindings);
 		}
-		else 
-		{
+		else {
 			// We've gotten another non-false answer - add it to the bindings.
 			bindings.push(answer);
 		}
@@ -31,13 +36,10 @@ function get_callback(funcWhenDone)
 
 
 // Gets a list of all the characters and prints them out
-function print_characters() 
-{
-	var print_bindings = function(bindings) 
-	{
+function print_characters() {
+	var print_bindings = function(bindings) {
 		// Get output container
-		for(var i = 0; i < bindings.length; i++) 
-		{
+		for(var i = 0; i < bindings.length; i++) {
 			print_character(bindings[i]);
 		}
 	}
@@ -47,9 +49,7 @@ function print_characters()
 }
 
 
-function print_character(binding) 
-{
-
+function print_character(binding) {
 	if (binding != null)
 	{
 		var result = document.getElementById("result");
@@ -61,9 +61,16 @@ function print_character(binding)
 	}
 }
 
+function add_character(name) {
+	var add_to_world = function(bindings) {
+		updateUI();
+	}
+	bindings = [];
+	session.query("asserta(character(" + name + ")).");
+	session.answers(get_callback(add_to_world));
+}
 
 // Add method to the String prototype to capitalize the first letter of the String.
-String.prototype.capitalize = function() 
-{
+String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
