@@ -42,9 +42,7 @@ function get_callback(funcWhenDone) {
 // Gets a list of all the characters and prints them out
 function print_characters() {
 	var print_bindings = function(bindings) {
-		console.log(bindings);
 		for(var i = 0; i < bindings.length; i++) {
-			console.log(bindings[i]);
 			print_character(bindings[i]);
 		}
 	}
@@ -94,7 +92,6 @@ String.prototype.lowercase = function() {
 // Updates the term being searched for when user hits search button
 function update_filter_string() {
 	var search_term = document.getElementById("search").value;
-	console.log("Search is: " + search_term);
 	filterString = search_term.toString();
 	updateUI();
 }
