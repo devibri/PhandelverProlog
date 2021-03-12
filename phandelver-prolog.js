@@ -56,11 +56,11 @@ function print_character(binding) {
 	if (binding != null) {
 		// Look up term that has been bound to variable "Char"
 		character = binding.lookup("Char"); 
-		charName = character.toString().capitalize(); // Turn the Term into a string.
+		charName = character.toString(); // Turn the Term into a string.
 		// Check if the character matches the search
-		if (charName.includes(filterString)) {
+		if (charName.match(filterString.toLowerCase())) {
 			var result = document.getElementById("result");
-			result.innerHTML = result.innerHTML + "<div>" + charName +  "</div>"; // Add name to HTML page
+			result.innerHTML = result.innerHTML + "<div>" + charName.capitalize() +  "</div>"; // Add name to HTML page
 		}
 	}
 }
