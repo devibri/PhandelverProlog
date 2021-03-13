@@ -20,7 +20,7 @@ function updateCharacterUI(myCallback) {
 	locations_output.innerHTML = "<div> </div>"; 
 	
 	print_characters();
-	myCallback();
+	//myCallback();
 }
 
 function updateLocationUI() {
