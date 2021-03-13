@@ -68,11 +68,11 @@ function print_characters() {
 function print_character(binding) {
 	if (binding != null) {
 		// Look up term that has been bound to variable "Char"
-		let firstName = binding.lookup("FirstName"); 
-		let charFirstName = firstName.toString(); // Turn the Term into a string.
-		let lastName = binding.lookup("LastName"); 
-		let charLastName = lastName.toString(); // Turn the Term into a string.
-		let charName = charFirstName.capitalize() + " " + charLastName.capitalize(); 
+		var firstName = binding.lookup("FirstName"); 
+		var charFirstName = firstName.toString(); // Turn the Term into a string.
+		var lastName = binding.lookup("LastName"); 
+		var charLastName = lastName.toString(); // Turn the Term into a string.
+		var charName = charFirstName.capitalize() + " " + charLastName.capitalize(); 
 		// Check if the character matches the search
 		if (charName.toLowerCase().match(filterString.toLowerCase())) {
 			var names_output = document.getElementById("names_output");
@@ -114,16 +114,15 @@ function print_location(binding) {
 // Addds a new character to the world from input 
 function add_character() { 
 	// Get the values from the form 
-	let tag = document.getElementById("tag").value;
-	let first_name = document.getElementById("first_name").value;
-	let last_name = document.getElementById("last_name").value;
+	var tag = document.getElementById("tag").value;
+	var first_name = document.getElementById("first_name").value;
+	var last_name = document.getElementById("last_name").value;
 
 	// Convert the values to strings 
-	let charTag = tag.toString().lowercase();
-	let charFirstName = first_name.toString().lowercase();
-	let charLastName = last_name.toString().lowercase();
+	var charTag = tag.toString().lowercase();
+	var charFirstName = first_name.toString().lowercase();
+	var charLastName = last_name.toString().lowercase();
 
-	console.log("adding to world: " + charFirstName + " " + charLastName);
 	// Update the UI and clear the form 
 	var add_to_world = function(bindings) {
 		updateUI();
@@ -132,7 +131,7 @@ function add_character() {
 		document.getElementById("last_name").value = "";
 	}
 	bindings = [];
-	session.query("asserta(character(" + charTag + ")), asserta(first_name(" + charTag + " , " + charFirstName + ")), asserta(last_name(" + charTag + " , " + charLastName + ")).");
+	session.query("asserta(character(" + charTag + ")). asserta(name(" + charTag + " , " + charFirstName + " , " + charLastName + ")).");
 	session.answers(get_callback(add_to_world));
 }
 

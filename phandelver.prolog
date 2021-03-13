@@ -262,4 +262,4 @@ location_in_region(cragmaw_castle, cragmaw_castle).
 location_in_region(wave_echo_cave, wave_echo_cave).
 
 :- dynamic(in_location/2).
-party_in_location(stonehill_inn).
+in_location(party, stonehill_inn).
