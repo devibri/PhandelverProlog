@@ -1,0 +1,16 @@
+location_in_region(stonehill_inn, phandalin).
+location_in_region(lionshield_coster, phandalin).
+location_in_region(barthens_provisions, phandalin).
+location_in_region(townmasters_hall, phandalin).
+location_in_region(shrine_of_luck, phandalin).
+location_in_region(sleeping_giant_tap_house, phandalin).
+location_in_region(edermath_orchard, phandalin).
+location_in_region(tresendar_manor, phandalin).
+location_in_region(old_owl_well, countryside).
+location_in_region(phandalin_miners_exchange, phandalin).
+location_in_region(alderleaf_farm, phandalin).
+location_in_region(thundertree, thundertree).
+location_in_region(agathas_lair, countryside).
+location_in_region(orc_camp, countryside).
+location_in_region(cragmaw_castle, cragmaw_castle).
+location_in_region(wave_echo_cave, wave_echo_cave).

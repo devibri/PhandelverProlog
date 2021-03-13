@@ -7,13 +7,24 @@ var bindings = [];
 var filterString = '';
 
 // In starting, render the UI
-updateUI();
+
+updateCharacterUI(updateLocationUI);
 
 // Clears the current list of characters then redisplays them
-function updateUI() {
-	var result = document.getElementById("result");
-	result.innerHTML = "<div> </div>"; 
+function updateCharacterUI(myCallback) {
+	// Clear the existing lists 
+	var names_output = document.getElementById("names_output");
+	names_output.innerHTML = "<div> </div>"; 
+
+	var locations_output = document.getElementById("locations_output");
+	locations_output.innerHTML = "<div> </div>"; 
+	
 	print_characters();
+	myCallback();
+}
+
+function updateLocationUI() {
+	print_locations();
 }
 
 
@@ -39,6 +50,8 @@ function get_callback(funcWhenDone) {
 } 
 
 
+// Output the appropriate entities
+
 // Gets a list of all the characters and prints them out
 function print_characters() {
 	var print_bindings = function(bindings) {
@@ -48,7 +61,6 @@ function print_characters() {
 	}
 	bindings = [];
 	session.query("first_name(Char, FirstName), last_name(Char, LastName).");
-	//session.query("last_name(Char, LastName).")
 	session.answers(get_callback(print_bindings));
 }
 
@@ -63,11 +75,41 @@ function print_character(binding) {
 		let charName = charFirstName.capitalize() + " " + charLastName.capitalize(); 
 		// Check if the character matches the search
 		if (charName.toLowerCase().match(filterString.toLowerCase())) {
-			var result = document.getElementById("result");
-			result.innerHTML = result.innerHTML + "<div>" + charName +  "</div>"; // Add name to HTML page
+			var names_output = document.getElementById("names_output");
+			names_output.innerHTML = names_output.innerHTML + "<div>" + charName +  "</div>"; // Add name to HTML page
 		}
 	}
 }
+
+
+// Gets a list of all the locations and prints them out
+function print_locations() {
+	var print_bindings = function(bindings) {
+		for(var i = 0; i < bindings.length; i++) {
+			print_location(bindings[i]);
+		}
+	}
+	bindings = [];
+	session.query("location_name(Loc, Name).");
+	session.answers(get_callback(print_bindings));
+}
+
+// outputs a single location if they are found in the search
+function print_location(binding) {
+	if (binding != null) {
+		// Look up term that has been bound to variable "Name"
+		let name = binding.lookup("Name"); 
+		let locName = name.toString(); // Turn the Term into a string.
+		// Check if the location matches the search
+		if (locName.toLowerCase().match(filterString.toLowerCase())) {
+			var names_output = document.getElementById("locations_output");
+			locations_output.innerHTML = locations_output.innerHTML + "<div>" + locName +  "</div>"; // Add name to HTML page
+		}
+	}
+}
+
+
+// Adding new entities to the database
 
 // Addds a new character to the world from input 
 function add_character() { 
@@ -93,6 +135,12 @@ function add_character() {
 	session.query("asserta(character(" + charTag + ")), asserta(first_name(" + charTag + " , " + charFirstName + ")), asserta(last_name(" + charTag + " , " + charLastName + ")).");
 	session.answers(get_callback(add_to_world));
 }
+
+
+
+
+// Utility functions
+
 
 // Add method to the String prototype to capitalize the first letter of the String.
 String.prototype.capitalize = function() {

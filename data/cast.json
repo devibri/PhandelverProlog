@@ -1,4 +1,4 @@
-var json_cast = `[
+[
          {
     "tag": "ToblinStonehill",
       "name": "Toblin Stonehill",
@@ -53,8 +53,8 @@ var json_cast = `[
       "occupation": "Halfling farmer",
       "status": "alive",
       "information": ["ReidothLocation"], 
-      "familyOf": "Mother of Carp",
-      "friendOf": "Reidoth",
+      "family_of": "Carp",
+      "friend_of": "Reidoth",
       "met": false
     
   },  
@@ -96,8 +96,8 @@ var json_cast = `[
     
   },
   {
-   "tag": "TheRedbrands",
-    "name": "The Redbrands",
+   "tag": "Redbrands",
+    "name": "Redbrands",
     "faction": "Redbrands",
     "status": "alive",
     "information": [],
@@ -133,7 +133,7 @@ var json_cast = `[
     "name": "Pip",
     "status": "alive",
     "information": ["SecretTunnelKnowledge"], 
-    "friendOf": "Carp",
+    "friend_of": "Carp",
     "met": false
     
   },
@@ -174,7 +174,7 @@ var json_cast = `[
     "name": "Carp",
     "status": "alive",
     "information": ["RedbrandHideoutLocation", "SecretTunnelLocation"],
-    "familyOf": "Child of Qelline Alderleaf",
+    "family_of": "Child of Qelline Alderleaf",
     "met": false
     
   },
@@ -211,11 +211,11 @@ var json_cast = `[
     
   },
   {
-   "tag": "RedbrandMinions",
-    "name": "Goblin Droop and Bugbears",
+   "tag": "droop",
+    "name": "Droop",
     "status": "alive",
     "information": ["RedbrandMinionInfo"],
     "met": false
     
   }
-         ]`
+         ]

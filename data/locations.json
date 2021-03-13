@@ -1,4 +1,4 @@
-var json_locations = `[
+[
   {
     "tag": "StonehillInn", 
       "name": "The Stonehill Inn", 
@@ -157,4 +157,4 @@ var json_locations = `[
       "visited": false
      
   }
-]`
+]
