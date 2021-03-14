@@ -17,8 +17,8 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
 
 const displayLists = async () => {
   await display_character_list();
-  await delay(500);
-  await display_location_list();
+  //await delay(50);
+  //await display_location_list();
   
 };
 
@@ -136,13 +136,13 @@ function add_character() {
 
 	// Update the UI and clear the form 
 	var add_to_world = function(bindings) {
-		updateUI();
+		displayLists();
 		document.getElementById("tag").value = "";
 		document.getElementById("first_name").value = "";
 		document.getElementById("last_name").value = "";
 	}
 	bindings = [];
-	session.query("asserta(character(" + charTag + ")). asserta(name(" + charTag + " , " + charFirstName + " , " + charLastName + ")).");
+	session.query("asserta(character(" + charTag + ")). asserta(first_name(" + charTag + " , " + charFirstName + " ))." + "asserta(last_name(" + charTag + " , " + charLastName + ")).");
 	session.answers(get_callback(add_to_world));
 }
 
@@ -166,5 +166,5 @@ String.prototype.lowercase = function() {
 function update_filter_string() {
 	var search_term = document.getElementById("search").value;
 	filterString = search_term.toString();
-	updateUI();
+	displayLists();
 }
