@@ -1,11 +1,51 @@
-// Create the prolog sesssion and load phandelver.prolog.
+// var Mutex = require('async-mutex').Mutex;
+// var Semaphore = require('async-mutex').Semaphore;
+// var withTimeout = require('async-mutex').withTimeout;
+
+// Create the prolog sesssion and load mini_prom_week_example.prolog.
 session = pl.create();
 session.consult("phandelver.prolog");
 
 // Array of variable bindings, one per answer, returned by prolog query
 var bindings = [];
 var filterString = '';
-var activeList = "character";
+var activeWindow = "Characters";
+// In starting, render the UI
+//print_characters();
+
+const delay = ms => new Promise(res => setTimeout(res, ms));
+
+function switch_window(value) {
+	activeWindow = value; 
+	display_correct_list();
+}
+
+
+const display_all_lists = async () => {
+  await print_characters();
+  await delay(50);
+  await print_locations();
+};
+
+
+function display_correct_list() {
+	console.log("displaying...");
+	console.log("Active window is: " + activeWindow);
+	// CLear the lists from the screen 
+	clear_all_lists();
+	// Find and display the correct list
+	if (activeWindow == "All") {
+		display_all_lists();
+	} else if (activeWindow == "Characters") {
+		print_characters();
+	} else if (activeWindow == "Locations") {
+		print_locations(); 
+	} else if (activeWindow == "Information"){
+		//
+	} else { // Fallback, display everything
+		display_all_lists();
+	}
+}
 
 function clear_all_lists() {
 	var names_output = document.getElementById("names_output");
@@ -15,31 +55,10 @@ function clear_all_lists() {
 	locations_output.innerHTML = "<div></div>"; 
 }
 
-// On starting up, display list of characters
-display_active_list();
 
-function display_active_list() {
-	if (activeList == "character") {
-		display_character_list();
-	} else if (activeList == "location") {
-		display_location_list();
-	} else {
-		console.log("ERROR: Tried to display non-existant list");
-	}
-}
-
-function display_character_list() {
-	activeList = "character";
-	clear_all_lists();
-	print_characters();
-}
-
-function display_location_list() {
-	activeList = "location";
-	clear_all_lists();
-	print_locations();
-}
-
+// Render the initial UI -- all lists 
+//display_correct_list();
+print_characters();
 
 // Functionality for prolog / JS callbacks
 
@@ -91,6 +110,8 @@ function print_character(binding) {
 			var names_output = document.getElementById("names_output");
 			names_output.innerHTML = names_output.innerHTML + "<div>" + charName +  "</div>"; // Add name to HTML page
 		}
+	} else {
+		console.log("binding is null");
 	}
 }
 
@@ -124,6 +145,19 @@ function print_location(binding) {
 
 // Adding new entities to the database
 
+// function on_submit_character() {
+// 	add_character();
+// 	clear_all_lists();
+// 	display_correct_list();
+// }
+
+
+const on_submit_character = async () => {
+	await add_character();
+	await clear_all_lists();
+	//await delay(1500);
+	await print_characters();
+};
 // Addds a new character to the world from input 
 function add_character() { 
 	// Get the values from the form 
@@ -136,18 +170,18 @@ function add_character() {
 	var charFirstName = first_name.toString().lowercase();
 	var charLastName = last_name.toString().lowercase();
 
+	console.log("Adding to world: " + charTag + " " + charFirstName + " " + charLastName);
+
 	// Update the UI and clear the form 
 	var add_to_world = function(bindings) {
-		display_character_list();
 		document.getElementById("tag").value = "";
 		document.getElementById("first_name").value = "";
 		document.getElementById("last_name").value = "";
 	}
 	bindings = [];
-	session.query("asserta(character(" + charTag + ")). asserta(first_name(" + charTag + " , " + charFirstName + " ))." + "asserta(last_name(" + charTag + " , " + charLastName + ")).");
+	session.query("asserta(character(" + charTag + ")). asserta(first_name(" + charTag + " , " + charFirstName + " )). asserta(last_name(" + charTag + " , " + charLastName + ")).");
 	session.answers(get_callback(add_to_world));
 }
-
 
 
 // Utility functions
@@ -166,5 +200,5 @@ String.prototype.lowercase = function() {
 function update_filter_string() {
 	var search_term = document.getElementById("search").value;
 	filterString = search_term.toString();
-	display_active_list(); 
+	display_correct_list();
 }
