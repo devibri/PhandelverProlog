@@ -15,14 +15,14 @@ var filterString = '';
 
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
-const displayLists = async () => {
-  await display_character_list();
-  await delay(50);
-  await display_location_list();
+// const displayLists = async () => {
+//   await display_character_list();
+//   await delay(50);
+//   await display_location_list();
   
-};
+// };
 
-displayLists();
+display_character_list();
 
 function display_character_list() {
 	// Clear exsting list
@@ -136,7 +136,7 @@ function add_character() {
 
 	// Update the UI and clear the form 
 	var add_to_world = function(bindings) {
-		displayLists();
+		display_character_list();
 		document.getElementById("tag").value = "";
 		document.getElementById("first_name").value = "";
 		document.getElementById("last_name").value = "";
