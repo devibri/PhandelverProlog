@@ -9,6 +9,7 @@ session.consult("phandelver.prolog");
 // Array of variable bindings, one per answer, returned by prolog query
 var bindings = [];
 var filterString = '';
+var activeList = "character";
 
 // In starting, render the UI
 //print_characters();
@@ -33,14 +34,26 @@ function clear_all_lists() {
 
 
 // On starting up, display list of characters
-display_character_list();
+display_active_list();
+
+function display_active_list() {
+	if (activeList == "character") {
+		display_character_list();
+	} else if (activeList == "location") {
+		display_location_list();
+	} else {
+		console.log("ERROR: Tried to display non-existant list");
+	}
+}
 
 function display_character_list() {
+	activeList = "character";
 	clear_all_lists();
 	print_characters();
 }
 
 function display_location_list() {
+	activeList = "location";
 	clear_all_lists();
 	print_locations();
 }
@@ -173,5 +186,6 @@ String.prototype.lowercase = function() {
 function update_filter_string() {
 	var search_term = document.getElementById("search").value;
 	filterString = search_term.toString();
-	displayLists();
+	display_active_list(); 
+	//displayLists();
 }
