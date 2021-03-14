@@ -17,8 +17,8 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
 
 const displayLists = async () => {
   await display_character_list();
-  //await delay(50);
-  //await display_location_list();
+  await delay(50);
+  await display_location_list();
   
 };
 
