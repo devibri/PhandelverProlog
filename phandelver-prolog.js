@@ -22,19 +22,26 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
   
 // };
 
+
+function clear_all_lists() {
+	var names_output = document.getElementById("names_output");
+	names_output.innerHTML = "<div></div>"; 
+
+	var locations_output = document.getElementById("locations_output");
+	locations_output.innerHTML = "<div></div>"; 
+}
+
+
+// On starting up, display list of characters
 display_character_list();
 
 function display_character_list() {
-	// Clear exsting list
-	var names_output = document.getElementById("names_output");
-	names_output.innerHTML = "<div></div>"; 
+	clear_all_lists();
 	print_characters();
 }
 
 function display_location_list() {
-	// Clear exsting list
-	var locations_output = document.getElementById("locations_output");
-	locations_output.innerHTML = "<div></div>"; 
+	clear_all_lists();
 	print_locations();
 }
 
