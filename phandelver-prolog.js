@@ -11,23 +11,30 @@ var bindings = [];
 var filterString = '';
 
 // In starting, render the UI
+//print_characters();
 
-updateCharacterUI(updateLocationUI);
+const delay = ms => new Promise(res => setTimeout(res, ms));
 
-// Clears the current list of characters then redisplays them
-function updateCharacterUI(myCallback) {
-	// Clear the existing lists 
+const displayLists = async () => {
+  await display_character_list();
+  await delay(500);
+  await display_location_list();
+  
+};
+
+displayLists();
+
+function display_character_list() {
+	// Clear exsting list
 	var names_output = document.getElementById("names_output");
-	names_output.innerHTML = "<div> </div>"; 
-
-	var locations_output = document.getElementById("locations_output");
-	locations_output.innerHTML = "<div> </div>"; 
-	
+	names_output.innerHTML = "<div></div>"; 
 	print_characters();
-	//myCallback();
 }
 
-function updateLocationUI() {
+function display_location_list() {
+	// Clear exsting list
+	var locations_output = document.getElementById("locations_output");
+	locations_output.innerHTML = "<div></div>"; 
 	print_locations();
 }
 
