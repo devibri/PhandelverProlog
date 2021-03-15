@@ -8,21 +8,26 @@ var filterString = '';
 var activeList = "character";
 
 function clear_all_lists() {
-	var names_output = document.getElementById("names_output");
+	let names_output = document.getElementById("names_output");
 	names_output.innerHTML = "<div></div>"; 
 
-	var locations_output = document.getElementById("locations_output");
+	let locations_output = document.getElementById("locations_output");
 	locations_output.innerHTML = "<div></div>"; 
+
+	let information_output = document.getElementById("information_output");
+	information_output.innerHTML = "<div></div>"; 
 }
 
 // On starting up, display list of characters
-display_active_list();
+print_characters();
 
 function display_active_list() {
 	if (activeList == "character") {
 		display_character_list();
 	} else if (activeList == "location") {
 		display_location_list();
+	} else if (activeList == "information") {
+		display_information_list();
 	} else {
 		console.log("ERROR: Tried to display non-existant list");
 	}
@@ -38,6 +43,12 @@ function display_location_list() {
 	activeList = "location";
 	clear_all_lists();
 	print_locations();
+}
+
+function display_information_list() {
+	activeList = "information";
+	clear_all_lists();
+	print_information();
 }
 
 
@@ -66,6 +77,9 @@ function get_callback(funcWhenDone) {
 // Output the appropriate entities
 
 // Gets a list of all the characters and prints them out
+
+
+// Gets a list of all the characters and prints them out
 function print_characters() {
 	var print_bindings = function(bindings) {
 		for(var i = 0; i < bindings.length; i++) {
@@ -73,7 +87,7 @@ function print_characters() {
 		}
 	}
 	bindings = [];
-	session.query("first_name(Char, FirstName), last_name(Char, LastName).");
+	session.query("character(Char), first_name(Char, FirstName).");
 	session.answers(get_callback(print_bindings));
 }
 
@@ -83,9 +97,9 @@ function print_character(binding) {
 		// Look up term that has been bound to variable "Char"
 		var firstName = binding.lookup("FirstName"); 
 		var charFirstName = firstName.toString(); // Turn the Term into a string.
-		var lastName = binding.lookup("LastName"); 
-		var charLastName = lastName.toString(); // Turn the Term into a string.
-		var charName = charFirstName.capitalize() + " " + charLastName.capitalize(); 
+		//var lastName = binding.lookup("LastName"); 
+		//var charLastName = lastName.toString(); // Turn the Term into a string.
+		var charName = charFirstName.capitalize() //+ " " + charLastName.capitalize(); 
 		// Check if the character matches the search
 		if (charName.toLowerCase().match(filterString.toLowerCase())) {
 			var names_output = document.getElementById("names_output");
@@ -115,11 +129,46 @@ function print_location(binding) {
 		let locName = name.toString(); // Turn the Term into a string.
 		// Check if the location matches the search
 		if (locName.toLowerCase().match(filterString.toLowerCase())) {
-			var names_output = document.getElementById("locations_output");
+			var locations_output = document.getElementById("locations_output");
 			locations_output.innerHTML = locations_output.innerHTML + "<div>" + locName +  "</div>"; // Add name to HTML page
 		}
 	}
 }
+
+
+
+// Gets a list of all the locations and prints them out
+function print_information() {
+	var print_bindings = function(bindings) {
+		for(var i = 0; i < bindings.length; i++) {
+			print_information_piece(bindings[i]);
+		}
+	}
+	bindings = [];
+	session.query("info_desc(Info, Desc).");
+	session.answers(get_callback(print_bindings));
+}
+
+// outputs a single location if they are found in the search
+function print_information_piece(binding) {
+	if (binding != null) {
+		// Look up term that has been bound to variable "Name"
+		let desc = binding.lookup("Desc"); 
+		let infoDesc = desc.toString(); // Turn the Term into a string.
+		// Check if the location matches the search
+		if (infoDesc.toLowerCase().match(filterString.toLowerCase())) {
+			var information_output = document.getElementById("information_output");
+			information_output.innerHTML = information_output.innerHTML + "<div>" + infoDesc +  "</div>"; // Add description to HTML page
+		}
+	}
+}
+
+
+
+
+
+
+
 
 
 // Adding new entities to the database
