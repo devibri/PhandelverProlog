@@ -7,8 +7,7 @@ var bindings = [];
 //var charTagArray = [toblin_stonehill,elmar_barthen,daren_edermath,linene_graywind,halia_thornton,qelline_alderleaf,sister_garaele,harbin_wester,sildar_hallwinter,narth,redbrands,elsa,lanar,trilena,pip,freda,ander,thistle,grista,carp,agatha,reidoth,gundren_rockseeker,hamun,droop,party];
 var filterString = '';
 var activeList = "character";
-var charInfo = "";
-
+var char_tag_list = [];
 
 
 function clear_all_lists() {
@@ -25,7 +24,13 @@ function clear_all_lists() {
 // On starting up, display list of characters
 
 //console.log("Array is: " + charTagArray);
-display_active_list();
+on_start();
+
+function on_start() {
+	get_character_tags();
+	display_active_list();
+}
+
 
 
 function display_active_list() {
@@ -43,7 +48,7 @@ function display_active_list() {
 function display_character_list() {
 	activeList = "character";
 	clear_all_lists();
-	print_characters();
+	//print_characters();
 }
 
 function display_location_list() {
@@ -80,6 +85,22 @@ function get_callback(funcWhenDone) {
 	return callbackFunc;
 } 
 
+// On start, get a list of the character tags in the game
+function get_character_tags() {
+	var get_all_bindings = function(bindings) {
+		print_character_tags(bindings[0]);
+	}
+	bindings = [];
+	session.query("findall([Tag], character(Tag), Char_Tag_List).");
+	session.answers(get_callback(get_all_bindings));
+}
+
+
+function print_character_tags(binding) {
+	if (binding != null) {
+		var char_tag_list = binding.lookup("Char_Tag_List"); 
+	}
+}
 
 function print_characters() {
 	var get_all_bindings = function(bindings) {
