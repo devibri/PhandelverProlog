@@ -28,7 +28,6 @@ function clear_all_lists() {
 display_active_list();
 
 
-
 function display_active_list() {
 	if (activeList == "character") {
 		display_character_list();
@@ -80,19 +79,6 @@ function get_callback(funcWhenDone) {
 
 	return callbackFunc;
 } 
-
-function on_start() {
-	//get_tags();
-	setTimeout(() => { get_all_character_info() }, 2000);
-	//get_first_name();
-}
-
-function get_all_character_info() {
-	console.log("Char tag array is: " + charTagArray);
-	charTagArray.forEach(function(item, index, array) {
-		get_first_name(item);
-	})
-}
 
 
 function print_characters() {
