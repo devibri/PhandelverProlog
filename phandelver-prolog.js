@@ -4,8 +4,12 @@ session.consult("phandelver.prolog");
 
 // Array of variable bindings, one per answer, returned by prolog query
 var bindings = [];
+//var charTagArray = [toblin_stonehill,elmar_barthen,daren_edermath,linene_graywind,halia_thornton,qelline_alderleaf,sister_garaele,harbin_wester,sildar_hallwinter,narth,redbrands,elsa,lanar,trilena,pip,freda,ander,thistle,grista,carp,agatha,reidoth,gundren_rockseeker,hamun,droop,party];
 var filterString = '';
 var activeList = "character";
+var charInfo = "";
+
+
 
 function clear_all_lists() {
 	let names_output = document.getElementById("names_output");
@@ -19,7 +23,11 @@ function clear_all_lists() {
 }
 
 // On starting up, display list of characters
-print_characters();
+
+//console.log("Array is: " + charTagArray);
+display_active_list();
+
+
 
 function display_active_list() {
 	if (activeList == "character") {
@@ -73,38 +81,34 @@ function get_callback(funcWhenDone) {
 	return callbackFunc;
 } 
 
-
-// Output the appropriate entities
-
-// Gets a list of all the characters and prints them out
-
-
-// Gets a list of all the characters and prints them out
-function print_characters() {
-	var print_bindings = function(bindings) {
-		for(var i = 0; i < bindings.length; i++) {
-			print_character(bindings[i]);
-		}
-	}
-	bindings = [];
-	session.query("character(Char), first_name(Char, FirstName).");
-	session.answers(get_callback(print_bindings));
+function on_start() {
+	//get_tags();
+	setTimeout(() => { get_all_character_info() }, 2000);
+	//get_first_name();
 }
 
-// outputs a single character if they are found in the search
+function get_all_character_info() {
+	console.log("Char tag array is: " + charTagArray);
+	charTagArray.forEach(function(item, index, array) {
+		get_first_name(item);
+	})
+}
+
+
+function print_characters() {
+	var get_all_bindings = function(bindings) {
+		print_character(bindings[0]);
+	}
+	bindings = [];
+	session.query("findall([CharInfoType, CharInfo], character_info(toblin_stonehill, CharInfoType, CharInfo), Char_List).");
+	session.answers(get_callback(get_all_bindings));
+}
+
 function print_character(binding) {
 	if (binding != null) {
-		// Look up term that has been bound to variable "Char"
-		var firstName = binding.lookup("FirstName"); 
-		var charFirstName = firstName.toString(); // Turn the Term into a string.
-		//var lastName = binding.lookup("LastName"); 
-		//var charLastName = lastName.toString(); // Turn the Term into a string.
-		var charName = charFirstName.capitalize() //+ " " + charLastName.capitalize(); 
-		// Check if the character matches the search
-		if (charName.toLowerCase().match(filterString.toLowerCase())) {
-			var names_output = document.getElementById("names_output");
-			names_output.innerHTML = names_output.innerHTML + "<div>" + charName +  "</div>"; // Add name to HTML page
-		}
+		var char_info = binding.lookup("Char_List"); 
+		// TODO update the HTML to add this to list
+		console.log("Char list is: " + char_info);
 	}
 }
 
