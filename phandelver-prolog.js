@@ -7,8 +7,10 @@ var bindings = [];
 //var charTagArray = [toblin_stonehill,elmar_barthen,daren_edermath,linene_graywind,halia_thornton,qelline_alderleaf,sister_garaele,harbin_wester,sildar_hallwinter,narth,redbrands,elsa,lanar,trilena,pip,freda,ander,thistle,grista,carp,agatha,reidoth,gundren_rockseeker,hamun,droop,party];
 var filterString = '';
 var activeList = "character";
-var char_tag_list = [];
-
+var characterTagList = ["toblin_stonehill", "elmar_barthen"]; 
+var characterInfoListToblin = ["first_name", "last_name", "status"];
+var characterInfoListBarthen = ["first_name", "last_name", "status"];
+var characterInfoList = [];
 
 function clear_all_lists() {
 	let names_output = document.getElementById("names_output");
@@ -22,18 +24,12 @@ function clear_all_lists() {
 }
 
 // On starting up, display list of characters
-
-//console.log("Array is: " + charTagArray);
-on_start();
-
-function on_start() {
-	get_character_tags();
-	display_active_list();
-}
+display_active_list();
 
 
 
 function display_active_list() {
+	clear_all_lists();
 	if (activeList == "character") {
 		display_character_list();
 	} else if (activeList == "location") {
@@ -47,19 +43,27 @@ function display_active_list() {
 
 function display_character_list() {
 	activeList = "character";
-	clear_all_lists();
-	//print_characters();
+	// For each character in the character tag list, print the character's info 
+	//get_character_info();
+	characterInfoList.push(characterInfoListToblin);
+	characterInfoList.push(characterInfoListBarthen); 
+	setTimeout(() => {  
+		for (var i = 0; i < characterInfoList.length; i++) {
+			print_character(characterTagList[i], characterInfoList[i]);
+		}
+	}, 200);
+	
+	//setTimeout(() => {  print_characters() }, 200);
+	
 }
 
 function display_location_list() {
 	activeList = "location";
-	clear_all_lists();
 	print_locations();
 }
 
 function display_information_list() {
 	activeList = "information";
-	clear_all_lists();
 	print_information();
 }
 
@@ -85,37 +89,71 @@ function get_callback(funcWhenDone) {
 	return callbackFunc;
 } 
 
-// On start, get a list of the character tags in the game
-function get_character_tags() {
+// // On start, get a list of the character tags in the game
+// function get_character_tags() {
+// 	var get_all_bindings = function(bindings) {
+// 		print_character_tags(bindings[0]);
+// 	}
+// 	bindings = [];
+// 	session.query("findall([Tag], character(Tag), Char_Tag_List).");
+// 	session.answers(get_callback(get_all_bindings));
+// }
+
+
+// function print_character_tags(binding) {
+// 	if (binding != null) {
+// 		char_tag_list = binding.lookup("Char_Tag_List").toJavaScript(); 
+// 		//console.log("Char tag list is " + char_tag_list);
+// 	}
+// }
+
+function get_character_info() {
+	//console.log("Tag is: " + tag);
 	var get_all_bindings = function(bindings) {
-		print_character_tags(bindings[0]);
+		for(var i = 0; i < bindings.length; i++) {
+			//console.log("result is " + bindings);
+			get_character(bindings[i]);
+		}
 	}
 	bindings = [];
-	session.query("findall([Tag], character(Tag), Char_Tag_List).");
+	//console.log("Query is " + "findall([CharInfoType, CharInfo], character_info("  + tag + ", CharInfoType, CharInfo), Char_List).");
+	session.query("character(Char), character_info_list(Char, Char_Info_List).");
 	session.answers(get_callback(get_all_bindings));
 }
 
-
-function print_character_tags(binding) {
+function get_character(binding) {
 	if (binding != null) {
-		var char_tag_list = binding.lookup("Char_Tag_List"); 
+		var char_name = binding.lookup("Char"); 
+		var char_info_list = binding.lookup("Char_Info_List");
+		var list = char_info_list.toJavaScript();
+		console.log(list);
+		characterTagList.push(char_name);
+		characterInfoList.push(list);
 	}
 }
 
-function print_characters() {
-	var get_all_bindings = function(bindings) {
-		print_character(bindings[0]);
+function print_character(character_tag, character_info_list) {
+	console.log("Calling print character..."); 
+	var get_all_bindings = function(answer) { 
+		//print_character_info(bindings[0]);
+		console.log(bindings.length);
+		for(var i = 0; i < bindings.length; i++) {
+			console.log("result is " + bindings);
+			print_character_info(bindings[i]);
+		}
 	}
-	bindings = [];
-	session.query("findall([CharInfoType, CharInfo], character_info(toblin_stonehill, CharInfoType, CharInfo), Char_List).");
-	session.answers(get_callback(get_all_bindings));
+	for (var i = 0; i < character_info_list.length; i++) {
+		console.log("Query: " + "call(" + character_info_list[i] + ", " + character_tag + ", Info).");
+		session.query("Pred = " + character_info_list[i] + ", call( Pred, " + character_tag + ", Info).");
+		session.answers(get_callback(get_all_bindings));
+	}
 }
 
-function print_character(binding) {
+function print_character_info(binding) {
 	if (binding != null) {
-		var char_info = binding.lookup("Char_List"); 
-		// TODO update the HTML to add this to list
-		console.log("Char list is: " + char_info);
+		var char_info = binding.lookup("Info");
+		var pred = binding.lookup("Pred");
+		console.log("answer: " + pred + ", " + char_info); 
 	}
 }
 

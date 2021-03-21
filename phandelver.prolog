@@ -1,130 +1,8 @@
 :- set_prolog_flag(double_quotes, atom).
 
-%%%%%%%%% Character info %%%%%%%%%
-
-% all the character info 
-:- dynamic(character_info/3).
-
-% first names 
-character_info(toblin_stonehill, first_name, toblin).
-character_info(elmar_barthen, first_name, elmar).
-character_info(daren_edermath, first_name, daren).
-character_info(linene_graywind, first_name, linene).
-character_info(halia_thornton, first_name, halia).
-character_info(qelline_alderleaf, first_name, qelline).
-character_info(sister_garaele, first_name, sister).
-character_info(harbin_wester, first_name, harbin).
-character_info(sildar_hallwinter, first_name, sildar).
-character_info(narth, first_name, narth).
-character_info(redbrands, first_name, redbrands).
-character_info(elsa, first_name, elsa).
-character_info(lanar, first_name, lanar).
-character_info(trilena, first_name, trilena).
-character_info(pip, first_name, pip).
-character_info(freda, first_name, freda).
-character_info(ander, first_name, ander).
-character_info(thistle, first_name, thistle).
-character_info(grista, first_name, grista).
-character_info(carp, first_name, carp).
-character_info(agatha, first_name, agatha).
-character_info(reidoth, first_name, reidoth).
-character_info(gundren_rockseeker, first_name, gundren).
-character_info(hamun, first_name, hamun).
-character_info(droop, first_name, droop).
-
-% last names 
-character_info(toblin_stonehill, last_name, stonehill).
-character_info(elmar_barthen, last_name, barthen).
-character_info(daren_edermath, last_name, edermath).
-character_info(linene_graywind, last_name, graywind).
-character_info(halia_thornton, last_name, thorton).
-character_info(qelline_alderleaf, last_name, alderleaf).
-character_info(sister_garaele, last_name, garaele).
-character_info(harbin_wester, last_name, wester).
-character_info(sildar_hallwinter, last_name, hallwinter).
-character_info(gundren_rockseeker, last_name, rockseeker).
-
-%occupation
-character_info(toblin_stonehill, occupation, "Innkeeper").
-character_info(elmar_barthen, occupation, "Owns trading post").
-character_info(daren_edermath, occupation, "Retired adventurer").
-character_info(linene_graywind, occupation, "Runs trading post").
-character_info(halia_thornton, occupation, "Runs Phandalin Miner's Exchange").
-character_info(qelline_alderleaf, occupation, "Farmer").
-character_info(sister_garaele, occupation, "Elf cleric of Tymora").
-character_info(harbin_wester, occupation, "Townmaster of Phandalin").
-character_info(narth, occupation, "Farmer").
-
-%status 
-character_info(toblin_stonehill, status, alive).
-character_info(elmar_barthen, status, alive).
-character_info(daren_edermath, status, alive).
-character_info(linene_graywind, status, alive).
-character_info(halia_thornton, status, alive).
-character_info(qelline_alderleaf, status, alive).
-character_info(sister_garaele, status, alive).
-character_info(harbin_wester, status, alive).
-character_info(sildar_hallwinter, status, alive).
-character_info(narth, status, alive).
-character_info(redbrands, status, alive).
-character_info(elsa, status, alive).
-character_info(lanar, status, alive).
-character_info(trilena, status, alive).
-character_info(pip, status, alive).
-character_info(freda, status, alive).
-character_info(ander, status, alive).
-character_info(thistle, status, alive).
-character_info(grista, status, alive).
-character_info(carp, status, alive).
-character_info(agatha, status, alive).
-character_info(reidoth, status, alive).
-character_info(gundren_rockseeker, status, alive).
-character_info(hamun, status, alive).
-character_info(droop, status, alive).
-
-% Has met the party 
-character_info(toblin_stonehill, has_met_party, true).
-
-character_info(daren_edermath, faction, "Order of the Gauntlet").
-character_info(halia_thornton, faction, "Zhentarim").
-character_info(sister_garaele, faction, "Harper").
-character_info(sildar_hallwinter, faction, "Lords' Alliance").
-character_info(redbrands, faction, "Redbrands").
-
-% who is friends with who
-character_info(qelline_alderleaf, friend_of, reidoth).
-character_info(pip, friend_of, carp).
-
-% who is family of who
-character_info(carp, family_of, qelline_alderleaf).
-
-% Information the character knows about
-character_info(toblin_stonehill, knows_about, redbrand_hangout).
-character_info(elmar_barthen, knows_about, redbrand_shakedown).
-character_info(daren_edermath, knows_about, redbrand_hideout_location).
-character_info(daren_edermath, knows_about, get_rid_of_redbrands).
-character_info(daren_edermath, knows_about, digging_old_owl_well).
-character_info(halia_thornton, knows_about, goblin_cragmaw_castle).
-character_info(halia_thornton, knows_about, kill_redbrand_leader).
-character_info(qelline_alderleaf, knows_about, reidoth_location).
-character_info(sister_garaele, knows_about, ask_agatha_about_book).
-character_info(harbin_wester, knows_about, orcs_triboar_trail).
-character_info(harbin_wester, knows_about, townmaster_and_redbrands).
-character_info(sildar_hallwinter, knows_about, missing_iarno).
-character_info(narth, knows_about, sister_garaele_exhausted).
-character_info(lanar, knows_about, orcs_triboar_trail).
-character_info(trilena, knows_about, dendrar_family_kidnapped).
-character_info(pip, knows_about, secret_tunnel_knowledge).
-character_info(freda, knows_about, redbrands_and_halia).
-character_info(carp, knows_about, redbrand_hideout_location).
-character_info(carp, knows_about, secret_tunnel_location).
-character_info(agatha, knows_about, agatha_info).
-character_info(reidoth, knows_about, green_dragon).
-character_info(gundren_rockseeker, knows_about, wave_echo_cave_map).
-character_info(hamun, knows_about, hamun_quest).
-character_info(hamun, knows_about, finish_hamun_quest).
-character_info(droop, knows_about, redbrand_minion_info).
-
+:- dynamic(character_info_list/2).
+character_info_list(toblin_stonehill, [first_name, last_name, status]).
+character_info_list(elmar_barthen, [first_name, last_name]).
 
 % The characters in the world.
 :- dynamic(character/1).
@@ -155,9 +33,129 @@ character(hamun).
 character(droop).
 character(party).
 
+:- dynamic(first_name/2).
+first_name(toblin_stonehill, toblin).
+first_name(elmar_barthen, elmar).
+first_name(daren_edermath, daren).
+first_name(linene_graywind, linene).
+first_name(halia_thornton, halia).
+first_name(qelline_alderleaf, qelline).
+first_name(sister_garaele, sister).
+first_name(harbin_wester, harbin).
+first_name(sildar_hallwinter, sildar).
+first_name(narth, narth).
+first_name(redbrands, redbrands).
+first_name(elsa, elsa).
+first_name(lanar, lanar).
+first_name(trilena, trilena).
+first_name(pip, pip).
+first_name(freda, freda).
+first_name(ander, ander).
+first_name(thistle, thistle).
+first_name(grista, grista).
+first_name(carp, carp).
+first_name(agatha, agatha).
+first_name(reidoth, reidoth).
+first_name(gundren_rockseeker, gundren).
+first_name(hamun, hamun).
+first_name(droop, droop).
+
+:- dynamic(last_name/2).
+last_name(toblin_stonehill, stonehill).
+last_name(elmar_barthen, barthen).
+last_name(daren_edermath, edermath).
+last_name(linene_graywind, graywind).
+last_name(halia_thornton, thorton).
+last_name(qelline_alderleaf, alderleaf).
+last_name(sister_garaele, garaele).
+last_name(harbin_wester, wester).
+last_name(sildar_hallwinter, hallwinter).
+last_name(gundren_rockseeker, rockseeker).
 
 
-%%%%%%%%% Location info %%%%%%%%%
+:- dynamic(occupation/2).
+occupation(toblin_stonehill, "Innkeeper").
+occupation(elmar_barthen, "Owns trading post").
+occupation(daren_edermath, "Retired adventurer").
+occupation(linene_graywind, "Runs trading post").
+occupation(halia_thornton, "Runs Phandalin Miner's Exchange").
+occupation(qelline_alderleaf, "Halfling farmer").
+occupation(sister_garaele, "Elf cleric of Tymora").
+occupation(harbin_wester, "Townmaster of Phandalin").
+occupation(narth, "Farmer").
+
+:- dynamic(status/2).
+status(toblin_stonehill, alive).
+status(elmar_barthen, alive).
+status(daren_edermath, alive).
+status(linene_graywind, alive).
+status(halia_thornton, alive).
+status(qelline_alderleaf, alive).
+status(sister_garaele, alive).
+status(harbin_wester, alive).
+status(sildar_hallwinter, alive).
+status(narth, alive).
+status(redbrands, alive).
+status(elsa, alive).
+status(lanar, alive).
+status(trilena, alive).
+status(pip, alive).
+status(freda, alive).
+status(ander, alive).
+status(thistle, alive).
+status(grista, alive).
+status(carp, alive).
+status(agatha, alive).
+status(reidoth, alive).
+status(gundren_rockseeker, alive).
+status(hamun, alive).
+status(droop, alive).
+
+% Has met the party 
+:- dynamic(met_party/1).
+met_party(toblin_stonehill).
+
+:- dynamic(faction/2).
+faction(daren_edermath, "Order of the Gauntlet").
+faction(halia_thornton, "Zhentarim").
+faction(sister_garaele, "Harper").
+faction(sildar_hallwinter, "Lords' Alliance").
+faction(redbrands, "Redbrands").
+
+:- dynamic(friend_of/2).
+friend_of(qelline_alderleaf, reidoth).
+friend_of(pip, carp).
+
+:- dynamic(family_of/2).
+family_of(carp, qelline_alderleaf).
+
+% Information the character knows about
+:- dynamic(knows_info/2).
+knows_info(toblin_stonehill, redbrand_hangout).
+knows_info(elmar_barthen, redbrand_shakedown).
+knows_info(daren_edermath, redbrand_hideout_location).
+knows_info(daren_edermath, get_rid_of_redbrands).
+knows_info(daren_edermath, digging_old_owl_well).
+knows_info(halia_thornton, goblin_cragmaw_castle).
+knows_info(halia_thornton, kill_redbrand_leader).
+knows_info(qelline_alderleaf, reidoth_location).
+knows_info(sister_garaele, ask_agatha_about_book).
+knows_info(harbin_wester, orcs_triboar_trail).
+knows_info(harbin_wester, townmaster_and_redbrands).
+knows_info(sildar_hallwinter, missing_iarno).
+knows_info(narth, sister_garaele_exhausted).
+knows_info(lanar, orcs_triboar_trail).
+knows_info(trilena, dendrar_family_kidnapped).
+knows_info(pip, secret_tunnel_knowledge).
+knows_info(freda, redbrands_and_halia).
+knows_info(carp, redbrand_hideout_location).
+knows_info(carp, secret_tunnel_location).
+knows_info(agatha, agatha_info).
+knows_info(reidoth, green_dragon).
+knows_info(gundren_rockseeker, wave_echo_cave_map).
+knows_info(hamun, hamun_quest).
+knows_info(hamun, finish_hamun_quest).
+knows_info(droop, redbrand_minion_info).
 
 % The regions in the world 
 :- dynamic(region/1).
