@@ -7,10 +7,8 @@ var bindings = [];
 //var charTagArray = [toblin_stonehill,elmar_barthen,daren_edermath,linene_graywind,halia_thornton,qelline_alderleaf,sister_garaele,harbin_wester,sildar_hallwinter,narth,redbrands,elsa,lanar,trilena,pip,freda,ander,thistle,grista,carp,agatha,reidoth,gundren_rockseeker,hamun,droop,party];
 var filterString = '';
 var activeList = "character";
-var characterTagList = ["toblin_stonehill", "elmar_barthen"]; 
-var characterInfoListToblin = ["first_name", "last_name", "status"];
-var characterInfoListBarthen = ["first_name", "last_name", "status"];
 var characterInfoList = [];
+var characterTagList = [];
 
 function clear_all_lists() {
 	let characters_output = document.getElementById("characters_output");
@@ -44,17 +42,12 @@ function display_active_list() {
 function display_character_list() {
 	activeList = "character";
 	// For each character in the character tag list, print the character's info 
-	//get_character_info();
-	characterInfoList.push(characterInfoListToblin);
-	characterInfoList.push(characterInfoListBarthen); 
+	get_character_info();
 	setTimeout(() => {  
 		for (var i = 0; i < characterInfoList.length; i++) {
 			print_character(characterTagList[i], characterInfoList[i]);
 		}
 	}, 200);
-	
-	//setTimeout(() => {  print_characters() }, 200);
-	
 }
 
 function display_location_list() {

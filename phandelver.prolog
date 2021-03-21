@@ -1,8 +1,8 @@
 :- set_prolog_flag(double_quotes, atom).
 
 :- dynamic(character_info_list/2).
-character_info_list(toblin_stonehill, [first_name, last_name, status]).
-character_info_list(elmar_barthen, [first_name, last_name]).
+character_info_list(toblin_stonehill, [first_name, last_name, status, occupation]).
+character_info_list(elmar_barthen, [first_name, last_name, status]).
 
 % The characters in the world.
 :- dynamic(character/1).
