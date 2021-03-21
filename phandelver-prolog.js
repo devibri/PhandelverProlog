@@ -13,8 +13,8 @@ var characterInfoListBarthen = ["first_name", "last_name", "status"];
 var characterInfoList = [];
 
 function clear_all_lists() {
-	let names_output = document.getElementById("names_output");
-	names_output.innerHTML = "<div></div>"; 
+	let characters_output = document.getElementById("characters_output");
+	characters_output.innerHTML = "<div></div>"; 
 
 	let locations_output = document.getElementById("locations_output");
 	locations_output.innerHTML = "<div></div>"; 
@@ -89,34 +89,14 @@ function get_callback(funcWhenDone) {
 	return callbackFunc;
 } 
 
-// // On start, get a list of the character tags in the game
-// function get_character_tags() {
-// 	var get_all_bindings = function(bindings) {
-// 		print_character_tags(bindings[0]);
-// 	}
-// 	bindings = [];
-// 	session.query("findall([Tag], character(Tag), Char_Tag_List).");
-// 	session.answers(get_callback(get_all_bindings));
-// }
-
-
-// function print_character_tags(binding) {
-// 	if (binding != null) {
-// 		char_tag_list = binding.lookup("Char_Tag_List").toJavaScript(); 
-// 		//console.log("Char tag list is " + char_tag_list);
-// 	}
-// }
 
 function get_character_info() {
-	//console.log("Tag is: " + tag);
 	var get_all_bindings = function(bindings) {
 		for(var i = 0; i < bindings.length; i++) {
-			//console.log("result is " + bindings);
 			get_character(bindings[i]);
 		}
 	}
 	bindings = [];
-	//console.log("Query is " + "findall([CharInfoType, CharInfo], character_info("  + tag + ", CharInfoType, CharInfo), Char_List).");
 	session.query("character(Char), character_info_list(Char, Char_Info_List).");
 	session.answers(get_callback(get_all_bindings));
 }
@@ -126,26 +106,18 @@ function get_character(binding) {
 		var char_name = binding.lookup("Char"); 
 		var char_info_list = binding.lookup("Char_Info_List");
 		var list = char_info_list.toJavaScript();
-		console.log(list);
 		characterTagList.push(char_name);
 		characterInfoList.push(list);
 	}
 }
 
 function print_character(character_tag, character_info_list) {
-	console.log("Calling print character..."); 
 	var get_all_bindings = function(answer) { 
-		//print_character_info(bindings[0]);
-		console.log(bindings.length);
-		for(var i = 0; i < bindings.length; i++) {
-			console.log("result is " + bindings);
-			print_character_info(bindings[i]);
-		}
+		print_character_info(answer);
 	}
 	for (var i = 0; i < character_info_list.length; i++) {
-		console.log("Query: " + "call(" + character_info_list[i] + ", " + character_tag + ", Info).");
 		session.query("Pred = " + character_info_list[i] + ", call( Pred, " + character_tag + ", Info).");
-		session.answers(get_callback(get_all_bindings));
+		session.answer(get_all_bindings);
 	}
 }
 
@@ -153,7 +125,7 @@ function print_character_info(binding) {
 	if (binding != null) {
 		var char_info = binding.lookup("Info");
 		var pred = binding.lookup("Pred");
-		console.log("answer: " + pred + ", " + char_info); 
+		characters_output.innerHTML = characters_output.innerHTML + "<div>" + pred +  ": " + char_info + "</div>";
 	}
 }
 
