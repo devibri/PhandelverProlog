@@ -155,7 +155,6 @@ function print_location(binding) {
 }
 
 
-
 // Gets a list of all the locations and prints them out
 function print_information() {
 	var print_bindings = function(bindings) {
@@ -181,13 +180,6 @@ function print_information_piece(binding) {
 		}
 	}
 }
-
-
-
-
-
-
-
 
 
 // Adding new entities to the database
