@@ -113,17 +113,19 @@ function print_character(character_tag, character_info_list) {
 	var get_all_bindings = function(answer) { 
 		print_character_info(answer);
 	}
+	characters_output.innerHTML = characters_output.innerHTML + "<div>";
 	for (var i = 0; i < character_info_list.length; i++) {
 		session.query("Pred = " + character_info_list[i] + ", call( Pred, " + character_tag + ", Info).");
 		session.answer(get_all_bindings);
 	}
+	characters_output.innerHTML = characters_output.innerHTML + "</div>";
 }
 
 function print_character_info(binding) {
 	if (binding != null) {
 		var char_info = binding.lookup("Info");
 		var pred = binding.lookup("Pred");
-		characters_output.innerHTML = characters_output.innerHTML + "<div>" + pred +  ": " + char_info + "</div>";
+		characters_output.innerHTML = characters_output.innerHTML + pred +  ": " + char_info + "&emsp;";
 	}
 }
 
