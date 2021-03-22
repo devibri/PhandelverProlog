@@ -46,6 +46,7 @@ function display_active_list() {
 
 function display_character_list() {
 	activeList = "character";
+	clear_character_info();
 	// For each character in the character tag list, print the character's info 
 	get_character_info();
 	setTimeout(() => {  
@@ -87,6 +88,11 @@ function get_callback(funcWhenDone) {
 	return callbackFunc;
 } 
 
+
+function clear_character_info() {
+	characterInfoList = [];
+	characterTagList = [];
+}
 
 function get_character_info() {
 	var get_all_bindings = function(bindings) {
