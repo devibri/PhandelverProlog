@@ -4,11 +4,11 @@ session.consult("phandelver.prolog");
 
 // Array of variable bindings, one per answer, returned by prolog query
 var bindings = [];
-//var charTagArray = [toblin_stonehill,elmar_barthen,daren_edermath,linene_graywind,halia_thornton,qelline_alderleaf,sister_garaele,harbin_wester,sildar_hallwinter,narth,redbrands,elsa,lanar,trilena,pip,freda,ander,thistle,grista,carp,agatha,reidoth,gundren_rockseeker,hamun,droop,party];
 var filterString = '';
 var activeList = "character";
 var characterInfoList = [];
 var characterTagList = [];
+var output = "";
 
 function clear_all_lists() {
 	let characters_output = document.getElementById("characters_output");
@@ -24,12 +24,14 @@ function clear_all_lists() {
 // On starting up, display list of characters
 display_active_list();
 
+
+// updated from navigation buttons in index.html. Changes the currently visible list 
 function set_active_list(value) {
 	activeList = value; 
 	display_active_list();
 }
 
-
+// checks which list is active and displays that list 
 function display_active_list() {
 	clear_all_lists();
 	if (activeList == "character") {
@@ -43,7 +45,7 @@ function display_active_list() {
 	}
 }
 
-
+// handles getting the info for characters and outputting it 
 function display_character_list() {
 	activeList = "character";
 	clear_character_info();
@@ -88,12 +90,15 @@ function get_callback(funcWhenDone) {
 	return callbackFunc;
 } 
 
-
+// Removes the current character information so it can be redisplayed
 function clear_character_info() {
 	characterInfoList = [];
 	characterTagList = [];
 }
 
+/* Handing character info and output */
+
+// Gets character tags and the list of all the info associated with each character
 function get_character_info() {
 	var get_all_bindings = function(bindings) {
 		for(var i = 0; i < bindings.length; i++) {
@@ -105,6 +110,7 @@ function get_character_info() {
 	session.answers(get_callback(get_all_bindings));
 }
 
+// Callback function for get_character_info, takes each character tag and its info and puts it into a list
 function get_character(binding) {
 	if (binding != null) {
 		var char_name = binding.lookup("Char"); 
@@ -115,26 +121,28 @@ function get_character(binding) {
 	}
 }
 
+// Takes the list of all character info lists, and for each elementin the list, outputs it 
 function print_character(character_tag, character_info_list) {
-	var get_all_bindings = function(answer) { 
+	output = "";
+	var get_all_bindings = function(answer) {
 		print_character_info(answer);
 	}
-	characters_output.innerHTML = characters_output.innerHTML + "<div>";
 	for (var i = 0; i < character_info_list.length; i++) {
-		session.query("Pred = " + character_info_list[i] + ", call( Pred, " + character_tag + ", Info).");
-		session.answers(get_all_bindings);
+		session.query("Pred = " + character_info_list[i] + ", findall([Pred, Info], call( Pred, " + character_tag + ", Info), List).");
+		session.answer(get_all_bindings);
 	}
-	characters_output.innerHTML = characters_output.innerHTML + "</div>";
+	// Get the appropriate list and output the character if it matches the search
+	var characters_output = document.getElementById("characters_output");
+	check_against_search_filter(output, characters_output); 
 }
 
+// Callback function for print_character, adds each solution to find character info and adds it to the output
 function print_character_info(binding) {
 	if (binding != null) {
-		var char_info = binding.lookup("Info");
-		var pred = binding.lookup("Pred");
-		characters_output.innerHTML = characters_output.innerHTML + pred +  ": " + char_info + "&emsp;";
+		var list = binding.lookup("List").toJavaScript(); 
+		output = output + list + "&emsp;";
 	}
 }
-
 
 // Gets a list of all the locations and prints them out
 function print_locations() {
@@ -217,7 +225,6 @@ function add_character() {
 }
 
 
-
 // Utility functions
 
 // Add method to the String prototype to capitalize the first letter of the String.
@@ -235,4 +242,11 @@ function update_filter_string() {
 	var search_term = document.getElementById("search").value;
 	filterString = search_term.toString();
 	display_active_list(); 
+}
+
+// Checks if the thing being outputted to list matches the search filter; if so, output it 
+function check_against_search_filter(output, output_list) {
+	if (output.toLowerCase().match(filterString.toLowerCase())) {
+		output_list.innerHTML = output_list.innerHTML + "<div>" + output +  "</div>"; // Add name to HTML page
+	}
 }
