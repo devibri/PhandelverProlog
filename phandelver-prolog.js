@@ -24,6 +24,10 @@ function clear_all_lists() {
 // On starting up, display list of characters
 display_active_list();
 
+function set_active_list(value) {
+	activeList = value; 
+	display_active_list();
+}
 
 
 function display_active_list() {
@@ -38,6 +42,7 @@ function display_active_list() {
 		console.log("ERROR: Tried to display non-existant list");
 	}
 }
+
 
 function display_character_list() {
 	activeList = "character";
