@@ -1,8 +1,9 @@
 :- set_prolog_flag(double_quotes, atom).
 
 :- dynamic(character_info_list/2).
-character_info_list(toblin_stonehill, [first_name, last_name, status, occupation]).
-character_info_list(elmar_barthen, [first_name, last_name, status]).
+character_info_list(toblin_stonehill, [first_name, last_name, occupation, status, has_met_party, knows_info]).
+character_info_list(elmar_barthen, [first_name, last_name, occupation, status, knows_info]).
+character_info_list(daren_edermath, [first_name, last_name, occupation, status, faction, knows_info]).
 
 % The characters in the world.
 :- dynamic(character/1).
@@ -112,8 +113,8 @@ status(hamun, alive).
 status(droop, alive).
 
 % Has met the party 
-:- dynamic(met_party/1).
-met_party(toblin_stonehill).
+:- dynamic(has_met_party/2).
+has_met_party(toblin_stonehill, true).
 
 :- dynamic(faction/2).
 faction(daren_edermath, "Order of the Gauntlet").

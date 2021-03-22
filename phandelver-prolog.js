@@ -122,7 +122,7 @@ function print_character(character_tag, character_info_list) {
 	characters_output.innerHTML = characters_output.innerHTML + "<div>";
 	for (var i = 0; i < character_info_list.length; i++) {
 		session.query("Pred = " + character_info_list[i] + ", call( Pred, " + character_tag + ", Info).");
-		session.answer(get_all_bindings);
+		session.answers(get_all_bindings);
 	}
 	characters_output.innerHTML = characters_output.innerHTML + "</div>";
 }
