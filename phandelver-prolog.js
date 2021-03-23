@@ -34,8 +34,10 @@ function set_active_list(value) {
 // checks which list is active and displays that list 
 function display_active_list() {
 	clear_all_lists();
+	clear_form(); 
 	if (activeList == "character") {
 		display_character_list();
+		display_character_form();
 	} else if (activeList == "location") {
 		display_location_list();
 	} else if (activeList == "information") {
@@ -43,6 +45,19 @@ function display_active_list() {
 	} else {
 		console.log("ERROR: Tried to display non-existant list");
 	}
+}
+
+function clear_form() {
+	var form = document.getElementById("form");
+	form.innerHTML = "<div></div>";
+}
+
+function display_character_form() {
+	var characters_form = document.getElementById("form");
+	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="textinput" type="text" id="tag" value="" placeholder="Enter tag" /></div>';
+	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="textinput" type="text" id="first_name" value="" placeholder="Enter first name" /></div>';
+	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="textinput" type="text" id="last_name" value="" placeholder="Enter last name" /></div>';
+	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="button" type="button" value="Add character" id="button" onClick="add_character();" /></div>';
 }
 
 // handles getting the info for characters and outputting it 
