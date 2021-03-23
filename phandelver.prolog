@@ -196,30 +196,22 @@ knows_info(droop, redbrand_minion_info).
 %%%%%%%%%%%% LOCATION INFO %%%%%%%%%%%%%
 
 :- dynamic(location_info_list/2).
-location_info_list(stonehill_inn, [location_name, location_known, location_in_region, in_location, visited]).
-location_info_list(lionshield_coster, [location_name, location_in_region, in_location]).
-location_info_list(barthens_provisions, [location_name, location_in_region, in_location]).
-location_info_list(townmasters_hall, [location_name, location_in_region, in_location]).
-location_info_list(shrine_of_luck, [location_name, location_in_region, in_location]).
-location_info_list(sleeping_giant_tap_house, [location_name, location_in_region, in_location]).
-location_info_list(edermath_orchard, [location_name, location_in_region, in_location]).
-location_info_list(tresendar_manor, [location_name, location_in_region, in_location]).
-location_info_list(old_owl_well, [location_name, location_in_region, in_location]).
-location_info_list(phandalin_miners_exchange, [location_name, location_in_region, in_location]).
-location_info_list(alderleaf_farm, [location_name, location_in_region, in_location]).
-location_info_list(thundertree, [location_name, location_in_region, in_location]).
-location_info_list(agathas_lair, [location_name, location_in_region, in_location]).
-location_info_list(orc_camp, [location_name, location_in_region]).
-location_info_list(cragmaw_castle, [location_name, location_in_region, in_location]).
-location_info_list(wave_echo_cave, [location_name, location_in_region]).
-
-% The regions in the world 
-:- dynamic(region/1).
-region(phandalin).
-region(countryside).
-region(thundertree).
-region(cragmaw_castle).
-region(wave_echo_cave).
+location_info_list(stonehill_inn, [location_name, location_known, in_region, char_in_location, location_visited]).
+location_info_list(lionshield_coster, [location_name, in_region, char_in_location]).
+location_info_list(barthens_provisions, [location_name, in_region, char_in_location]).
+location_info_list(townmasters_hall, [location_name, in_region, char_in_location]).
+location_info_list(shrine_of_luck, [location_name, in_region, char_in_location]).
+location_info_list(sleeping_giant_tap_house, [location_name, in_region, char_in_location]).
+location_info_list(edermath_orchard, [location_name, in_region, char_in_location]).
+location_info_list(tresendar_manor, [location_name, in_region, char_in_location]).
+location_info_list(old_owl_well, [location_name, in_region, char_in_location]).
+location_info_list(phandalin_miners_exchange, [location_name, in_region, char_in_location]).
+location_info_list(alderleaf_farm, [location_name, in_region, char_in_location]).
+location_info_list(thundertree, [location_name, in_region, char_in_location]).
+location_info_list(agathas_lair, [location_name, in_region, char_in_location]).
+location_info_list(orc_camp, [location_name, in_region]).
+location_info_list(cragmaw_castle, [location_name, in_region, char_in_location]).
+location_info_list(wave_echo_cave, [location_name, in_region]).
 
 % The locations in the world.
 :- dynamic(location/1).
@@ -261,53 +253,53 @@ location_name(wave_echo_cave, "Wave Echo Cave").
 :- dynamic(location_known/2).
 location_known(stonehill_inn, true).
 
-:- dynamic(location_in_region/2).
-location_in_region(stonehill_inn, phandalin).
-location_in_region(lionshield_coster, phandalin).
-location_in_region(barthens_provisions, phandalin).
-location_in_region(townmasters_hall, phandalin).
-location_in_region(shrine_of_luck, phandalin).
-location_in_region(sleeping_giant_tap_house, phandalin).
-location_in_region(edermath_orchard, phandalin).
-location_in_region(tresendar_manor, phandalin).
-location_in_region(old_owl_well, countryside).
-location_in_region(phandalin_miners_exchange, phandalin).
-location_in_region(alderleaf_farm, phandalin).
-location_in_region(thundertree, thundertree).
-location_in_region(agathas_lair, countryside).
-location_in_region(orc_camp, countryside).
-location_in_region(cragmaw_castle, cragmaw_castle).
-location_in_region(wave_echo_cave, wave_echo_cave).
+:- dynamic(in_region/2).
+in_region(stonehill_inn, phandalin).
+in_region(lionshield_coster, phandalin).
+in_region(barthens_provisions, phandalin).
+in_region(townmasters_hall, phandalin).
+in_region(shrine_of_luck, phandalin).
+in_region(sleeping_giant_tap_house, phandalin).
+in_region(edermath_orchard, phandalin).
+in_region(tresendar_manor, phandalin).
+in_region(old_owl_well, countryside).
+in_region(phandalin_miners_exchange, phandalin).
+in_region(alderleaf_farm, phandalin).
+in_region(thundertree, thundertree).
+in_region(agathas_lair, countryside).
+in_region(orc_camp, countryside).
+in_region(cragmaw_castle, cragmaw_castle).
+in_region(wave_echo_cave, wave_echo_cave).
 
-:- dynamic(in_location/2).
-in_location(stonehill_inn, party).
-in_location(stonehill_inn, toblin_stonehill).
-in_location(stonehill_inn, narth).
-in_location(stonehill_inn, elsa).
-in_location(stonehill_inn, lanar).
-in_location(stonehill_inn, trilena).
-in_location(stonehill_inn, pip).
-in_location(stonehill_inn, freda).
-in_location(lionshield_coster, linene_graywind).
-in_location(barthens_provisions, elmar_barthen).
-in_location(barthens_provisions, ander).
-in_location(barthens_provisions, thistle).
-in_location(townmasters_hall, harbin_wester).
-in_location(shrine_of_luck, sister_garaele).
-in_location(sleeping_giant_tap_house, grista).
-in_location(sleeping_giant_tap_house, redbrands).
-in_location(edermath_orchard, daren_edermath).
-in_location(tresendar_manor, droop).
-in_location(old_owl_well, hamun).
-in_location(phandalin_miners_exchange, halia_thornton).
-in_location(alderleaf_farm, qelline_alderleaf).
-in_location(alderleaf_farm, carp).
-in_location(thundertree, reidoth).
-in_location(agathas_lair, agatha).
-in_location(cragmaw_castle, gundren_rockseeker).
+:- dynamic(char_in_location/2).
+char_in_location(stonehill_inn, party).
+char_in_location(stonehill_inn, toblin_stonehill).
+char_in_location(stonehill_inn, narth).
+char_in_location(stonehill_inn, elsa).
+char_in_location(stonehill_inn, lanar).
+char_in_location(stonehill_inn, trilena).
+char_in_location(stonehill_inn, pip).
+char_in_location(stonehill_inn, freda).
+char_in_location(lionshield_coster, linene_graywind).
+char_in_location(barthens_provisions, elmar_barthen).
+char_in_location(barthens_provisions, ander).
+char_in_location(barthens_provisions, thistle).
+char_in_location(townmasters_hall, harbin_wester).
+char_in_location(shrine_of_luck, sister_garaele).
+char_in_location(sleeping_giant_tap_house, grista).
+char_in_location(sleeping_giant_tap_house, redbrands).
+char_in_location(edermath_orchard, daren_edermath).
+char_in_location(tresendar_manor, droop).
+char_in_location(old_owl_well, hamun).
+char_in_location(phandalin_miners_exchange, halia_thornton).
+char_in_location(alderleaf_farm, qelline_alderleaf).
+char_in_location(alderleaf_farm, carp).
+char_in_location(thundertree, reidoth).
+char_in_location(agathas_lair, agatha).
+char_in_location(cragmaw_castle, gundren_rockseeker).
 
-:- dynamic(visited/2).
-visited(stonehill_inn, true).
+:- dynamic(location_visited/2).
+location_visited(stonehill_inn, true).
 
 
 

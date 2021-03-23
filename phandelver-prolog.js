@@ -5,7 +5,7 @@ session.consult("phandelver.prolog");
 // Array of variable bindings, one per answer, returned by prolog query
 var bindings = [];
 var filterString = '';
-var activeList = "character";
+var activeList = "location";
 var infoList = [];
 var tagList = [];
 var output = "";
@@ -40,6 +40,7 @@ function display_active_list() {
 		display_character_form();
 	} else if (activeList == "location") {
 		display_location_list();
+		display_location_form();
 	} else if (activeList == "information") {
 		display_information_list();
 	} else if (activeList == "visualization") {
@@ -69,20 +70,16 @@ function display_character_form() {
 	character_form.innerHTML = character_form.innerHTML + '<div><input class="button" type="button" value="Add character" id="button" onClick="add_character();" /></div>';
 }
 
-// function display_location_form() {
-// 	var location_form = document.getElementById("form");
-// 	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="tag" value="" placeholder="Enter tag" /></div>';
-// 	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="first_name" value="" placeholder="Enter first name" /></div>';
-// 	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="last_name" value="" placeholder="Enter last name" /></div>';
-// 	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="occupation" value="" placeholder="Enter occupation" /></div>';
-// 	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="status" value="" placeholder="Enter status (ex. alive)" /></div>';
-// 	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="has_met_party" value="" placeholder="Has met party (ex. true)" /></div>';
-// 	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="faction" value="" placeholder="Enter faction" /></div>';
-// 	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="friend_of" value="" placeholder="Friend of (enter tag)" /></div>';
-// 	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="family_of" value="" placeholder="Family of (enter tag)" /></div>';
-// 	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="knows_info" value="" placeholder="Knows info (enter tag)" /></div>';
-// 	location_form.innerHTML = location_form.innerHTML + '<div><input class="button" type="button" value="Add character" id="button" onClick="add_character();" /></div>';
-// }
+function display_location_form() {
+	var location_form = document.getElementById("form");
+	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="location_tag" value="" placeholder="Enter tag" /></div>';
+	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="location_name" value="" placeholder="Enter location name" /></div>';
+	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="location_known" value="" placeholder="Party knows about location (ex. true)" /></div>';
+	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="in_region" value="" placeholder="Enter region" /></div>';
+	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="char_in_location" value="" placeholder="Enter characters in location" /></div>';
+	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="location_visited" value="" placeholder="Party has visited location (ex. true)" /></div>';
+	location_form.innerHTML = location_form.innerHTML + '<div><input class="button" type="button" value="Add location" id="button" onClick="add_location();" /></div>';
+}
 
 // handles getting the info for characters and outputting it 
 function display_character_list() {
@@ -228,33 +225,6 @@ function print_location(location_tag, location_info_list) {
 	check_against_search_filter(location_tag, output, locations_output); 
 }
 
-// // Gets a list of all the locations and prints them out
-// function print_locations() {
-// 	var print_bindings = function(bindings) {
-// 		for(var i = 0; i < bindings.length; i++) {
-// 			print_location(bindings[i]);
-// 		}
-// 	}
-// 	bindings = [];
-// 	session.query("location_name(Loc, Name).");
-// 	session.answers(get_callback(print_bindings));
-// }
-
-// // outputs a single location if they are found in the search
-// function print_location(binding) {
-// 	if (binding != null) {
-// 		// Look up term that has been bound to variable "Name"
-// 		let name = binding.lookup("Name"); 
-// 		let locName = name.toString(); // Turn the Term into a string.
-// 		// Check if the location matches the search
-// 		if (locName.toLowerCase().match(filterString.toLowerCase())) {
-// 			var locations_output = document.getElementById("locations_output");
-// 			locations_output.innerHTML = locations_output.innerHTML + "<div>" + locName +  "</div>"; // Add name to HTML page
-// 		}
-// 	}
-// }
-
-
 // Gets a list of all the locations and prints them out
 function print_information() {
 	var print_bindings = function(bindings) {
@@ -287,28 +257,16 @@ function print_information_piece(binding) {
 // Addds a new character to the world from input 
 function add_character() { 
 	// Get the values from the form 
-	var tag = document.getElementById("tag").value;
-	var first_name = document.getElementById("first_name").value;
-	var last_name = document.getElementById("last_name").value;
-	var occupation = document.getElementById("occupation").value;
-	var status = document.getElementById("status").value;
-	var has_met_party = document.getElementById("has_met_party").value;
-	var faction = document.getElementById("faction").value;
-	var friend_of = document.getElementById("friend_of").value;
-	var family_of = document.getElementById("family_of").value;
-	var knows_info = document.getElementById("knows_info").value;
-
-	// Convert the values to strings 
-	var charTag = tag.toString().lowercase();
-	var charFirstName = first_name.toString().lowercase();
-	var charLastName = last_name.toString().lowercase();
-	var charOccupation = occupation.toString().lowercase();
-	var charStatus = status.toString().lowercase();
-	var charHasMetParty = has_met_party.toString().lowercase();
-	var charFaction = faction.toString().lowercase();
-	var charFriendOf = friend_of.toString().lowercase();
-	var charFamilyOf = family_of.toString().lowercase();
-	var charKnowsInfo = knows_info.toString().lowercase();
+	var charTag = document.getElementById("tag").value.toString().lowercase();
+	var charFirstName = document.getElementById("first_name").value.toString().lowercase();
+	var charLastName = document.getElementById("last_name").value.toString().lowercase();
+	var charOccupation = document.getElementById("occupation").value.toString().lowercase();
+	var charStatus = document.getElementById("status").value.toString().lowercase();
+	var charHasMetParty = document.getElementById("has_met_party").value.toString().lowercase();
+	var charFaction = document.getElementById("faction").value.toString().lowercase();
+	var charFriendOf = document.getElementById("friend_of").value.toString().lowercase();
+	var charFamilyOf = document.getElementById("family_of").value.toString().lowercase();
+	var charKnowsInfo = document.getElementById("knows_info").value.toString().lowercase();
 
 	// Update the UI and clear the form 
 	var add_to_world = function(bindings) {
@@ -340,6 +298,37 @@ function add_character() {
 	session.answers(get_callback(add_to_world));
 }
 
+// Addds a new location to the world from input 
+function add_location() { 
+	// Get the values from the form 
+	var locTag = document.getElementById("location_tag").value.toString().lowercase();
+	var locName = document.getElementById("location_name").value.toString().lowercase();
+	var locKnown = document.getElementById("location_known").value.toString().lowercase();
+	var locInRegion = document.getElementById("in_region").value.toString().lowercase();
+	var charInLocation = document.getElementById("char_in_location").value.toString().lowercase();
+	var locVisited = document.getElementById("location_visited").value.toString().lowercase();
+
+	// Update the UI and clear the form 
+	var add_to_world = function(bindings) {
+		display_active_list();
+		document.getElementById("location_tag").value = "";
+		document.getElementById("location_name").value = "";
+		document.getElementById("location_known").value = "";
+		document.getElementById("in_region").value = "";
+		document.getElementById("char_in_location").value = "";
+		document.getElementById("location_visited").value = "";
+	}
+	bindings = [];
+	session.query(
+		"asserta(location(" + locTag + "))." + 
+		"asserta(location_name(" + locTag + " , " + locName + " ))." + 
+		"asserta(location_known(" + locTag + " , " + locKnown + "))." + 
+		"asserta(in_region(" + locTag + " , " + locInRegion + "))." + 
+		"asserta(char_in_location(" + locTag + " , " + charInLocation + "))." + 
+		"asserta(location_visited(" + locTag + " , " + locVisited + "))." + 
+		"asserta(location_info_list(" + locTag + ", [location_name, location_known, in_region, char_in_location, location_visited])).");
+	session.answers(get_callback(add_to_world));
+}
 
 // Utility functions
 
