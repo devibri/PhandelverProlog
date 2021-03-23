@@ -6,10 +6,8 @@ session.consult("phandelver.prolog");
 var bindings = [];
 var filterString = '';
 var activeList = "character";
-var characterInfoList = [];
-var characterTagList = [];
-var locationInfoList = [];
-var locationTagList = [];
+var infoList = [];
+var tagList = [];
 var output = "";
 
 function clear_all_lists() {
@@ -74,24 +72,24 @@ function display_character_form() {
 // handles getting the info for characters and outputting it 
 function display_character_list() {
 	activeList = "character";
-	clear_character_info();
+	clear_saved_info();
 	// For each character in the character tag list, print the character's info 
 	get_character_info();
 	setTimeout(() => {  
-		for (var i = 0; i < characterInfoList.length; i++) {
-			print_character(characterTagList[i], characterInfoList[i]);
+		for (var i = 0; i < infoList.length; i++) {
+			print_character(tagList[i], infoList[i]);
 		}
 	}, 500);
 }
 
 function display_location_list() {
 	activeList = "location";
-	clear_location_info();
+	clear_saved_info();
 	// For each location in the location tag list, print the location's info 
 	get_location_info();
 	setTimeout(() => {  
-		for (var i = 0; i < locationInfoList.length; i++) {
-			print_location(locationTagList[i], locationInfoList[i]);
+		for (var i = 0; i < infoList.length; i++) {
+			print_location(tagList[i], infoList[i]);
 		}
 	}, 500);
 }
@@ -123,15 +121,10 @@ function get_callback(funcWhenDone) {
 	return callbackFunc;
 } 
 
-// Removes the current character information so it can be redisplayed
-function clear_character_info() {
-	characterInfoList = [];
-	characterTagList = [];
-}
-
-function clear_location_info() {
-	locationInfoList = [];
-	locationTagList = [];
+// Removes the current information so it can be redisplayed
+function clear_saved_info() {
+	infoList = [];
+	tagList = [];
 }
 
 /* Handing character info and output */
@@ -154,8 +147,8 @@ function get_character(binding) {
 		var char_name = binding.lookup("Char"); 
 		var char_info_list = binding.lookup("Char_Info_List");
 		var list = char_info_list.toJavaScript();
-		characterTagList.push(char_name);
-		characterInfoList.push(list);
+		tagList.push(char_name);
+		infoList.push(list);
 	}
 }
 
@@ -202,8 +195,8 @@ function get_location(binding) {
 		var loc_name = binding.lookup("Loc"); 
 		var loc_info_list = binding.lookup("Loc_Info_List");
 		var list = loc_info_list.toJavaScript();
-		locationTagList.push(loc_name); 
-		locationInfoList.push(list);
+		tagList.push(loc_name); 
+		infoList.push(list);
 	}
 }
 
