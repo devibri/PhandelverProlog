@@ -42,6 +42,8 @@ function display_active_list() {
 		display_location_list();
 	} else if (activeList == "information") {
 		display_information_list();
+	} else if (activeList == "visualization") {
+		// for now, do nothing
 	} else {
 		console.log("ERROR: Tried to display non-existant list");
 	}
