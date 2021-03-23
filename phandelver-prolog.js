@@ -8,6 +8,8 @@ var filterString = '';
 var activeList = "character";
 var characterInfoList = [];
 var characterTagList = [];
+var locationInfoList = [];
+var locationTagList = [];
 var output = "";
 
 function clear_all_lists() {
@@ -84,7 +86,15 @@ function display_character_list() {
 
 function display_location_list() {
 	activeList = "location";
-	print_locations();
+	//print_locations();
+	clear_location_info();
+	// For each character in the character tag list, print the character's info 
+	get_location_info();
+	setTimeout(() => {  
+		for (var i = 0; i < locationInfoList.length; i++) {
+			print_location(locationTagList[i], locationInfoList[i]);
+		}
+	}, 500);
 }
 
 function display_information_list() {
@@ -118,6 +128,11 @@ function get_callback(funcWhenDone) {
 function clear_character_info() {
 	characterInfoList = [];
 	characterTagList = [];
+}
+
+function clear_location_info() {
+	locationInfoList = [];
+	locationTagList = [];
 }
 
 /* Handing character info and output */
@@ -168,31 +183,79 @@ function print_character_info(binding) {
 	}
 }
 
-// Gets a list of all the locations and prints them out
-function print_locations() {
-	var print_bindings = function(bindings) {
+
+
+// Gets character tags and the list of all the info associated with each character
+function get_location_info() {
+	var get_all_bindings = function(bindings) {
 		for(var i = 0; i < bindings.length; i++) {
-			print_location(bindings[i]);
+			get_location(bindings[i]);
 		}
 	}
 	bindings = [];
-	session.query("location_name(Loc, Name).");
-	session.answers(get_callback(print_bindings));
+	session.query("location(Loc), location_info_list(Loc, Loc_Info_List).");
+	session.answers(get_callback(get_all_bindings));
 }
 
-// outputs a single location if they are found in the search
-function print_location(binding) {
+// Callback function for get_character_info, takes each character tag and its info and puts it into a list
+function get_location(binding) {
 	if (binding != null) {
-		// Look up term that has been bound to variable "Name"
-		let name = binding.lookup("Name"); 
-		let locName = name.toString(); // Turn the Term into a string.
-		// Check if the location matches the search
-		if (locName.toLowerCase().match(filterString.toLowerCase())) {
-			var locations_output = document.getElementById("locations_output");
-			locations_output.innerHTML = locations_output.innerHTML + "<div>" + locName +  "</div>"; // Add name to HTML page
-		}
+		var loc_name = binding.lookup("Loc"); 
+		var loc_info_list = binding.lookup("Loc_Info_List");
+		var list = loc_info_list.toJavaScript();
+		locationTagList.push(loc_name); 
+		locationInfoList.push(list);
 	}
 }
+
+// Takes the list of all character info lists, and for each elementin the list, outputs it 
+function print_location(location_tag, location_info_list) {
+	output = "";
+	var get_all_bindings = function(answer) {
+		print_location_info(answer);
+	}
+	for (var i = 0; i < location_info_list.length; i++) {
+		session.query("Pred = " + location_info_list[i] + ", findall([Pred, Info], call( Pred, " + location_tag + ", Info), List).");
+		session.answer(get_all_bindings);
+	}
+	// Get the appropriate list and output the character if it matches the search
+	var locations_output = document.getElementById("locations_output");
+	check_against_search_filter(location_tag, output, locations_output); 
+}
+
+// Callback function for print_character, adds each solution to find character info and adds it to the output
+function print_location_info(binding) {
+	if (binding != null) {
+		var list = binding.lookup("List").toJavaScript(); 
+		output = output + list + "&emsp;";
+	}
+}
+
+// // Gets a list of all the locations and prints them out
+// function print_locations() {
+// 	var print_bindings = function(bindings) {
+// 		for(var i = 0; i < bindings.length; i++) {
+// 			print_location(bindings[i]);
+// 		}
+// 	}
+// 	bindings = [];
+// 	session.query("location_name(Loc, Name).");
+// 	session.answers(get_callback(print_bindings));
+// }
+
+// // outputs a single location if they are found in the search
+// function print_location(binding) {
+// 	if (binding != null) {
+// 		// Look up term that has been bound to variable "Name"
+// 		let name = binding.lookup("Name"); 
+// 		let locName = name.toString(); // Turn the Term into a string.
+// 		// Check if the location matches the search
+// 		if (locName.toLowerCase().match(filterString.toLowerCase())) {
+// 			var locations_output = document.getElementById("locations_output");
+// 			locations_output.innerHTML = locations_output.innerHTML + "<div>" + locName +  "</div>"; // Add name to HTML page
+// 		}
+// 	}
+// }
 
 
 // Gets a list of all the locations and prints them out
