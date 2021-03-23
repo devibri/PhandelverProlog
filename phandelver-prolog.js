@@ -70,7 +70,7 @@ function display_character_list() {
 		for (var i = 0; i < characterInfoList.length; i++) {
 			print_character(characterTagList[i], characterInfoList[i]);
 		}
-	}, 200);
+	}, 500);
 }
 
 function display_location_list() {

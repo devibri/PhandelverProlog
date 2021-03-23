@@ -4,6 +4,28 @@
 character_info_list(toblin_stonehill, [first_name, last_name, occupation, status, has_met_party, knows_info]).
 character_info_list(elmar_barthen, [first_name, last_name, occupation, status, knows_info]).
 character_info_list(daren_edermath, [first_name, last_name, occupation, status, faction, knows_info]).
+character_info_list(linene_graywind, [first_name, last_name, occupation, status]).
+character_info_list(halia_thornton, [first_name, last_name, occupation, status, faction, knows_info]).
+character_info_list(qelline_alderleaf, [first_name, last_name, occupation, status, faction, friend_of, family_of, knows_info]).
+character_info_list(sister_garaele, [first_name, last_name, occupation, status, faction, knows_info]).
+character_info_list(harbin_wester, [first_name, last_name, occupation, status, knows_info]).
+character_info_list(sildar_hallwinter, [first_name, last_name, status, has_met_party, faction, knows_info]).
+character_info_list(narth, [first_name, occupation, status, faction, knows_info]).
+character_info_list(redbrands, [first_name, status, faction]).
+character_info_list(elsa, [first_name, status]).
+character_info_list(lanar, [first_name, status, knows_info]).
+character_info_list(trilena, [first_name, status, knows_info]).
+character_info_list(pip, [first_name, status, friend_of, knows_info]).
+character_info_list(freda, [first_name, status, knows_info]).
+character_info_list(ander, [first_name, status]).
+character_info_list(thistle, [first_name, status]).
+character_info_list(grista, [first_name, status]).
+character_info_list(carp, [first_name, status, friend_of, family_of, knows_info]).
+character_info_list(agatha, [first_name, status, knows_info]).
+character_info_list(reidoth, [first_name, status, friend_of, knows_info]).
+character_info_list(gundren_rockseeker, [first_name, last_name, status, knows_info]).
+character_info_list(hamun, [first_name, occupation, status, knows_info]).
+character_info_list(droop, [first_name, status, knows_info]).
 
 % The characters in the world.
 :- dynamic(character/1).
@@ -80,10 +102,11 @@ occupation(elmar_barthen, "Owns trading post").
 occupation(daren_edermath, "Retired adventurer").
 occupation(linene_graywind, "Runs trading post").
 occupation(halia_thornton, "Runs Phandalin Miner's Exchange").
-occupation(qelline_alderleaf, "Halfling farmer").
+occupation(qelline_alderleaf, "Farmer").
 occupation(sister_garaele, "Elf cleric of Tymora").
 occupation(harbin_wester, "Townmaster of Phandalin").
 occupation(narth, "Farmer").
+occupation(narth, "Necromancer").
 
 :- dynamic(status/2).
 status(toblin_stonehill, alive).
@@ -115,6 +138,7 @@ status(droop, alive).
 % Has met the party 
 :- dynamic(has_met_party/2).
 has_met_party(toblin_stonehill, true).
+has_met_party(sildar_hallwinter, true).
 
 :- dynamic(faction/2).
 faction(daren_edermath, "Order of the Gauntlet").
@@ -125,10 +149,13 @@ faction(redbrands, "Redbrands").
 
 :- dynamic(friend_of/2).
 friend_of(qelline_alderleaf, reidoth).
+friend_of(reidoth, qelline_alderleaf).
 friend_of(pip, carp).
+friend_of(carp, pip).
 
 :- dynamic(family_of/2).
 family_of(carp, qelline_alderleaf).
+family_of(qelline_alderleaf, carp).
 
 % Information the character knows about
 :- dynamic(knows_info/2).
@@ -420,9 +447,3 @@ goes_to_info(find_cragmaw_castle, wave_echo_cave_map).
 goes_to_info(remove_orc_camp, finish_hamun_quest).
 goes_to_info(finish_hamun_quest, find_wave_echo_cave).
 goes_to_info(learn_tower_maker, finish_hamun_quest).
-
-
-
-full_name(Char, FirstName, LastName) :- 
-	first_name(Char, FirstName),
-	last_name(Char, LastName).
