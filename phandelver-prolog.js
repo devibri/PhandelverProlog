@@ -55,19 +55,34 @@ function clear_form() {
 }
 
 function display_character_form() {
-	var characters_form = document.getElementById("form");
-	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="textinput" type="text" id="tag" value="" placeholder="Enter tag" /></div>';
-	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="textinput" type="text" id="first_name" value="" placeholder="Enter first name" /></div>';
-	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="textinput" type="text" id="last_name" value="" placeholder="Enter last name" /></div>';
-	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="textinput" type="text" id="occupation" value="" placeholder="Enter occupation" /></div>';
-	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="textinput" type="text" id="status" value="" placeholder="Enter status (ex. alive)" /></div>';
-	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="textinput" type="text" id="has_met_party" value="" placeholder="Has met party (ex. true)" /></div>';
-	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="textinput" type="text" id="faction" value="" placeholder="Enter faction" /></div>';
-	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="textinput" type="text" id="friend_of" value="" placeholder="Friend of (enter tag)" /></div>';
-	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="textinput" type="text" id="family_of" value="" placeholder="Family of (enter tag)" /></div>';
-	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="textinput" type="text" id="knows_info" value="" placeholder="Knows info (enter tag)" /></div>';
-	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="button" type="button" value="Add character" id="button" onClick="add_character();" /></div>';
+	var character_form = document.getElementById("form");
+	character_form.innerHTML = character_form.innerHTML + '<div><input class="textinput" type="text" id="tag" value="" placeholder="Enter tag" /></div>';
+	character_form.innerHTML = character_form.innerHTML + '<div><input class="textinput" type="text" id="first_name" value="" placeholder="Enter first name" /></div>';
+	character_form.innerHTML = character_form.innerHTML + '<div><input class="textinput" type="text" id="last_name" value="" placeholder="Enter last name" /></div>';
+	character_form.innerHTML = character_form.innerHTML + '<div><input class="textinput" type="text" id="occupation" value="" placeholder="Enter occupation" /></div>';
+	character_form.innerHTML = character_form.innerHTML + '<div><input class="textinput" type="text" id="status" value="" placeholder="Enter status (ex. alive)" /></div>';
+	character_form.innerHTML = character_form.innerHTML + '<div><input class="textinput" type="text" id="has_met_party" value="" placeholder="Has met party (ex. true)" /></div>';
+	character_form.innerHTML = character_form.innerHTML + '<div><input class="textinput" type="text" id="faction" value="" placeholder="Enter faction" /></div>';
+	character_form.innerHTML = character_form.innerHTML + '<div><input class="textinput" type="text" id="friend_of" value="" placeholder="Friend of (enter tag)" /></div>';
+	character_form.innerHTML = character_form.innerHTML + '<div><input class="textinput" type="text" id="family_of" value="" placeholder="Family of (enter tag)" /></div>';
+	character_form.innerHTML = character_form.innerHTML + '<div><input class="textinput" type="text" id="knows_info" value="" placeholder="Knows info (enter tag)" /></div>';
+	character_form.innerHTML = character_form.innerHTML + '<div><input class="button" type="button" value="Add character" id="button" onClick="add_character();" /></div>';
 }
+
+// function display_location_form() {
+// 	var location_form = document.getElementById("form");
+// 	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="tag" value="" placeholder="Enter tag" /></div>';
+// 	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="first_name" value="" placeholder="Enter first name" /></div>';
+// 	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="last_name" value="" placeholder="Enter last name" /></div>';
+// 	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="occupation" value="" placeholder="Enter occupation" /></div>';
+// 	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="status" value="" placeholder="Enter status (ex. alive)" /></div>';
+// 	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="has_met_party" value="" placeholder="Has met party (ex. true)" /></div>';
+// 	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="faction" value="" placeholder="Enter faction" /></div>';
+// 	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="friend_of" value="" placeholder="Friend of (enter tag)" /></div>';
+// 	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="family_of" value="" placeholder="Family of (enter tag)" /></div>';
+// 	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="knows_info" value="" placeholder="Knows info (enter tag)" /></div>';
+// 	location_form.innerHTML = location_form.innerHTML + '<div><input class="button" type="button" value="Add character" id="button" onClick="add_character();" /></div>';
+// }
 
 // handles getting the info for characters and outputting it 
 function display_character_list() {
@@ -156,7 +171,7 @@ function get_character(binding) {
 function print_character(character_tag, character_info_list) {
 	output = "";
 	var get_all_bindings = function(answer) {
-		print_character_info(answer);
+		print_list_info(answer);
 	}
 	for (var i = 0; i < character_info_list.length; i++) {
 		session.query("Pred = " + character_info_list[i] + ", findall([Pred, Info], call( Pred, " + character_tag + ", Info), List).");
@@ -167,15 +182,13 @@ function print_character(character_tag, character_info_list) {
 	check_against_search_filter(character_tag, output, characters_output); 
 }
 
-// Callback function for print_character, adds each solution to find character info and adds it to the output
-function print_character_info(binding) {
+// Callback function that takes a list and outputs it 
+function print_list_info(binding) {
 	if (binding != null) {
 		var list = binding.lookup("List").toJavaScript(); 
 		output = output + list + "&emsp;";
 	}
 }
-
-
 
 // Gets character tags and the list of all the info associated with each character
 function get_location_info() {
@@ -204,7 +217,7 @@ function get_location(binding) {
 function print_location(location_tag, location_info_list) {
 	output = "";
 	var get_all_bindings = function(answer) {
-		print_location_info(answer);
+		print_list_info(answer);
 	}
 	for (var i = 0; i < location_info_list.length; i++) {
 		session.query("Pred = " + location_info_list[i] + ", findall([Pred, Info], call( Pred, " + location_tag + ", Info), List).");
@@ -213,14 +226,6 @@ function print_location(location_tag, location_info_list) {
 	// Get the appropriate list and output the character if it matches the search
 	var locations_output = document.getElementById("locations_output");
 	check_against_search_filter(location_tag, output, locations_output); 
-}
-
-// Callback function for print_character, adds each solution to find character info and adds it to the output
-function print_location_info(binding) {
-	if (binding != null) {
-		var list = binding.lookup("List").toJavaScript(); 
-		output = output + list + "&emsp;";
-	}
 }
 
 // // Gets a list of all the locations and prints them out
