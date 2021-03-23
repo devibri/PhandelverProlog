@@ -248,8 +248,6 @@ function add_character() {
 	var charFamilyOf = family_of.toString().lowercase();
 	var charKnowsInfo = knows_info.toString().lowercase();
 
-	console.log("chartag is " + charTag);
-
 	// Update the UI and clear the form 
 	var add_to_world = function(bindings) {
 		display_active_list();
