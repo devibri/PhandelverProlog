@@ -1,5 +1,7 @@
 :- set_prolog_flag(double_quotes, atom).
 
+%%%%%%%%%%%% CHARACTER INFO %%%%%%%%%%%%%
+
 :- dynamic(character_info_list/2).
 character_info_list(toblin_stonehill, [first_name, last_name, occupation, status, has_met_party, knows_info]).
 character_info_list(elmar_barthen, [first_name, last_name, occupation, status, knows_info]).
@@ -185,6 +187,32 @@ knows_info(hamun, hamun_quest).
 knows_info(hamun, finish_hamun_quest).
 knows_info(droop, redbrand_minion_info).
 
+
+
+
+
+
+
+%%%%%%%%%%%% LOCATION INFO %%%%%%%%%%%%%
+
+:- dynamic(location_info_list/2).
+location_info_list(stonehill_inn, [location_name, location_known, location_in_region, in_location, visited]).
+location_info_list(lionshield_coster, [location_name, location_in_region, in_location]).
+location_info_list(barthens_provisions, [location_name, location_in_region, in_location]).
+location_info_list(townmasters_hall, [location_name, location_in_region, in_location]).
+location_info_list(shrine_of_luck, [location_name, location_in_region, in_location]).
+location_info_list(sleeping_giant_tap_house, [location_name, location_in_region, in_location]).
+location_info_list(edermath_orchard, [location_name, location_in_region, in_location]).
+location_info_list(tresendar_manor, [location_name, location_in_region, in_location]).
+location_info_list(old_owl_well, [location_name, location_in_region, in_location]).
+location_info_list(phandalin_miners_exchange, [location_name, location_in_region, in_location]).
+location_info_list(alderleaf_farm, [location_name, location_in_region, in_location]).
+location_info_list(thundertree, [location_name, location_in_region, in_location]).
+location_info_list(agathas_lair, [location_name, location_in_region, in_location]).
+location_info_list(orc_camp, [location_name, location_in_region]).
+location_info_list(cragmaw_castle, [location_name, location_in_region, in_location]).
+location_info_list(wave_echo_cave, [location_name, location_in_region]).
+
 % The regions in the world 
 :- dynamic(region/1).
 region(phandalin).
@@ -195,10 +223,6 @@ region(wave_echo_cave).
 
 % The locations in the world.
 :- dynamic(location/1).
-location(stonehill_inn).
-location(lionshield_coster).
-location(barthens_provisions).
-location(townmasters_hall).
 location(stonehill_inn).
 location(lionshield_coster).
 location(barthens_provisions).
@@ -235,16 +259,7 @@ location_name(cragmaw_castle, "Cragmaw Castle").
 location_name(wave_echo_cave, "Wave Echo Cave").
 
 :- dynamic(location_known/2).
-location_known(stonehill_inn).
-location_known(lionshield_coster).
-location_known(barthens_provisions).
-location_known(townmasters_hall).
-location_known(shrine_of_luck).
-location_known(sleeping_giant_tap_house).
-location_known(edermath_orchard).
-location_known(phandalin_miners_exchange).
-location_known(alderleaf_farm).
-
+location_known(stonehill_inn, true).
 
 :- dynamic(location_in_region/2).
 location_in_region(stonehill_inn, phandalin).
@@ -265,7 +280,7 @@ location_in_region(cragmaw_castle, cragmaw_castle).
 location_in_region(wave_echo_cave, wave_echo_cave).
 
 :- dynamic(in_location/2).
-in_location(party, stonehill_inn).
+in_location(stonehill_inn, party).
 in_location(stonehill_inn, toblin_stonehill).
 in_location(stonehill_inn, narth).
 in_location(stonehill_inn, elsa).
@@ -289,9 +304,46 @@ in_location(alderleaf_farm, qelline_alderleaf).
 in_location(alderleaf_farm, carp).
 in_location(thundertree, reidoth).
 in_location(agathas_lair, agatha).
+in_location(cragmaw_castle, gundren_rockseeker).
 
-:- dynamic(visited/1).
-visited(stonehill_inn).
+:- dynamic(visited/2).
+visited(stonehill_inn, true).
+
+
+
+
+%%%%%%%%%%%% INFORMATION INFO %%%%%%%%%%%%%
+
+:- dynamic(information_info_list/2).
+information_info_list(redbrand_hideout_location, [info_desc, storyline, goes_to_location, goes_to_info]).
+information_info_list(secret_tunnel_location, [info_desc, storyline, goes_to_location, goes_to_info]).
+information_info_list(secret_tunnel_knowledge, [info_desc, storyline, goes_to_location, goes_to_info]).
+information_info_list(orcs_triboar_trail, [info_desc, storyline, goes_to_location, goes_to_info]).
+information_info_list(dendrar_family_kidnapped, [info_desc, storyline, goes_to_info]).
+information_info_list(redbrands_and_halia, [info_desc, storyline, goes_to_location, goes_to_info]).
+information_info_list(redbrand_hangout, [info_desc, storyline, goes_to_location, goes_to_info]).
+information_info_list(sister_garaele_exhausted, [info_desc, storyline, goes_to_location, goes_to_info]).
+information_info_list(goblin_cragmaw_castle, [info_desc, storyline, goes_to_location, goes_to_info]).
+information_info_list(kill_redbrand_leader, [info_desc, storyline, goes_to_location, goes_to_info]).
+information_info_list(get_rid_of_redbrands, [info_desc, storyline, goes_to_info]).
+information_info_list(digging_old_owl_well, [info_desc, storyline, goes_to_location, goes_to_info]).
+information_info_list(ask_agatha_about_book, [info_desc, storyline, goes_to_location, goes_to_info]).
+information_info_list(missing_iarno, [info_desc, storyline, goes_to_info]).
+information_info_list(townmaster_and_redbrands, [info_desc, storyline]).
+information_info_list(redbrand_shakedown, [info_desc, storyline, goes_to_info]).
+information_info_list(reidoth_location, [info_desc, storyline, goes_to_location, goes_to_info]).
+information_info_list(agatha_info, [info_desc, storyline, goes_to_location, goes_to_info]).
+information_info_list(green_dragon, [info_desc, storyline, goes_to_location, goes_to_info]).
+information_info_list(wave_echo_cave_map, [info_desc, storyline, goes_to_location, goes_to_info]).
+information_info_list(hamun_quest, [info_desc, storyline, goes_to_location, goes_to_info]).
+information_info_list(redbrand_minion_info, [info_desc, storyline, goes_to_location, goes_to_info]).
+information_info_list(learn_about_redbrands, [info_desc, storyline, goes_to_info]).
+information_info_list(find_redbrands, [info_desc, storyline, goes_to_info]).
+information_info_list(find_cragmaw_castle, [info_desc, storyline, goes_to_info]).
+information_info_list(find_wave_echo_cave, [info_desc, storyline, goes_to_info]).
+information_info_list(remove_orc_camp, [info_desc, storyline, goes_to_info]).
+information_info_list(finish_hamun_quest, [info_desc, storyline, goes_to_info]).
+information_info_list(learn_tower_maker, [info_desc, storyline, goes_to_info]).
 
 :- dynamic(info/1).
 info(redbrand_hideout_location).
@@ -323,6 +375,11 @@ info(find_wave_echo_cave).
 info(remove_orc_camp).
 info(finish_hamun_quest).
 info(learn_tower_maker).
+
+
+
+
+
 
 :- dynamic(info_desc/2).
 info_desc(redbrand_hideout_location, "The Redbrand hideout is at Tresendar Manor").
