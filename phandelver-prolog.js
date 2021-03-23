@@ -157,7 +157,7 @@ function print_character(character_tag, character_info_list) {
 	}
 	// Get the appropriate list and output the character if it matches the search
 	var characters_output = document.getElementById("characters_output");
-	check_against_search_filter(output, characters_output); 
+	check_against_search_filter(character_tag, output, characters_output); 
 }
 
 // Callback function for print_character, adds each solution to find character info and adds it to the output
@@ -301,8 +301,8 @@ function update_filter_string() {
 }
 
 // Checks if the thing being outputted to list matches the search filter; if so, output it 
-function check_against_search_filter(output, output_list) {
+function check_against_search_filter(tag, output, output_list) {
 	if (output.toLowerCase().match(filterString.toLowerCase())) {
-		output_list.innerHTML = output_list.innerHTML + "<div>" + output +  "</div>"; // Add name to HTML page
+		output_list.innerHTML = output_list.innerHTML + "<div class='output-row'>" + tag + "  -  " + output +  "</div>"; // Add name to HTML page
 	}
 }
