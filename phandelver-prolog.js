@@ -57,6 +57,13 @@ function display_character_form() {
 	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="textinput" type="text" id="tag" value="" placeholder="Enter tag" /></div>';
 	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="textinput" type="text" id="first_name" value="" placeholder="Enter first name" /></div>';
 	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="textinput" type="text" id="last_name" value="" placeholder="Enter last name" /></div>';
+	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="textinput" type="text" id="occupation" value="" placeholder="Enter occupation" /></div>';
+	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="textinput" type="text" id="status" value="" placeholder="Enter status (ex. alive)" /></div>';
+	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="textinput" type="text" id="has_met_party" value="" placeholder="Has met party (ex. true)" /></div>';
+	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="textinput" type="text" id="faction" value="" placeholder="Enter faction" /></div>';
+	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="textinput" type="text" id="friend_of" value="" placeholder="Friend of (enter tag)" /></div>';
+	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="textinput" type="text" id="family_of" value="" placeholder="Family of (enter tag)" /></div>';
+	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="textinput" type="text" id="knows_info" value="" placeholder="Knows info (enter tag)" /></div>';
 	characters_form.innerHTML = characters_form.innerHTML + '<div><input class="button" type="button" value="Add character" id="button" onClick="add_character();" /></div>';
 }
 
@@ -221,21 +228,55 @@ function add_character() {
 	var tag = document.getElementById("tag").value;
 	var first_name = document.getElementById("first_name").value;
 	var last_name = document.getElementById("last_name").value;
+	var occupation = document.getElementById("occupation").value;
+	var status = document.getElementById("status").value;
+	var has_met_party = document.getElementById("has_met_party").value;
+	var faction = document.getElementById("faction").value;
+	var friend_of = document.getElementById("friend_of").value;
+	var family_of = document.getElementById("family_of").value;
+	var knows_info = document.getElementById("knows_info").value;
 
 	// Convert the values to strings 
 	var charTag = tag.toString().lowercase();
 	var charFirstName = first_name.toString().lowercase();
 	var charLastName = last_name.toString().lowercase();
+	var charOccupation = occupation.toString().lowercase();
+	var charStatus = status.toString().lowercase();
+	var charHasMetParty = has_met_party.toString().lowercase();
+	var charFaction = faction.toString().lowercase();
+	var charFriendOf = friend_of.toString().lowercase();
+	var charFamilyOf = family_of.toString().lowercase();
+	var charKnowsInfo = knows_info.toString().lowercase();
+
+	console.log("chartag is " + charTag);
 
 	// Update the UI and clear the form 
 	var add_to_world = function(bindings) {
-		display_character_list();
+		display_active_list();
 		document.getElementById("tag").value = "";
 		document.getElementById("first_name").value = "";
 		document.getElementById("last_name").value = "";
+		document.getElementById("occupation").value = "";
+		document.getElementById("status").value = "";
+		document.getElementById("has_met_party").value = "";
+		document.getElementById("faction").value = "";
+		document.getElementById("friend_of").value = "";
+		document.getElementById("family_of").value = "";
+		document.getElementById("knows_info").value = "";
 	}
 	bindings = [];
-	session.query("asserta(character(" + charTag + ")). asserta(first_name(" + charTag + " , " + charFirstName + " ))." + "asserta(last_name(" + charTag + " , " + charLastName + ")).");
+	session.query(
+		"asserta(character(" + charTag + "))." + 
+		"asserta(first_name(" + charTag + " , " + charFirstName + " ))." + 
+		"asserta(last_name(" + charTag + " , " + charLastName + "))." + 
+		"asserta(occupation(" + charTag + " , " + charOccupation + "))." + 
+		"asserta(status(" + charTag + " , " + charStatus + "))." + 
+		"asserta(has_met_party(" + charTag + " , " + charHasMetParty + "))." + 
+		"asserta(faction(" + charTag + " , " + charFaction + "))." + 
+		"asserta(friend_of(" + charTag + " , " + charFriendOf + "))." + 
+		"asserta(family_of(" + charTag + " , " + charFamilyOf + "))." + 
+		"asserta(knows_info(" + charTag + " , " + charKnowsInfo + "))." + 
+		"asserta(character_info_list(" + charTag + ", [first_name, last_name, occupation, status, has_met_party, faction, friend_of, family_of, knows_info])).");
 	session.answers(get_callback(add_to_world));
 }
 
