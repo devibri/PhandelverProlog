@@ -5,6 +5,8 @@
 	<title>Phandelver Prolog Database</title>
   <script src="tau-prolog.js" defer></script>
   <script src="phandelver-prolog.js" defer></script>
+  <link rel="stylesheet" href="style.css">
+  
 </head>
 <body>
 	<main>
@@ -19,20 +21,29 @@
 		<input class="textinput" type="text" id="search" value="" placeholder="Search" />
 		<!-- Button -->
 		<input class="button" type="button" value="Search" id="button" onClick="update_filter_string(value);" />
-		<!-- Tag input -->
-		<input class="textinput" type="text" id="tag" value="" placeholder="Enter tag" />
-		<!-- Name input -->
-		<input class="textinput" type="text" id="first_name" value="" placeholder="Enter first name" />
-		<!-- Name input -->
-		<input class="textinput" type="text" id="last_name" value="" placeholder="Enter last name" />
-		<!-- Button -->
-		<input class="button" type="button" value="Add character" id="button" onClick="add_character();" />
-		<!-- Where names will be outputted --> 
-		<div class="output" id="characters_output"></div>
-		<!-- Where locations will be outputted --> 
-		<div class="output" id="locations_output"></div>
-		<!-- Where information will be outputted -->
-		<div class="output" id="information_output"></div>
+
+		<div class="row">
+			<div class="column left">
+				<!-- Where names will be outputted --> 
+				<div class="output" id="characters_output"></div>
+				<!-- Where locations will be outputted --> 
+				<div class="output" id="locations_output"></div>
+				<!-- Where information will be outputted -->
+				<div class="output" id="information_output"></div>
+			</div>
+			<div class="column right">
+				<form class="form">
+					<!-- Tag input -->
+					<div><input class="textinput" type="text" id="tag" value="" placeholder="Enter tag" /></div>
+					<!-- Name input -->
+					<div><input class="textinput" type="text" id="first_name" value="" placeholder="Enter first name" /></div>
+					<!-- Name input -->
+					<div><input class="textinput" type="text" id="last_name" value="" placeholder="Enter last name" /></div>
+					<!-- Button -->
+					<div><input class="button" type="button" value="Add character" id="button" onClick="add_character();" /></div>
+				</form>
+			</div>
+		</div>
 	</main>
 </body>
 </html>
