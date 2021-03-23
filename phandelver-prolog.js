@@ -86,9 +86,8 @@ function display_character_list() {
 
 function display_location_list() {
 	activeList = "location";
-	//print_locations();
 	clear_location_info();
-	// For each character in the character tag list, print the character's info 
+	// For each location in the location tag list, print the location's info 
 	get_location_info();
 	setTimeout(() => {  
 		for (var i = 0; i < locationInfoList.length; i++) {
