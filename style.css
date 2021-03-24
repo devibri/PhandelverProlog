@@ -29,4 +29,51 @@
 
 .output-row {
   padding: 10px;
+  margin: 20px;
+  background-color: #d9d9d9ff;
+}
+
+body {
+  background-color: #f3f3f3ff;
+  font-family: Arial;
+}
+
+.button {
+  background-color: #999999ff; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 10px;
+}
+
+.row input[type=text] {
+  padding: 6px;
+  border: none;
+  margin-top: 8px;
+  margin-right: 16px;
+  font-size: 17px;
+  
+}
+
+.search {
+  margin-top: 10px;
+  margin-left: 40px;
+ 
+}
+
+.search input[type=text] {
+   width: 30%;
+}
+
+
+.form input[type=text] {
+  width: 90%;
+}
+
+p {
+  font-size: 14px;
 }

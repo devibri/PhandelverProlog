@@ -5,7 +5,7 @@ session.consult("phandelver.prolog");
 // Array of variable bindings, one per answer, returned by prolog query
 var bindings = [];
 var filterString = '';
-var activeList = "location";
+var activeList = "character";
 var infoList = [];
 var tagList = [];
 var output = "";
@@ -185,6 +185,7 @@ function print_character(character_tag, character_info_list) {
 function print_list_info(binding) {
 	if (binding != null) {
 		var list = binding.lookup("List").toJavaScript(); 
+		console.log("List is: " + list);
 		output = output + list + "&emsp;";
 	}
 }
