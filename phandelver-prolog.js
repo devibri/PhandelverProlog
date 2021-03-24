@@ -5,12 +5,14 @@ session.consult("phandelver.prolog");
 // Array of variable bindings, one per answer, returned by prolog query
 var bindings = [];
 var filterString = '';
-var activeList = "character";
+var activeList = "visualization";
 var infoList = [];
 var tagList = [];
 var output = "";
 var character_fields = ["tag", "first_name", "last_name", "occupation", "status", "has_met_party", "faction", "friend_of", "family_of", "knows_info"];
 var location_fields = ["location_tag", "location_name", "location_known", "in_region", "char_in_location", "location_visited"];
+
+mermaidAPI.initialize({startOnLoad: false});
 
 function clear_all_lists() {
 	let output_area = document.getElementById("output_area");
@@ -40,7 +42,7 @@ function display_active_list() {
 	} else if (activeList == "information") {
 		display_information_list();
 	} else if (activeList == "visualization") {
-		// for now, do nothing
+		display_visualization(); 
 	} else {
 		console.log("ERROR: Tried to display non-existant list");
 	}
@@ -105,6 +107,15 @@ function display_location_list() {
 function display_information_list() {
 	activeList = "information";
 	print_information();
+}
+
+function display_visualization() {
+	activeList = "visualization";
+	//clear_saved_info();
+	//get_information_info(); 
+	setTimeout(() => {  
+		generate_visualization();
+	}, 500);
 }
 
 
@@ -179,7 +190,6 @@ function print_character(character_tag, character_info_list) {
 function print_list_info(binding) {
 	if (binding != null) {
 		var list = binding.lookup("List").toJavaScript(); 
-		console.log("List is: " + list);
 		output = output + list + "&emsp;";
 	}
 }
@@ -222,32 +232,28 @@ function print_location(location_tag, location_info_list) {
 	check_against_search_filter(location_tag, output, output_area); 
 }
 
-// Gets a list of all the locations and prints them out
-function print_information() {
-	var print_bindings = function(bindings) {
+// Gets character tags and the list of all the info associated with each character
+function get_information_info() {
+	var get_all_bindings = function(bindings) {
 		for(var i = 0; i < bindings.length; i++) {
-			print_information_piece(bindings[i]);
+			get_information(bindings[i]);
 		}
 	}
 	bindings = [];
-	session.query("info_desc(Info, Desc).");
-	session.answers(get_callback(print_bindings));
+	session.query("information(Info), information_info_list(Info, Info_Info_List).");
+	session.answers(get_callback(get_all_bindings));
 }
 
-// outputs a single location if they are found in the search
-function print_information_piece(binding) {
+// Callback function for get_character_info, takes each character tag and its info and puts it into a list
+function get_information(binding) {
 	if (binding != null) {
-		// Look up term that has been bound to variable "Name"
-		let desc = binding.lookup("Desc"); 
-		let infoDesc = desc.toString(); // Turn the Term into a string.
-		// Check if the location matches the search
-		if (infoDesc.toLowerCase().match(filterString.toLowerCase())) {
-			var output_area = document.getElementById("output_area");
-			output_area.innerHTML = output_area.innerHTML + "<div>" + infoDesc +  "</div>"; // Add description to HTML page
-		}
+		var info_name = binding.lookup("Info"); 
+		var info_info_list = binding.lookup("Info_Info_List");
+		var list = info_info_list.toJavaScript();
+		tagList.push(info_name); 
+		infoList.push(list);
 	}
 }
-
 
 // Adding new entities to the database
 
@@ -347,10 +353,58 @@ function update_filter_string() {
 // Checks if the thing being outputted to list matches the search filter; if so, output it 
 function check_against_search_filter(tag, output, output_list) {
 	if (output.toLowerCase().match(filterString.toLowerCase())) {
-		output_list.innerHTML = output_list.innerHTML + "<div class='output-row'>" + tag + "  -  " + output +  "</div>"; // Add name to HTML page
+		output_list.innerHTML = output_list.innerHTML + "<div class='output-row'>" + tag + "  -  " + output +  "</div>"; 
 	}
 }
 
 function generate_visualization() {
+	output = "";
 
+	// for each piece of information, find the character associated with that piece of info 
+	var get_all_bindings = function(bindings) {
+		for(var i = 0; i < bindings.length; i++) {
+			get_character_with_info(bindings[i]);
+		}
+	}
+	bindings = [];
+	session.query("info(Info), knows_info(CharTag, Info), info_desc(Info, InfoDesc).");
+	session.answers(get_callback(get_all_bindings));
+	
+	// for each piece of information, generate connection between it and the piece of info tag it leads to 
+
+	// put all outputs into index.html
+	setTimeout(() => {
+		var insertSvg = function(svgCode, bindFunctions){
+            graphDiv.innerHTML = svgCode;
+            
+        };
+        var final_output = "graph LR\n" + output;
+        console.log(final_output);
+        var graph = mermaid.mermaidAPI.render('viz_output', final_output, insertSvg);		
+	}, 1000);
 }
+
+function get_character_with_info(binding) {
+	if (binding != null) {
+		// output to this format: 
+		//     RedbrandHangout["<p>(Toblin Stonehill) Redbrands hang out at Sleeping Giant Tap House and they are trouble</p>"]
+		var info_tag = binding.lookup("Info"); 
+		var char_tag = binding.lookup("CharTag");
+		var info_desc = binding.lookup("InfoDesc");
+		output = output + info_tag + "[\"<p>(" + char_tag + ") " + info_desc + "</p>\"]\n";
+	}
+}
+
+
+
+//Set it so that each node has line breaks after certain # of words
+$("p").each(function() {
+  var html = $(this).html().split(" ");
+  var slicedHTML = "";
+  var i;
+  for (i = 0; i <= html.length - 3; i = i + 3) {
+    slicedHTML = slicedHTML + html.slice(i, i+3).join(" ") + "<br />";
+  }
+  slicedHTML = slicedHTML + html.slice(i).join(" ");
+  $(this).html(slicedHTML);
+});

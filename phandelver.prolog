@@ -369,10 +369,6 @@ info(finish_hamun_quest).
 info(learn_tower_maker).
 
 
-
-
-
-
 :- dynamic(info_desc/2).
 info_desc(redbrand_hideout_location, "The Redbrand hideout is at Tresendar Manor").
 info_desc(secret_tunnel_location, "The Redbrand hideout has a secret tunnel entrance located near Tresendar Manor").
@@ -496,3 +492,8 @@ goes_to_info(find_cragmaw_castle, wave_echo_cave_map).
 goes_to_info(remove_orc_camp, finish_hamun_quest).
 goes_to_info(finish_hamun_quest, find_wave_echo_cave).
 goes_to_info(learn_tower_maker, finish_hamun_quest).
+
+
+get_info_desc(info_tag, [InfoDesc]) :-
+	info(info_tag), 
+	info_desc(info_tag, InfoDesc).

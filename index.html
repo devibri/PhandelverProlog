@@ -3,10 +3,27 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Phandelver Prolog Database</title>
-  <script src="tau-prolog.js" defer></script>
-  <script src="phandelver-prolog.js" defer></script>
-  <link rel="stylesheet" href="style.css">
-  
+	<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+	  <script src="https://cdn.rawgit.com/knsv/mermaid/0.5.8/dist/mermaidAPI.js"></script>
+	  <script src="tau-prolog.js" defer></script>
+	  <script src="phandelver-prolog.js" defer></script>
+	  <link rel="stylesheet" href="style.css">
+	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <script>
+		var config = {
+			theme:'neutral',
+			flowchart:{
+				htmlLabels:true,
+				curve:'basis',
+			},
+			startOnLoad: false,
+			securityLevel: 'loose'
+		};
+		mermaid.initialize(config);
+	</script>
+
+
 </head>
 <body>
 	<main>
@@ -34,6 +51,8 @@
 					</div>
 				</form>
 			</div>
+		</div>
+		<div class="graphDiv" id="graphDiv">
 		</div>
 	</main>
 </body>
