@@ -9,6 +9,8 @@ var activeList = "location";
 var infoList = [];
 var tagList = [];
 var output = "";
+var character_fields = ["tag", "first_name", "last_name", "occupation", "status", "has_met_party", "faction", "friend_of", "family_of", "knows_info"];
+var location_fields = ["location_tag", "location_name", "location_known", "in_region", "char_in_location", "location_visited"];
 
 function clear_all_lists() {
 	let characters_output = document.getElementById("characters_output");
@@ -257,30 +259,23 @@ function print_information_piece(binding) {
 // Addds a new character to the world from input 
 function add_character() { 
 	// Get the values from the form 
-	var charTag = document.getElementById("tag").value.toString().lowercase();
-	var charFirstName = document.getElementById("first_name").value.toString().lowercase();
-	var charLastName = document.getElementById("last_name").value.toString().lowercase();
-	var charOccupation = document.getElementById("occupation").value.toString().lowercase();
-	var charStatus = document.getElementById("status").value.toString().lowercase();
-	var charHasMetParty = document.getElementById("has_met_party").value.toString().lowercase();
-	var charFaction = document.getElementById("faction").value.toString().lowercase();
-	var charFriendOf = document.getElementById("friend_of").value.toString().lowercase();
-	var charFamilyOf = document.getElementById("family_of").value.toString().lowercase();
-	var charKnowsInfo = document.getElementById("knows_info").value.toString().lowercase();
+	var charTag = get_element("tag");
+	var charFirstName = get_element("first_name");
+	var charLastName = get_element("last_name");
+	var charOccupation = get_element("occupation");
+	var charStatus = get_element("status");
+	var charHasMetParty = get_element("has_met_party");
+	var charFaction = get_element("faction");
+	var charFriendOf = get_element("friend_of"); 
+	var charFamilyOf = get_element("family_of"); 
+	var charKnowsInfo = get_element("knows_info"); 
 
 	// Update the UI and clear the form 
 	var add_to_world = function(bindings) {
 		display_active_list();
-		document.getElementById("tag").value = "";
-		document.getElementById("first_name").value = "";
-		document.getElementById("last_name").value = "";
-		document.getElementById("occupation").value = "";
-		document.getElementById("status").value = "";
-		document.getElementById("has_met_party").value = "";
-		document.getElementById("faction").value = "";
-		document.getElementById("friend_of").value = "";
-		document.getElementById("family_of").value = "";
-		document.getElementById("knows_info").value = "";
+		for (var i = 0; i < character_fields.length; i++) {
+			clear_form_field(character_fields[i]);
+		}
 	}
 	bindings = [];
 	session.query(
@@ -301,22 +296,19 @@ function add_character() {
 // Addds a new location to the world from input 
 function add_location() { 
 	// Get the values from the form 
-	var locTag = document.getElementById("location_tag").value.toString().lowercase();
-	var locName = document.getElementById("location_name").value.toString().lowercase();
-	var locKnown = document.getElementById("location_known").value.toString().lowercase();
-	var locInRegion = document.getElementById("in_region").value.toString().lowercase();
-	var charInLocation = document.getElementById("char_in_location").value.toString().lowercase();
-	var locVisited = document.getElementById("location_visited").value.toString().lowercase();
+	var locTag = get_element("location_tag");
+	var locName = get_element("location_name");
+	var locKnown = get_element("location_known");
+	var locInRegion = get_element("in_region");
+	var charInLocation = get_element("char_in_location");
+	var locVisited = get_element("location_visited");
 
 	// Update the UI and clear the form 
 	var add_to_world = function(bindings) {
 		display_active_list();
-		document.getElementById("location_tag").value = "";
-		document.getElementById("location_name").value = "";
-		document.getElementById("location_known").value = "";
-		document.getElementById("in_region").value = "";
-		document.getElementById("char_in_location").value = "";
-		document.getElementById("location_visited").value = "";
+		for (var i = 0; i < location_fields.length; i++) {
+			clear_form_field(location_fields[i]);
+		}
 	}
 	bindings = [];
 	session.query(
@@ -328,6 +320,14 @@ function add_location() {
 		"asserta(location_visited(" + locTag + " , " + locVisited + "))." + 
 		"asserta(location_info_list(" + locTag + ", [location_name, location_known, in_region, char_in_location, location_visited])).");
 	session.answers(get_callback(add_to_world));
+}
+
+function clear_form_field(field) {
+	document.getElementById(field).value = "";
+}
+
+function get_element(id) {
+	return document.getElementById(id).value.toString().lowercase();
 }
 
 // Utility functions
