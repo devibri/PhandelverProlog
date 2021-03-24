@@ -379,7 +379,6 @@ function generate_visualization() {
             
         };
         var final_output = "graph LR\n" + output;
-        console.log(final_output);
         var graph = mermaid.mermaidAPI.render('viz_output', final_output, insertSvg);		
 	}, 1000);
 }
@@ -391,20 +390,18 @@ function get_character_with_info(binding) {
 		var info_tag = binding.lookup("Info"); 
 		var char_tag = binding.lookup("CharTag");
 		var info_desc = binding.lookup("InfoDesc");
-		output = output + info_tag + "[\"<p>(" + char_tag + ") " + info_desc + "</p>\"]\n";
+		var info_desc_breaks = addBreaks(info_desc); 
+		output = output + info_tag + "[\"<p>(" + char_tag + ") " + info_desc_breaks + "</p>\"]\n";
 	}
 }
 
-
-
-//Set it so that each node has line breaks after certain # of words
-$("p").each(function() {
-  var html = $(this).html().split(" ");
-  var slicedHTML = "";
-  var i;
-  for (i = 0; i <= html.length - 3; i = i + 3) {
-    slicedHTML = slicedHTML + html.slice(i, i+3).join(" ") + "<br />";
-  }
-  slicedHTML = slicedHTML + html.slice(i).join(" ");
-  $(this).html(slicedHTML);
-});
+function addBreaks(str) {
+	var desc = str.toString().split(" ");
+	var slicedDesc = ""; 
+	var i;
+	for (i = 0; i < desc.length - 5; i = i + 5) {
+		slicedDesc = slicedDesc + desc.slice(i, i+5).join(" ") + "<br />"; 
+	}
+	slicedDesc = slicedDesc + desc.slice(i).join(" "); 
+    return slicedDesc; 
+}
