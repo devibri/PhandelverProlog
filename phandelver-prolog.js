@@ -13,14 +13,8 @@ var character_fields = ["tag", "first_name", "last_name", "occupation", "status"
 var location_fields = ["location_tag", "location_name", "location_known", "in_region", "char_in_location", "location_visited"];
 
 function clear_all_lists() {
-	let characters_output = document.getElementById("characters_output");
-	characters_output.innerHTML = "<div></div>"; 
-
-	let locations_output = document.getElementById("locations_output");
-	locations_output.innerHTML = "<div></div>"; 
-
-	let information_output = document.getElementById("information_output");
-	information_output.innerHTML = "<div></div>"; 
+	let output_area = document.getElementById("output_area");
+	output_area.innerHTML = "<div></div>"; 
 }
 
 // On starting up, display list of characters
@@ -177,8 +171,8 @@ function print_character(character_tag, character_info_list) {
 		session.answer(get_all_bindings);
 	}
 	// Get the appropriate list and output the character if it matches the search
-	var characters_output = document.getElementById("characters_output");
-	check_against_search_filter(character_tag, output, characters_output); 
+	var output_area = document.getElementById("output_area");
+	check_against_search_filter(character_tag, output, output_area); 
 }
 
 // Callback function that takes a list and outputs it 
@@ -224,8 +218,8 @@ function print_location(location_tag, location_info_list) {
 		session.answer(get_all_bindings);
 	}
 	// Get the appropriate list and output the character if it matches the search
-	var locations_output = document.getElementById("locations_output");
-	check_against_search_filter(location_tag, output, locations_output); 
+	var output_area = document.getElementById("output_area");
+	check_against_search_filter(location_tag, output, output_area); 
 }
 
 // Gets a list of all the locations and prints them out
@@ -248,8 +242,8 @@ function print_information_piece(binding) {
 		let infoDesc = desc.toString(); // Turn the Term into a string.
 		// Check if the location matches the search
 		if (infoDesc.toLowerCase().match(filterString.toLowerCase())) {
-			var information_output = document.getElementById("information_output");
-			information_output.innerHTML = information_output.innerHTML + "<div>" + infoDesc +  "</div>"; // Add description to HTML page
+			var output_area = document.getElementById("output_area");
+			output_area.innerHTML = output_area.innerHTML + "<div>" + infoDesc +  "</div>"; // Add description to HTML page
 		}
 	}
 }
@@ -355,4 +349,8 @@ function check_against_search_filter(tag, output, output_list) {
 	if (output.toLowerCase().match(filterString.toLowerCase())) {
 		output_list.innerHTML = output_list.innerHTML + "<div class='output-row'>" + tag + "  -  " + output +  "</div>"; // Add name to HTML page
 	}
+}
+
+function generate_visualization() {
+
 }
