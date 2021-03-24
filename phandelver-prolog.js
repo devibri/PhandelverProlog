@@ -9,6 +9,7 @@ var activeList = "visualization";
 var infoList = [];
 var tagList = [];
 var output = "";
+var output_connections = "";
 var character_fields = ["tag", "first_name", "last_name", "occupation", "status", "has_met_party", "faction", "friend_of", "family_of", "knows_info"];
 var location_fields = ["location_tag", "location_name", "location_known", "in_region", "char_in_location", "location_visited"];
 
@@ -358,6 +359,21 @@ function check_against_search_filter(tag, output, output_list) {
 }
 
 function generate_visualization() {
+	get_nodes(); 
+	// for each piece of information, generate connection between it and the piece of info tag it leads to 
+	get_connections(); 
+	// put all outputs into index.html
+	setTimeout(() => {
+		var insertSvg = function(svgCode, bindFunctions){
+            graphDiv.innerHTML = svgCode;
+            
+        };
+        var final_output = "graph LR\n" + output + output_connections;
+        var graph = mermaid.mermaidAPI.render('viz_output', final_output, insertSvg);		
+	}, 1000);
+}
+
+function get_nodes() {
 	output = "";
 
 	// for each piece of information, find the character associated with that piece of info 
@@ -369,29 +385,35 @@ function generate_visualization() {
 	bindings = [];
 	session.query("info(Info), knows_info(CharTag, Info), info_desc(Info, InfoDesc).");
 	session.answers(get_callback(get_all_bindings));
-	
-	// for each piece of information, generate connection between it and the piece of info tag it leads to 
-
-	// put all outputs into index.html
-	setTimeout(() => {
-		var insertSvg = function(svgCode, bindFunctions){
-            graphDiv.innerHTML = svgCode;
-            
-        };
-        var final_output = "graph LR\n" + output;
-        var graph = mermaid.mermaidAPI.render('viz_output', final_output, insertSvg);		
-	}, 1000);
 }
 
 function get_character_with_info(binding) {
 	if (binding != null) {
-		// output to this format: 
-		//     RedbrandHangout["<p>(Toblin Stonehill) Redbrands hang out at Sleeping Giant Tap House and they are trouble</p>"]
 		var info_tag = binding.lookup("Info"); 
 		var char_tag = binding.lookup("CharTag");
 		var info_desc = binding.lookup("InfoDesc");
 		var info_desc_breaks = addBreaks(info_desc); 
 		output = output + info_tag + "[\"<p>(" + char_tag + ") " + info_desc_breaks + "</p>\"]\n";
+	}
+}
+
+function get_connections() {
+	output_connections = "";
+	var get_all_bindings = function(bindings) {
+		for(var i = 0; i < bindings.length; i++) {
+			get_connection(bindings[i]);
+		}
+	}
+	bindings = [];
+	session.query("info(Info), goes_to_info(Info, InfoNext).");
+	session.answers(get_callback(get_all_bindings));
+}
+
+function get_connection(binding) {
+	if (binding != null) {
+		var info_tag = binding.lookup("Info"); 
+		var info_next_tag = binding.lookup("InfoNext");
+		output_connections = output_connections + info_tag + "-->" + info_next_tag + "\n";
 	}
 }
 
