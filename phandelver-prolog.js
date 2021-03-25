@@ -34,6 +34,7 @@ function set_active_list(value) {
 function display_active_list() {
 	clear_all_lists();
 	clear_form(); 
+	clear_viz();
 	if (activeList == "character") {
 		display_character_list();
 		display_character_form();
@@ -51,7 +52,12 @@ function display_active_list() {
 
 function clear_form() {
 	var form = document.getElementById("form");
-	form.innerHTML = "<div></div>";
+	form.innerHTML = "";
+}
+
+function clear_viz() {
+	var viz = document.getElementById("graphDiv");
+	viz.innerHTML = "";
 }
 
 function display_character_form() {
@@ -112,11 +118,7 @@ function display_information_list() {
 
 function display_visualization() {
 	activeList = "visualization";
-	//clear_saved_info();
-	//get_information_info(); 
-	setTimeout(() => {  
-		generate_visualization();
-	}, 500);
+	generate_visualization();
 }
 
 
@@ -361,16 +363,23 @@ function check_against_search_filter(tag, output, output_list) {
 function generate_visualization() {
 	get_nodes(); 
 	// for each piece of information, generate connection between it and the piece of info tag it leads to 
-	get_connections(); 
+
+	setTimeout(() => {
+		get_connections(); 
+	}, 500);
+
+	
 	// put all outputs into index.html
 	setTimeout(() => {
 		var insertSvg = function(svgCode, bindFunctions){
             graphDiv.innerHTML = svgCode;
             
         };
+
         var final_output = "graph LR\n" + output + output_connections;
+        console.log(final_output);
         var graph = mermaid.mermaidAPI.render('viz_output', final_output, insertSvg);		
-	}, 1000);
+	}, 2000);
 }
 
 function get_nodes() {
@@ -385,6 +394,7 @@ function get_nodes() {
 	bindings = [];
 	session.query("info(Info), knows_info(CharTag, Info), info_desc(Info, InfoDesc).");
 	session.answers(get_callback(get_all_bindings));
+	console.log("done getting nodes");
 }
 
 function get_character_with_info(binding) {
@@ -407,6 +417,7 @@ function get_connections() {
 	bindings = [];
 	session.query("info(Info), goes_to_info(Info, InfoNext).");
 	session.answers(get_callback(get_all_bindings));
+	console.log("connection is " + output_connections);
 }
 
 function get_connection(binding) {
@@ -414,6 +425,8 @@ function get_connection(binding) {
 		var info_tag = binding.lookup("Info"); 
 		var info_next_tag = binding.lookup("InfoNext");
 		output_connections = output_connections + info_tag + "-->" + info_next_tag + "\n";
+		console.log("output " + output_connections);
+
 	}
 }
 
