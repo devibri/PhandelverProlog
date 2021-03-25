@@ -361,20 +361,6 @@ function check_against_search_filter(tag, output, output_list) {
 }
 
 function generate_visualization() {
-	get_nodes(); 
-	// for each piece of information, generate connection between it and the piece of info tag it leads to 
-
-	setTimeout(() => {
-		get_connections(); 
-	}, 500);
-	
-	// put all outputs into index.html
-	setTimeout(() => {
-		display_graph();
-	}, 2000);
-}
-
-function get_nodes() {
 	output = "";
 
 	// for each piece of information, find the character associated with that piece of info 
@@ -382,11 +368,13 @@ function get_nodes() {
 		for(var i = 0; i < bindings.length; i++) {
 			get_character_with_info(bindings[i]);
 		}
+		// Once you get the nodes, get the connections
+		get_connections();
 	}
 	bindings = [];
 	session.query("info(Info), knows_info(CharTag, Info), info_desc(Info, InfoDesc).");
 	session.answers(get_callback(get_all_bindings));
-	console.log("done getting nodes");
+
 }
 
 function get_character_with_info(binding) {
@@ -405,6 +393,8 @@ function get_connections() {
 		for(var i = 0; i < bindings.length; i++) {
 			get_connection(bindings[i]);
 		}
+		// Once you have the nodes and connections, display the graph
+		display_graph();
 	}
 	bindings = [];
 	session.query("info(Info), goes_to_info(Info, InfoNext).");
@@ -424,7 +414,8 @@ function get_connection(binding) {
 
 function display_graph() {
 	var insertSvg = function(svgCode, bindFunctions){
-            graphDiv.innerHTML = svgCode;
+			var viz = document.getElementById("graphDiv");
+            viz.innerHTML = svgCode;
             
     };
     var final_output = "graph LR\n" + output + output_connections;   
