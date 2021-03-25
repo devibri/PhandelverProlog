@@ -5,7 +5,7 @@ session.consult("phandelver.prolog");
 // Array of variable bindings, one per answer, returned by prolog query
 var bindings = [];
 var filterString = '';
-var activeList = "visualization";
+var activeList = "information";
 var infoList = [];
 var tagList = [];
 var output = "";
@@ -35,14 +35,18 @@ function display_active_list() {
 	clear_all_lists();
 	clear_form(); 
 	clear_viz();
+	clear_search(); 
 	if (activeList == "character") {
 		display_character_list();
 		display_character_form();
+		display_search(); 
 	} else if (activeList == "location") {
 		display_location_list();
 		display_location_form();
+		display_search(); 
 	} else if (activeList == "information") {
 		display_information_list();
+		display_search(); 
 	} else if (activeList == "visualization") {
 		display_visualization(); 
 	} else {
@@ -58,6 +62,16 @@ function clear_form() {
 function clear_viz() {
 	var viz = document.getElementById("graphDiv");
 	viz.innerHTML = "";
+}
+
+function clear_search() {
+	var search = document.getElementById("search-bar");
+	search.style.visibility = "hidden"; 
+}
+
+function display_search() {
+	var search = document.getElementById("search-bar");
+	search.style.visibility = "visible"; 
 }
 
 function display_character_form() {
@@ -113,7 +127,14 @@ function display_location_list() {
 
 function display_information_list() {
 	activeList = "information";
-	print_information();
+	clear_saved_info();
+	// For each information in the information tag list, print the information's info 
+	get_information_info();
+	setTimeout(() => {  
+		for (var i = 0; i < infoList.length; i++) {
+			print_information(tagList[i], infoList[i]);
+		}
+	}, 500);
 }
 
 function display_visualization() {
@@ -220,7 +241,7 @@ function get_location(binding) {
 	}
 }
 
-// Takes the list of all character info lists, and for each elementin the list, outputs it 
+// Takes the list of all character info lists, and for each element in the list, outputs it 
 function print_location(location_tag, location_info_list) {
 	output = "";
 	var get_all_bindings = function(answer) {
@@ -243,11 +264,11 @@ function get_information_info() {
 		}
 	}
 	bindings = [];
-	session.query("information(Info), information_info_list(Info, Info_Info_List).");
+	session.query("info(Info), information_info_list(Info, Info_Info_List).");
 	session.answers(get_callback(get_all_bindings));
 }
 
-// Callback function for get_character_info, takes each character tag and its info and puts it into a list
+// Callback function for get_information_info, takes each info tag and its info list and puts it into a list
 function get_information(binding) {
 	if (binding != null) {
 		var info_name = binding.lookup("Info"); 
@@ -256,6 +277,21 @@ function get_information(binding) {
 		tagList.push(info_name); 
 		infoList.push(list);
 	}
+}
+
+// Takes the list of all info info lists, and for each element in the list, outputs it 
+function print_information(information_tag, information_info_list) {
+	output = "";
+	var get_all_bindings = function(answer) {
+		print_list_info(answer);
+	}
+	for (var i = 0; i < information_info_list.length; i++) {
+		session.query("Pred = " + information_info_list[i] + ", findall([Pred, Info], call( Pred, " + information_tag + ", Info), List).");
+		session.answer(get_all_bindings);
+	}
+	// Get the appropriate list and output the character if it matches the search
+	var output_area = document.getElementById("output_area");
+	check_against_search_filter(information_tag, output, output_area); 
 }
 
 // Adding new entities to the database
@@ -399,7 +435,6 @@ function get_connections() {
 	bindings = [];
 	session.query("info(Info), goes_to_info(Info, InfoNext).");
 	session.answers(get_callback(get_all_bindings));
-	console.log("connection is " + output_connections);
 }
 
 function get_connection(binding) {
@@ -407,8 +442,6 @@ function get_connection(binding) {
 		var info_tag = binding.lookup("Info"); 
 		var info_next_tag = binding.lookup("InfoNext");
 		output_connections = output_connections + info_tag + "-->" + info_next_tag + "\n";
-		console.log("output " + output_connections);
-
 	}
 }
 
