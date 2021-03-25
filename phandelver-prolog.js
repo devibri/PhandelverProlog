@@ -367,18 +367,10 @@ function generate_visualization() {
 	setTimeout(() => {
 		get_connections(); 
 	}, 500);
-
 	
 	// put all outputs into index.html
 	setTimeout(() => {
-		var insertSvg = function(svgCode, bindFunctions){
-            graphDiv.innerHTML = svgCode;
-            
-        };
-
-        var final_output = "graph LR\n" + output + output_connections;
-        console.log(final_output);
-        var graph = mermaid.mermaidAPI.render('viz_output', final_output, insertSvg);		
+		display_graph();
 	}, 2000);
 }
 
@@ -428,6 +420,15 @@ function get_connection(binding) {
 		console.log("output " + output_connections);
 
 	}
+}
+
+function display_graph() {
+	var insertSvg = function(svgCode, bindFunctions){
+            graphDiv.innerHTML = svgCode;
+            
+    };
+    var final_output = "graph LR\n" + output + output_connections;   
+    var graph = mermaid.mermaidAPI.render('viz_output', final_output, insertSvg);	
 }
 
 function addBreaks(str) {
