@@ -12,7 +12,7 @@ character_info_list(qelline_alderleaf, [first_name, last_name, occupation, statu
 character_info_list(sister_garaele, [first_name, last_name, occupation, status, faction, knows_info]).
 character_info_list(harbin_wester, [first_name, last_name, occupation, status, knows_info]).
 character_info_list(sildar_hallwinter, [first_name, last_name, status, has_met_party, faction, knows_info]).
-character_info_list(narth, [first_name, occupation, status, faction, knows_info]).
+character_info_list(narth, [first_name, occupation, status, knows_info]).
 character_info_list(redbrands, [first_name, status, faction]).
 character_info_list(elsa, [first_name, status]).
 character_info_list(lanar, [first_name, status, knows_info]).
@@ -108,7 +108,7 @@ occupation(qelline_alderleaf, "Farmer").
 occupation(sister_garaele, "Elf cleric of Tymora").
 occupation(harbin_wester, "Townmaster of Phandalin").
 occupation(narth, "Farmer").
-occupation(narth, "Necromancer").
+occupation(hamun, "Necromancer").
 
 :- dynamic(status/2).
 status(toblin_stonehill, alive).
