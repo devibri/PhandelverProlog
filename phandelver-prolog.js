@@ -12,6 +12,7 @@ var output = "";
 var output_connections = "";
 var character_fields = ["tag", "first_name", "last_name", "occupation", "status", "has_met_party", "faction", "friend_of", "family_of", "knows_info"];
 var location_fields = ["location_tag", "location_name", "location_known", "in_region", "char_in_location", "location_visited"];
+var information_fields = ["information_tag", "information_description", "information_known", "information_acted_on", "storyline", "goes_to_location", "goes_to_information"];
 
 mermaidAPI.initialize({startOnLoad: false});
 
@@ -36,6 +37,7 @@ function display_active_list() {
 	clear_form(); 
 	clear_viz();
 	clear_search(); 
+	output = "";
 	if (activeList == "character") {
 		display_character_list();
 		display_character_form();
@@ -46,6 +48,7 @@ function display_active_list() {
 		display_search(); 
 	} else if (activeList == "information") {
 		display_information_list();
+		display_information_form();
 		display_search(); 
 	} else if (activeList == "visualization") {
 		display_visualization(); 
@@ -75,29 +78,41 @@ function display_search() {
 }
 
 function display_character_form() {
-	var character_form = document.getElementById("form");
-	character_form.innerHTML = character_form.innerHTML + '<div><input class="textinput" type="text" id="tag" value="" placeholder="Enter tag" /></div>';
-	character_form.innerHTML = character_form.innerHTML + '<div><input class="textinput" type="text" id="first_name" value="" placeholder="Enter first name" /></div>';
-	character_form.innerHTML = character_form.innerHTML + '<div><input class="textinput" type="text" id="last_name" value="" placeholder="Enter last name" /></div>';
-	character_form.innerHTML = character_form.innerHTML + '<div><input class="textinput" type="text" id="occupation" value="" placeholder="Enter occupation" /></div>';
-	character_form.innerHTML = character_form.innerHTML + '<div><input class="textinput" type="text" id="status" value="" placeholder="Enter status (ex. alive)" /></div>';
-	character_form.innerHTML = character_form.innerHTML + '<div><input class="textinput" type="text" id="has_met_party" value="" placeholder="Has met party (ex. true)" /></div>';
-	character_form.innerHTML = character_form.innerHTML + '<div><input class="textinput" type="text" id="faction" value="" placeholder="Enter faction" /></div>';
-	character_form.innerHTML = character_form.innerHTML + '<div><input class="textinput" type="text" id="friend_of" value="" placeholder="Friend of (enter tag)" /></div>';
-	character_form.innerHTML = character_form.innerHTML + '<div><input class="textinput" type="text" id="family_of" value="" placeholder="Family of (enter tag)" /></div>';
-	character_form.innerHTML = character_form.innerHTML + '<div><input class="textinput" type="text" id="knows_info" value="" placeholder="Knows info (enter tag)" /></div>';
-	character_form.innerHTML = character_form.innerHTML + '<div><input class="button" type="button" value="Add character" id="button" onClick="add_character();" /></div>';
+	var form = document.getElementById("form");
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="tag" value="" placeholder="Enter tag" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="first_name" value="" placeholder="Enter first name" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="last_name" value="" placeholder="Enter last name" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="occupation" value="" placeholder="Enter occupation" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="status" value="" placeholder="Enter status (ex. alive)" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="has_met_party" value="" placeholder="Has met party (ex. true)" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="faction" value="" placeholder="Enter faction" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="friend_of" value="" placeholder="Friend of (enter tag)" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="family_of" value="" placeholder="Family of (enter tag)" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="knows_info" value="" placeholder="Knows info (enter tag)" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add character" id="button" onClick="add_character();" /></div>';
 }
 
 function display_location_form() {
-	var location_form = document.getElementById("form");
-	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="location_tag" value="" placeholder="Enter tag" /></div>';
-	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="location_name" value="" placeholder="Enter location name" /></div>';
-	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="location_known" value="" placeholder="Party knows about location (ex. true)" /></div>';
-	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="in_region" value="" placeholder="Enter region" /></div>';
-	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="char_in_location" value="" placeholder="Enter characters in location" /></div>';
-	location_form.innerHTML = location_form.innerHTML + '<div><input class="textinput" type="text" id="location_visited" value="" placeholder="Party has visited location (ex. true)" /></div>';
-	location_form.innerHTML = location_form.innerHTML + '<div><input class="button" type="button" value="Add location" id="button" onClick="add_location();" /></div>';
+	var form = document.getElementById("form");
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="location_tag" value="" placeholder="Enter tag" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="location_name" value="" placeholder="Enter location name" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="location_known" value="" placeholder="Party knows about location (ex. true)" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="in_region" value="" placeholder="Enter region" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="char_in_location" value="" placeholder="Enter characters in location" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="location_visited" value="" placeholder="Party has visited location (ex. true)" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add location" id="button" onClick="add_location();" /></div>';
+}
+
+function display_information_form() {
+	var form = document.getElementById("form");
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="information_tag" value="" placeholder="Enter tag" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="information_description" value="" placeholder="Enter information description" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="information_known" value="" placeholder="Party knows information (ex. true)" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="information_acted_on" value="" placeholder="Party has acted on information (ex. true)" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="storyline" value="" placeholder="Adds to storyline" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_location" value="" placeholder="Informs party about location (enter tag)" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_information" value="" placeholder="Informs party about information (enter tag)" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add information" id="button" onClick="add_information();" /></div>';
 }
 
 // handles getting the info for characters and outputting it 
@@ -106,11 +121,21 @@ function display_character_list() {
 	clear_saved_info();
 	// For each character in the character tag list, print the character's info 
 	get_character_info();
+	// output =  
+	// 	"<table>" + 
+ //  		"<tr>" + 
+ //    		"<th>Company</th>" + 
+ //    		"<th>Contact</th>" + 
+ //    		"<th>Country</th>" + 
+ //  		"</tr>";
 	setTimeout(() => {  
 		for (var i = 0; i < infoList.length; i++) {
 			print_character(tagList[i], infoList[i]);
+			//output = output + "</table>"
+			//console.log(output);
 		}
 	}, 500);
+	
 }
 
 function display_location_list() {
@@ -142,7 +167,6 @@ function display_visualization() {
 	generate_visualization();
 }
 
-
 // Functionality for prolog / JS callbacks
 
 /*
@@ -168,6 +192,18 @@ function get_callback(funcWhenDone) {
 function clear_saved_info() {
 	infoList = [];
 	tagList = [];
+}
+
+// Outputs the relevant list 
+
+// Callback function that takes a list and outputs it 
+function print_list_info(binding) {
+	if (binding != null) {
+		var list = binding.lookup("List").toJavaScript(); 
+		//output = output + "<td>" + list + "</td>" + "&emsp;";
+		output = output + list + "&emsp;";
+		//console.log("list is " + list);
+	}
 }
 
 /* Handing character info and output */
@@ -197,7 +233,6 @@ function get_character(binding) {
 
 // Takes the list of all character info lists, and for each elementin the list, outputs it 
 function print_character(character_tag, character_info_list) {
-	output = "";
 	var get_all_bindings = function(answer) {
 		print_list_info(answer);
 	}
@@ -208,14 +243,6 @@ function print_character(character_tag, character_info_list) {
 	// Get the appropriate list and output the character if it matches the search
 	var output_area = document.getElementById("output_area");
 	check_against_search_filter(character_tag, output, output_area); 
-}
-
-// Callback function that takes a list and outputs it 
-function print_list_info(binding) {
-	if (binding != null) {
-		var list = binding.lookup("List").toJavaScript(); 
-		output = output + list + "&emsp;";
-	}
 }
 
 // Gets character tags and the list of all the info associated with each character
@@ -362,6 +389,41 @@ function add_location() {
 	session.answers(get_callback(add_to_world));
 }
 
+// Addds a new information piece to the world from input 
+function add_information() { 
+	// Get the values from the form 
+	var infoTag = get_element("information_tag");
+	var infoDesc = get_element("information_description");
+	var infoKnown = get_element("information_known");
+	var infoActedOn = get_element("information_acted_on");
+	var storyline = get_element("storyline");
+	var goesToLoc = get_element("goes_to_location");
+	var goesToInfo = get_element("goes_to_information");
+
+	console.log("adding : " + infoTag + " " + infoDesc + " " + infoKnown + " " + infoActedOn + " " + storyline + " " + goesToLoc + " " + goesToInfo);
+
+	// Update the UI and clear the form 
+	var add_to_world = function(bindings) {
+		display_active_list();
+		for (var i = 0; i < information_fields.length; i++) {
+			clear_form_field(information_fields[i]);
+		}
+	}
+	bindings = [];
+	session.query(
+		"asserta(info(" + infoTag + "))." + 
+		"asserta(info_desc(" + infoTag + " , " + infoDesc + " ))." + 
+		"asserta(info_known(" + infoTag + " , " + infoKnown + "))." + 
+		"asserta(info_acted_on(" + infoTag + " , " + infoActedOn + "))." + 
+		"asserta(storyline(" + infoTag + " , " + storyline + "))." + 
+		"asserta(goes_to_location(" + infoTag + " , " + goesToLoc + "))." + 
+		"asserta(goes_to_info(" + infoTag + " , " + goesToInfo + "))." + 
+		"asserta(information_info_list(" + infoTag + ", [info_desc, info_known, info_acted_on, storyline, goes_to_location, goes_to_info])).");
+	session.answers(get_callback(add_to_world));
+}
+
+
+
 function clear_form_field(field) {
 	document.getElementById(field).value = "";
 }
@@ -465,3 +527,15 @@ function addBreaks(str) {
 	slicedDesc = slicedDesc + desc.slice(i).join(" "); 
     return slicedDesc; 
 }
+
+// $.fn.editable.defaults.mode = 'inline';
+
+// $(document).ready(function() {
+//     $('#username').editable({
+//     	success: function(response, newValue) {
+//     		console.log(newValue);
+//     	}
+//     });
+// });
+
+

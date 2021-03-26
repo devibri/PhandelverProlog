@@ -400,9 +400,9 @@ info_desc(remove_orc_camp, "Players can remove orc camp from Wyvern Tor").
 info_desc(finish_hamun_quest, "Talk to Hamun about completing one of his tasks").
 info_desc(learn_tower_maker, "Ask Agatha about maker of old magic tower ruin").
 
-:- dynamic(info_known/1).
+:- dynamic(info_known/2).
 
-:- dynamic(info_acted_on/1).
+:- dynamic(info_acted_on/2).
 
 :- dynamic(storyline/2).
 storyline(redbrand_hideout_location, redbrand_story).
