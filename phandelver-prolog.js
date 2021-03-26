@@ -37,7 +37,6 @@ function display_active_list() {
 	clear_form(); 
 	clear_viz();
 	clear_search(); 
-	output = "";
 	if (activeList == "character") {
 		display_character_list();
 		display_character_form();
@@ -121,21 +120,11 @@ function display_character_list() {
 	clear_saved_info();
 	// For each character in the character tag list, print the character's info 
 	get_character_info();
-	// output =  
-	// 	"<table>" + 
- //  		"<tr>" + 
- //    		"<th>Company</th>" + 
- //    		"<th>Contact</th>" + 
- //    		"<th>Country</th>" + 
- //  		"</tr>";
 	setTimeout(() => {  
 		for (var i = 0; i < infoList.length; i++) {
 			print_character(tagList[i], infoList[i]);
-			//output = output + "</table>"
-			//console.log(output);
 		}
 	}, 500);
-	
 }
 
 function display_location_list() {
@@ -166,6 +155,7 @@ function display_visualization() {
 	activeList = "visualization";
 	generate_visualization();
 }
+
 
 // Functionality for prolog / JS callbacks
 
@@ -200,9 +190,7 @@ function clear_saved_info() {
 function print_list_info(binding) {
 	if (binding != null) {
 		var list = binding.lookup("List").toJavaScript(); 
-		//output = output + "<td>" + list + "</td>" + "&emsp;";
 		output = output + list + "&emsp;";
-		//console.log("list is " + list);
 	}
 }
 
@@ -233,6 +221,7 @@ function get_character(binding) {
 
 // Takes the list of all character info lists, and for each elementin the list, outputs it 
 function print_character(character_tag, character_info_list) {
+	output = "";
 	var get_all_bindings = function(answer) {
 		print_list_info(answer);
 	}
