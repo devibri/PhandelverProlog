@@ -5,11 +5,10 @@ session.consult("phandelver.prolog");
 // Array of variable bindings, one per answer, returned by prolog query
 var bindings = [];
 var filterString = '';
-var activeList = "character";
+var activeList = "information";
 var infoList = [];
 var tagList = [];
 var output = "";
-var final_output = "";
 var output_connections = "";
 var character_fields = ["tag", "first_name", "last_name", "occupation", "status", "has_met_party", "faction", "friend_of", "family_of", "knows_info"];
 var location_fields = ["location_tag", "location_name", "location_known", "in_region", "char_in_location", "location_visited"];
@@ -19,7 +18,7 @@ mermaidAPI.initialize({startOnLoad: false});
 
 function clear_all_lists() {
 	let output_area = document.getElementById("output_area");
-	output_area.innerHTML = ""; 
+	output_area.innerHTML = "<div></div>"; 
 }
 
 // On starting up, display list of characters
@@ -53,7 +52,7 @@ function display_active_list() {
 	} else if (activeList == "visualization") {
 		display_visualization(); 
 	} else {
-		console.log("ERROR: Tried to display non-existent list");
+		console.log("ERROR: Tried to display non-existant list");
 	}
 }
 
@@ -121,18 +120,11 @@ function display_character_list() {
 	clear_saved_info();
 	// For each character in the character tag list, print the character's info 
 	get_character_info();
-	var output_area = document.getElementById("output_area");
-	final_output = "<table id='list-table'><tr><th>First Name</th><th>Last Name</th><th>Occupation</th><<th>Status</th><th>Has Met Party</th><th>Friend Of</th><th>Family Of</th><th>Knows Info</th></tr>";
 	setTimeout(() => {  
 		for (var i = 0; i < infoList.length; i++) {
 			print_character(tagList[i], infoList[i]);
-		}	
-		output_area.innerHTML = final_output + "</table>";
-		//console.log(output_area.innerHTML);
+		}
 	}, 500);
-
-	
-
 }
 
 function display_location_list() {
@@ -198,12 +190,7 @@ function clear_saved_info() {
 function print_list_info(binding) {
 	if (binding != null) {
 		var list = binding.lookup("List").toJavaScript(); 
-		var values = list.toString().split(','); 
-		console.log(values.length);
-		while (values.length > 0) {
-			values.shift();
-			output = output + "<td>" + values.shift(); + "</td>" + "&emsp;";
-		}
+		output = output + list + "&emsp;";
 	}
 }
 
@@ -402,7 +389,7 @@ function add_information() {
 	var goesToLoc = get_element("goes_to_location");
 	var goesToInfo = get_element("goes_to_information");
 
-	//console.log("adding : " + infoTag + " " + infoDesc + " " + infoKnown + " " + infoActedOn + " " + storyline + " " + goesToLoc + " " + goesToInfo);
+	console.log("adding : " + infoTag + " " + infoDesc + " " + infoKnown + " " + infoActedOn + " " + storyline + " " + goesToLoc + " " + goesToInfo);
 
 	// Update the UI and clear the form 
 	var add_to_world = function(bindings) {
@@ -456,8 +443,7 @@ function update_filter_string() {
 // Checks if the thing being outputted to list matches the search filter; if so, output it 
 function check_against_search_filter(tag, output, output_list) {
 	if (output.toLowerCase().match(filterString.toLowerCase())) {
-		final_output = final_output + "<tr>" + output +  "</tr>";
-		//console.log(output_list); 
+		output_list.innerHTML = output_list.innerHTML + "<div class='output-row'>" + tag + "  -  " + output +  "</div>"; 
 	}
 }
 
@@ -541,6 +527,4 @@ function addBreaks(str) {
 //     });
 // });
 
-$(document).ready( function () {
-    $('#list-table').DataTable();
-} );
+
