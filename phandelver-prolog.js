@@ -218,8 +218,6 @@ function add_to_table(tag, fields_list) {
 		all_info = all_info + output_elements[i] + " ";
 	}
 
-	console.log(all_info);
-	console.log("output elements is " + output_elements);
 	// Check if the character matches the current search
 	if (all_info.toLowerCase().match(filterString.toLowerCase())) {
 		final_output = final_output + "<tr><td>" + tag + "</td>";
@@ -229,7 +227,8 @@ function add_to_table(tag, fields_list) {
 				final_output = final_output + "<td>";
 				output_elements.shift();
 				while (output_elements.includes(fields_list[i])) {
-					final_output = final_output + output_elements.shift() + "\n"; 
+					console.log("multiple");
+					final_output = final_output + output_elements.shift() + ", "; 
 					output_elements.shift();
 				}
 				if (output_elements.length > 0) {
@@ -310,6 +309,7 @@ function get_information(binding) {
 // Takes the list of all info info lists, and for each element in the list, outputs it 
 function print_information(information_tag, information_info_list) {
 	output = "";
+	output_elements = [];
 	var get_all_bindings = function(answer) {
 		print_list_info(answer);
 	}
