@@ -41,7 +41,7 @@ function display_active_list() {
 	clear_search(); 
 	if (activeList == "character") {
 		display_character_list();
-		display_character_form();
+		//display_character_form();
 		display_search(); 
 	} else if (activeList == "location") {
 		display_location_list();
@@ -253,9 +253,18 @@ function add_to_table(tag, output_area) {
 	for (var i = 1; i < character_fields.length; i++) {
 		if (output_elements[0] == character_fields[i]) {
 			output_elements.shift();
-			if (output_elements[1] == character_fields[i]) {
-				final_output = final_output + "<td>" + output_elements.shift() + ", " +  output_elements.shift() + "</td>";
-			} else {
+			if (output_elements[1] == character_fields[i] && output_elements[3] == character_fields[i]) {
+				final_output = final_output + "<td>" + output_elements.shift() + ", "; 
+				output_elements.shift();
+				final_output = final_output + output_elements.shift() + ", "; 
+				output_elements.shift();
+				final_output = final_output + output_elements.shift() + "</td>";
+			} else if (output_elements[1] == character_fields[i]) {
+				final_output = final_output + "<td>" + output_elements.shift() + ", "; 
+				output_elements.shift();
+				final_output = final_output + output_elements.shift() + "</td>";
+			}
+			else {
 				final_output = final_output + "<td>" + output_elements.shift() + "</td>";
 			}
 		} else {
