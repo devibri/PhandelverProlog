@@ -123,7 +123,7 @@ function display_character_list() {
 	// For each character in the character tag list, print the character's info 
 	get_character_info();
 	var output_area = document.getElementById("output_area");
-	final_output = "<table id='list-table'><tr><th>First Name</th><th>Last Name</th><th>Occupation</th><<th>Status</th><th>Has Met Party</th><th>Friend Of</th><th>Family Of</th><th>Knows Info</th></tr>";
+	final_output = "<table id='list-table'><tr><th>Tag</th><th>First Name</th><th>Last Name</th><th>Occupation</th><<th>Status</th><th>Has Met Party</th><th>Friend Of</th><th>Family Of</th><th>Knows Info</th></tr>";
 	setTimeout(() => {  
 		for (var i = 0; i < infoList.length; i++) {
 			print_character(tagList[i], infoList[i]);
@@ -197,7 +197,7 @@ function print_list_info(binding) {
 		var list = binding.lookup("List").toJavaScript(); 
 		var values = list.toString().split(','); 
 		while (values.length > 0) {
-			values.shift()
+			//values.shift()
 			output_elements.push(values.shift());
 			//output = output + "<strong>" + values.shift() + ":</strong> " + values.shift() + "&emsp;";
 		}
@@ -244,15 +244,19 @@ function print_character(character_tag, character_info_list) {
 	}
 	// Get the appropriate list and output the character if it matches the search
 	var output_area = document.getElementById("output_area");
-	add_to_table(output_area); 
+	add_to_table(character_tag, output_area); 
 	//check_against_search_filter(character_tag, output, output_area); 
 }
 
-function add_to_table(output_area) {
-	//console.log(output_elements);
-	final_output = final_output + "<tr>";
-	for (var i = 0; i < output_elements.length; i++) {
-		final_output = final_output + "<td>" + output_elements[i] + "</td>";
+function add_to_table(tag, output_area) {
+	final_output = final_output + "<tr><td>" + tag + "</td>";
+	for (var i = 1; i < character_fields.length; i++) {
+		if (output_elements[0] == character_fields[i]) {
+			output_elements.shift(); 
+			final_output = final_output + "<td>" + output_elements.shift() + "</td>"; 
+		} else {
+			final_output = final_output + "<td></td>";
+		}
 	}
 	final_output = final_output + "</tr>";
 }
