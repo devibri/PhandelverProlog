@@ -5,7 +5,7 @@ session.consult("phandelver.prolog");
 // Array of variable bindings, one per answer, returned by prolog query
 var bindings = [];
 var filterString = '';
-var activeList = "character";
+var activeList = "location";
 var infoList = [];
 var tagList = [];
 var output = "";
@@ -41,7 +41,6 @@ function display_active_list() {
 	clear_viz();
 	clear_search(); 
 	final_output = "";
-	all_info = ""; 
 	if (activeList == "character") {
 		display_character_list();
 		//display_character_form();
@@ -210,9 +209,7 @@ function print_character(character_tag, character_info_list) {
 		session.answer(get_all_bindings);
 	}
 	// Get the appropriate list and output the character if it matches the search
-	//var output_area = document.getElementById("output_area");
 	add_to_table(character_tag, character_fields); 
-	//check_against_search_filter(character_tag, output, output_area); 
 }
 
 function add_to_table(tag, fields_list) {
@@ -220,6 +217,9 @@ function add_to_table(tag, fields_list) {
 	for (var i = 1; i < output_elements.length; i+=2) {
 		all_info = all_info + output_elements[i] + " ";
 	}
+
+	console.log(all_info);
+	console.log("output elements is " + output_elements);
 	// Check if the character matches the current search
 	if (all_info.toLowerCase().match(filterString.toLowerCase())) {
 		final_output = final_output + "<tr><td>" + tag + "</td>";
@@ -270,6 +270,7 @@ function get_location(binding) {
 // Takes the list of all character info lists, and for each element in the list, outputs it 
 function print_location(location_tag, location_info_list) {
 	output = "";
+	output_elements = [];
 	var get_all_bindings = function(answer) {
 		print_list_info(answer);
 	}
