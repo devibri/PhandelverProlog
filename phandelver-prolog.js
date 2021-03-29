@@ -251,22 +251,34 @@ function print_character(character_tag, character_info_list) {
 function add_to_table(tag, output_area) {
 	final_output = final_output + "<tr><td>" + tag + "</td>";
 	for (var i = 1; i < character_fields.length; i++) {
+
 		if (output_elements[0] == character_fields[i]) {
+			final_output = final_output + "<td>";
 			output_elements.shift();
-			if (output_elements[1] == character_fields[i] && output_elements[3] == character_fields[i]) {
-				final_output = final_output + "<td>" + output_elements.shift() + ", "; 
+			while (output_elements.includes(character_fields[i])) {
+				final_output = final_output + output_elements.shift() + "\n"; 
 				output_elements.shift();
-				final_output = final_output + output_elements.shift() + ", "; 
+				final_output = final_output + output_elements.shift() + "\n";
 				output_elements.shift();
-				final_output = final_output + output_elements.shift() + "</td>";
-			} else if (output_elements[1] == character_fields[i]) {
-				final_output = final_output + "<td>" + output_elements.shift() + ", "; 
-				output_elements.shift();
-				final_output = final_output + output_elements.shift() + "</td>";
 			}
-			else {
-				final_output = final_output + "<td>" + output_elements.shift() + "</td>";
+			// if (output_elements[1] == character_fields[i] && output_elements[3] == character_fields[i]) {
+			// 	final_output = final_output + "<td>" + output_elements.shift() + ", "; 
+			// 	output_elements.shift();
+			// 	final_output = final_output + output_elements.shift() + ", "; 
+			// 	output_elements.shift();
+			// 	final_output = final_output + output_elements.shift() + "</td>";
+			// } else if (output_elements[1] == character_fields[i]) {
+			// 	final_output = final_output + "<td>" + output_elements.shift() + ", "; 
+			// 	output_elements.shift();
+			// 	final_output = final_output + output_elements.shift() + "</td>";
+			// }
+			//else {
+			if (output_elements.length > 0) {
+				final_output = final_output + output_elements.shift();
+			//}
+			
 			}
+			final_output = final_output + "</td>"
 		} else {
 			final_output = final_output + "<td></td>";
 		}
