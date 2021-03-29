@@ -15,11 +15,12 @@ var character_fields = ["tag", "first_name", "last_name", "occupation", "status"
 var location_fields = ["location_tag", "location_name", "location_known", "in_region", "char_in_location", "location_visited"];
 var information_fields = ["information_tag", "information_description", "information_known", "information_acted_on", "storyline", "goes_to_location", "goes_to_information"];
 var output_elements = [];
+var output_area = document.getElementById("output_area");
 
 mermaidAPI.initialize({startOnLoad: false});
 
 function clear_all_lists() {
-	let output_area = document.getElementById("output_area");
+	//let output_area = document.getElementById("output_area");
 	output_area.innerHTML = "<div></div>"; 
 }
 
@@ -39,13 +40,15 @@ function display_active_list() {
 	clear_form(); 
 	clear_viz();
 	clear_search(); 
+	final_output = "";
+	all_info = ""; 
 	if (activeList == "character") {
 		display_character_list();
 		//display_character_form();
 		display_search(); 
 	} else if (activeList == "location") {
 		display_location_list();
-		display_location_form();
+		//display_location_form();
 		display_search(); 
 	} else if (activeList == "information") {
 		display_information_list();
@@ -78,52 +81,13 @@ function display_search() {
 	search.style.visibility = "visible"; 
 }
 
-function display_character_form() {
-	var form = document.getElementById("form");
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="tag" value="" placeholder="Enter tag" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="first_name" value="" placeholder="Enter first name" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="last_name" value="" placeholder="Enter last name" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="occupation" value="" placeholder="Enter occupation" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="status" value="" placeholder="Enter status (ex. alive)" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="has_met_party" value="" placeholder="Has met party (ex. true)" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="faction" value="" placeholder="Enter faction" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="friend_of" value="" placeholder="Friend of (enter tag)" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="family_of" value="" placeholder="Family of (enter tag)" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="knows_info" value="" placeholder="Knows info (enter tag)" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add character" id="button" onClick="add_character();" /></div>';
-}
-
-function display_location_form() {
-	var form = document.getElementById("form");
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="location_tag" value="" placeholder="Enter tag" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="location_name" value="" placeholder="Enter location name" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="location_known" value="" placeholder="Party knows about location (ex. true)" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="in_region" value="" placeholder="Enter region" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="char_in_location" value="" placeholder="Enter characters in location" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="location_visited" value="" placeholder="Party has visited location (ex. true)" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add location" id="button" onClick="add_location();" /></div>';
-}
-
-function display_information_form() {
-	var form = document.getElementById("form");
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="information_tag" value="" placeholder="Enter tag" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="information_description" value="" placeholder="Enter information description" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="information_known" value="" placeholder="Party knows information (ex. true)" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="information_acted_on" value="" placeholder="Party has acted on information (ex. true)" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="storyline" value="" placeholder="Adds to storyline" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_location" value="" placeholder="Informs party about location (enter tag)" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_information" value="" placeholder="Informs party about information (enter tag)" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add information" id="button" onClick="add_information();" /></div>';
-}
-
 // handles getting the info for characters and outputting it 
 function display_character_list() {
 	activeList = "character";
 	clear_saved_info();
 	// For each character in the character tag list, print the character's info 
 	get_character_info();
-	var output_area = document.getElementById("output_area");
-	final_output = "<table id='list-table'><tr><th>Tag</th><th>First Name</th><th>Last Name</th><th>Occupation</th><<th>Status</th><th>Has Met Party</th><th>Faction</th><th>Friend Of</th><th>Family Of</th><th>Knows Info</th></tr>";
+	final_output = "<table id='list-table'><tr><th>Tag</th><th>First Name</th><th>Last Name</th><th>Occupation</th><th>Status</th><th>Has Met Party</th><th>Faction</th><th>Friend Of</th><th>Family Of</th><th>Knows Info</th></tr>";
 	setTimeout(() => {  
 		for (var i = 0; i < infoList.length; i++) {
 			print_character(tagList[i], infoList[i]);
@@ -137,10 +101,13 @@ function display_location_list() {
 	clear_saved_info();
 	// For each location in the location tag list, print the location's info 
 	get_location_info();
+	"location_tag", "location_name", "location_known", "in_region", "char_in_location", "location_visited"
+	final_output = "<table id='list-table'><tr><th>Tag</th><th>Name</th><th>Known by Party</th><th>In Region</th><th>Characters Here</th><th>Visited by Party</th></tr>";
 	setTimeout(() => {  
 		for (var i = 0; i < infoList.length; i++) {
 			print_location(tagList[i], infoList[i]);
 		}
+		output_area.innerHTML = final_output + "</table>";
 	}, 500);
 }
 
@@ -243,47 +210,38 @@ function print_character(character_tag, character_info_list) {
 		session.answer(get_all_bindings);
 	}
 	// Get the appropriate list and output the character if it matches the search
-	var output_area = document.getElementById("output_area");
-	add_to_table(character_tag, output_area); 
+	//var output_area = document.getElementById("output_area");
+	add_to_table(character_tag, character_fields); 
 	//check_against_search_filter(character_tag, output, output_area); 
 }
 
-function add_to_table(tag, output_area) {
-	final_output = final_output + "<tr><td>" + tag + "</td>";
-	for (var i = 1; i < character_fields.length; i++) {
-
-		if (output_elements[0] == character_fields[i]) {
-			final_output = final_output + "<td>";
-			output_elements.shift();
-			while (output_elements.includes(character_fields[i])) {
-				final_output = final_output + output_elements.shift() + "\n"; 
-				output_elements.shift();
-				final_output = final_output + output_elements.shift() + "\n";
-				output_elements.shift();
-			}
-			// if (output_elements[1] == character_fields[i] && output_elements[3] == character_fields[i]) {
-			// 	final_output = final_output + "<td>" + output_elements.shift() + ", "; 
-			// 	output_elements.shift();
-			// 	final_output = final_output + output_elements.shift() + ", "; 
-			// 	output_elements.shift();
-			// 	final_output = final_output + output_elements.shift() + "</td>";
-			// } else if (output_elements[1] == character_fields[i]) {
-			// 	final_output = final_output + "<td>" + output_elements.shift() + ", "; 
-			// 	output_elements.shift();
-			// 	final_output = final_output + output_elements.shift() + "</td>";
-			// }
-			//else {
-			if (output_elements.length > 0) {
-				final_output = final_output + output_elements.shift();
-			//}
-			
-			}
-			final_output = final_output + "</td>"
-		} else {
-			final_output = final_output + "<td></td>";
-		}
+function add_to_table(tag, fields_list) {
+	var all_info = ""; 
+	for (var i = 1; i < output_elements.length; i+=2) {
+		all_info = all_info + output_elements[i] + " ";
 	}
-	final_output = final_output + "</tr>";
+	// Check if the character matches the current search
+	if (all_info.toLowerCase().match(filterString.toLowerCase())) {
+		final_output = final_output + "<tr><td>" + tag + "</td>";
+		// Go through each of the character's pieces of info and add them to the table 
+		for (var i = 1; i < fields_list.length; i++) {
+			if (output_elements[0] == fields_list[i]) {
+				final_output = final_output + "<td>";
+				output_elements.shift();
+				while (output_elements.includes(fields_list[i])) {
+					final_output = final_output + output_elements.shift() + "\n"; 
+					output_elements.shift();
+				}
+				if (output_elements.length > 0) {
+					final_output = final_output + output_elements.shift();
+				}
+				final_output = final_output + "</td>"
+			} else {
+				final_output = final_output + "<td></td>";
+			}
+		}
+		final_output = final_output + "</tr>";
+	}
 }
 
 // Gets character tags and the list of all the info associated with each character
@@ -320,8 +278,9 @@ function print_location(location_tag, location_info_list) {
 		session.answer(get_all_bindings);
 	}
 	// Get the appropriate list and output the character if it matches the search
-	var output_area = document.getElementById("output_area");
-	check_against_search_filter(location_tag, output, output_area); 
+	//var output_area = document.getElementById("output_area");
+	//check_against_search_filter(location_tag, output, output_area); 
+	add_to_table(location_tag, location_fields); 
 }
 
 // Gets character tags and the list of all the info associated with each character
