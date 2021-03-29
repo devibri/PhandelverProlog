@@ -9,10 +9,12 @@ var activeList = "character";
 var infoList = [];
 var tagList = [];
 var output = "";
+var final_output = "";
 var output_connections = "";
 var character_fields = ["tag", "first_name", "last_name", "occupation", "status", "has_met_party", "faction", "friend_of", "family_of", "knows_info"];
 var location_fields = ["location_tag", "location_name", "location_known", "in_region", "char_in_location", "location_visited"];
 var information_fields = ["information_tag", "information_description", "information_known", "information_acted_on", "storyline", "goes_to_location", "goes_to_information"];
+var output_elements = [];
 
 mermaidAPI.initialize({startOnLoad: false});
 
@@ -120,10 +122,13 @@ function display_character_list() {
 	clear_saved_info();
 	// For each character in the character tag list, print the character's info 
 	get_character_info();
+	var output_area = document.getElementById("output_area");
+	final_output = "<table id='list-table'><tr><th>First Name</th><th>Last Name</th><th>Occupation</th><<th>Status</th><th>Has Met Party</th><th>Friend Of</th><th>Family Of</th><th>Knows Info</th></tr>";
 	setTimeout(() => {  
 		for (var i = 0; i < infoList.length; i++) {
 			print_character(tagList[i], infoList[i]);
 		}
+		output_area.innerHTML = final_output + "</table>";
 	}, 500);
 }
 
@@ -192,7 +197,9 @@ function print_list_info(binding) {
 		var list = binding.lookup("List").toJavaScript(); 
 		var values = list.toString().split(','); 
 		while (values.length > 0) {
-			output = output + "<strong>" + values.shift() + ":</strong> " + values.shift() + "&emsp;";
+			values.shift()
+			output_elements.push(values.shift());
+			//output = output + "<strong>" + values.shift() + ":</strong> " + values.shift() + "&emsp;";
 		}
 		
 		//output = output + list + "&emsp;";
@@ -227,6 +234,7 @@ function get_character(binding) {
 // Takes the list of all character info lists, and for each elementin the list, outputs it 
 function print_character(character_tag, character_info_list) {
 	output = "";
+	output_elements = [];
 	var get_all_bindings = function(answer) {
 		print_list_info(answer);
 	}
@@ -236,7 +244,17 @@ function print_character(character_tag, character_info_list) {
 	}
 	// Get the appropriate list and output the character if it matches the search
 	var output_area = document.getElementById("output_area");
-	check_against_search_filter(character_tag, output, output_area); 
+	add_to_table(output_area); 
+	//check_against_search_filter(character_tag, output, output_area); 
+}
+
+function add_to_table(output_area) {
+	//console.log(output_elements);
+	final_output = final_output + "<tr>";
+	for (var i = 0; i < output_elements.length; i++) {
+		final_output = final_output + "<td>" + output_elements[i] + "</td>";
+	}
+	final_output = final_output + "</tr>";
 }
 
 // Gets character tags and the list of all the info associated with each character
