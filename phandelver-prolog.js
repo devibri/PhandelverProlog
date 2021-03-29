@@ -5,7 +5,7 @@ session.consult("phandelver.prolog");
 // Array of variable bindings, one per answer, returned by prolog query
 var bindings = [];
 var filterString = '';
-var activeList = "location";
+var activeList = "information";
 var infoList = [];
 var tagList = [];
 var output = "";
@@ -13,7 +13,7 @@ var final_output = "";
 var output_connections = "";
 var character_fields = ["tag", "first_name", "last_name", "occupation", "status", "has_met_party", "faction", "friend_of", "family_of", "knows_info"];
 var location_fields = ["location_tag", "location_name", "location_known", "in_region", "char_in_location", "location_visited"];
-var information_fields = ["information_tag", "information_description", "information_known", "information_acted_on", "storyline", "goes_to_location", "goes_to_information"];
+var information_fields = ["information_tag", "info_desc", "known_info", "info_acted_on", "storyline", "goes_to_location", "goes_to_info"];
 var output_elements = [];
 var output_area = document.getElementById("output_area");
 
@@ -21,7 +21,7 @@ mermaidAPI.initialize({startOnLoad: false});
 
 function clear_all_lists() {
 	//let output_area = document.getElementById("output_area");
-	output_area.innerHTML = "<div></div>"; 
+	output_area.innerHTML = ""; 
 }
 
 // On starting up, display list of characters
@@ -85,7 +85,7 @@ function display_character_list() {
 	clear_saved_info();
 	// For each character in the character tag list, print the character's info 
 	get_character_info();
-	final_output = "<table id='list-table'><tr><th>Tag</th><th>First Name</th><th>Last Name</th><th>Occupation</th><th>Status</th><th>Has Met Party</th><th>Faction</th><th>Friend Of</th><th>Family Of</th><th>Knows Info</th></tr>";
+	final_output = "<h1>Characters</h1><table id='list-table'><tr><th>Tag</th><th>First Name</th><th>Last Name</th><th>Occupation</th><th>Status</th><th>Has Met Party</th><th>Faction</th><th>Friend Of</th><th>Family Of</th><th>Knows Info</th></tr>";
 	setTimeout(() => {  
 		for (var i = 0; i < infoList.length; i++) {
 			print_character(tagList[i], infoList[i]);
@@ -99,8 +99,7 @@ function display_location_list() {
 	clear_saved_info();
 	// For each location in the location tag list, print the location's info 
 	get_location_info();
-	"location_tag", "location_name", "location_known", "in_region", "char_in_location", "location_visited"
-	final_output = "<table id='list-table'><tr><th>Tag</th><th>Name</th><th>Known by Party</th><th>In Region</th><th>Characters Here</th><th>Visited by Party</th></tr>";
+	final_output = "<h1>Locations</h1><table id='list-table'><tr><th>Tag</th><th>Name</th><th>Known by Party</th><th>In Region</th><th>Characters Here</th><th>Visited by Party</th></tr>";
 	setTimeout(() => {  
 		for (var i = 0; i < infoList.length; i++) {
 			print_location(tagList[i], infoList[i]);
@@ -114,10 +113,12 @@ function display_information_list() {
 	clear_saved_info();
 	// For each information in the information tag list, print the information's info 
 	get_information_info();
+	final_output = "<h1>Information</h1><table id='list-table'><tr><th>Tag</th><th>Description</th><th>Known by Party</th><th>Acted On</th><th>Storyline</th><th>Goes to Location</th><th>Goes to Information</th></tr>";
 	setTimeout(() => {  
 		for (var i = 0; i < infoList.length; i++) {
 			print_information(tagList[i], infoList[i]);
 		}
+		output_area.innerHTML = final_output + "</table>";
 	}, 500);
 }
 
@@ -154,20 +155,49 @@ function clear_saved_info() {
 	tagList = [];
 }
 
-// Outputs the relevant list 
-
-// Callback function that takes a list and outputs it 
+// Adds the relevant list to a list of all its elements 
 function print_list_info(binding) {
 	if (binding != null) {
 		var list = binding.lookup("List").toJavaScript(); 
 		var values = list.toString().split(','); 
 		while (values.length > 0) {
-			//values.shift()
 			output_elements.push(values.shift());
-			//output = output + "<strong>" + values.shift() + ":</strong> " + values.shift() + "&emsp;";
 		}
-		
-		//output = output + list + "&emsp;";
+	}
+}
+
+// add the info if it matches search to the table
+function add_to_table(tag, fields_list) {
+	var all_info = ""; 
+	for (var i = 1; i < output_elements.length; i+=2) {
+		all_info = all_info + output_elements[i] + " ";
+	}
+	//console.log(all_info);
+
+	// Check if the character matches the current search
+	if (all_info.toLowerCase().match(filterString.toLowerCase())) {
+		console.log("check if " + output_elements[0] + " equals " + fields_list[1]);
+		final_output = final_output + "<tr><td>" + tag + "</td>";
+		// Go through each of the character's pieces of info and add them to the table 
+		for (var i = 1; i < fields_list.length; i++) {
+			if (output_elements[0] == fields_list[i]) {
+				final_output = final_output + "<td>";
+				output_elements.shift();
+				while (output_elements.includes(fields_list[i])) {
+					console.log("multiple");
+					final_output = final_output + output_elements.shift() + ", "; 
+					output_elements.shift();
+				}
+				if (output_elements.length > 0) {
+					final_output = final_output + output_elements.shift();
+				}
+				final_output = final_output + "</td>"
+			} else {
+				final_output = final_output + "<td></td>";
+			}
+		}
+		final_output = final_output + "</tr>";
+		console.log(final_output);
 	}
 }
 
@@ -209,37 +239,6 @@ function print_character(character_tag, character_info_list) {
 	}
 	// Get the appropriate list and output the character if it matches the search
 	add_to_table(character_tag, character_fields); 
-}
-
-function add_to_table(tag, fields_list) {
-	var all_info = ""; 
-	for (var i = 1; i < output_elements.length; i+=2) {
-		all_info = all_info + output_elements[i] + " ";
-	}
-
-	// Check if the character matches the current search
-	if (all_info.toLowerCase().match(filterString.toLowerCase())) {
-		final_output = final_output + "<tr><td>" + tag + "</td>";
-		// Go through each of the character's pieces of info and add them to the table 
-		for (var i = 1; i < fields_list.length; i++) {
-			if (output_elements[0] == fields_list[i]) {
-				final_output = final_output + "<td>";
-				output_elements.shift();
-				while (output_elements.includes(fields_list[i])) {
-					console.log("multiple");
-					final_output = final_output + output_elements.shift() + ", "; 
-					output_elements.shift();
-				}
-				if (output_elements.length > 0) {
-					final_output = final_output + output_elements.shift();
-				}
-				final_output = final_output + "</td>"
-			} else {
-				final_output = final_output + "<td></td>";
-			}
-		}
-		final_output = final_output + "</tr>";
-	}
 }
 
 // Gets character tags and the list of all the info associated with each character
@@ -316,9 +315,8 @@ function print_information(information_tag, information_info_list) {
 		session.query("Pred = " + information_info_list[i] + ", findall([Pred, Info], call( Pred, " + information_tag + ", Info), List).");
 		session.answer(get_all_bindings);
 	}
-	// Get the appropriate list and output the character if it matches the search
-	var output_area = document.getElementById("output_area");
-	check_against_search_filter(information_tag, output, output_area); 
+	// Get the appropriate list and output the info if it matches the search
+	add_to_table(information_tag, information_fields); 
 }
 
 // Adding new entities to the database
