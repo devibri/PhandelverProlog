@@ -5,7 +5,7 @@ session.consult("phandelver.prolog");
 // Array of variable bindings, one per answer, returned by prolog query
 var bindings = [];
 var filterString = '';
-var activeList = "information";
+var activeList = "character";
 var infoList = [];
 var tagList = [];
 var output = "";
@@ -190,7 +190,12 @@ function clear_saved_info() {
 function print_list_info(binding) {
 	if (binding != null) {
 		var list = binding.lookup("List").toJavaScript(); 
-		output = output + list + "&emsp;";
+		var values = list.toString().split(','); 
+		while (values.length > 0) {
+			output = output + "<strong>" + values.shift() + ":</strong> " + values.shift() + "&emsp;";
+		}
+		
+		//output = output + list + "&emsp;";
 	}
 }
 
@@ -389,8 +394,6 @@ function add_information() {
 	var goesToLoc = get_element("goes_to_location");
 	var goesToInfo = get_element("goes_to_information");
 
-	console.log("adding : " + infoTag + " " + infoDesc + " " + infoKnown + " " + infoActedOn + " " + storyline + " " + goesToLoc + " " + goesToInfo);
-
 	// Update the UI and clear the form 
 	var add_to_world = function(bindings) {
 		display_active_list();
@@ -443,7 +446,7 @@ function update_filter_string() {
 // Checks if the thing being outputted to list matches the search filter; if so, output it 
 function check_against_search_filter(tag, output, output_list) {
 	if (output.toLowerCase().match(filterString.toLowerCase())) {
-		output_list.innerHTML = output_list.innerHTML + "<div class='output-row'>" + tag + "  -  " + output +  "</div>"; 
+		output_list.innerHTML = output_list.innerHTML + "<div class='output-row'>" + "<strong>tag:</strong> " + tag + "&emsp;" + output +  "</div>"; 
 	}
 }
 

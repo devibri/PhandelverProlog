@@ -8,7 +8,7 @@ character_info_list(elmar_barthen, [first_name, last_name, occupation, status, k
 character_info_list(daren_edermath, [first_name, last_name, occupation, status, faction, knows_info]).
 character_info_list(linene_graywind, [first_name, last_name, occupation, status]).
 character_info_list(halia_thornton, [first_name, last_name, occupation, status, faction, knows_info]).
-character_info_list(qelline_alderleaf, [first_name, last_name, occupation, status, faction, friend_of, family_of, knows_info]).
+character_info_list(qelline_alderleaf, [first_name, last_name, occupation, status, friend_of, family_of, knows_info]).
 character_info_list(sister_garaele, [first_name, last_name, occupation, status, faction, knows_info]).
 character_info_list(harbin_wester, [first_name, last_name, occupation, status, knows_info]).
 character_info_list(sildar_hallwinter, [first_name, last_name, status, has_met_party, faction, knows_info]).
@@ -108,7 +108,7 @@ occupation(qelline_alderleaf, "Farmer").
 occupation(sister_garaele, "Elf cleric of Tymora").
 occupation(harbin_wester, "Townmaster of Phandalin").
 occupation(narth, "Farmer").
-occupation(narth, "Necromancer").
+occupation(hamun, "Necromancer").
 
 :- dynamic(status/2).
 status(toblin_stonehill, alive).
