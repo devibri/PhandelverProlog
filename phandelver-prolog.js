@@ -5,7 +5,7 @@ session.consult("phandelver.prolog");
 // Array of variable bindings, one per answer, returned by prolog query
 var bindings = [];
 var filterString = '';
-var activeList = "information";
+var activeList = "location";
 var infoList = [];
 var tagList = [];
 var output = "";
@@ -13,7 +13,7 @@ var final_output = "";
 var output_connections = "";
 var character_fields = ["tag", "first_name", "last_name", "occupation", "status", "has_met_party", "faction", "friend_of", "family_of", "knows_info"];
 var location_fields = ["location_tag", "location_name", "location_known", "in_region", "char_in_location", "location_visited"];
-var information_fields = ["information_tag", "info_desc", "known_info", "info_acted_on", "storyline", "goes_to_location", "goes_to_info"];
+var information_fields = ["information_tag", "info_desc", "info_known", "info_acted_on", "storyline", "goes_to_location", "goes_to_info"];
 var output_elements = [];
 var output_area = document.getElementById("output_area");
 
