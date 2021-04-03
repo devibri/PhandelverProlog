@@ -11,7 +11,7 @@ var tagList = [];
 var output = "";
 var final_output = "";
 var output_connections = "";
-var character_fields = ["tag", "first_name", "last_name", "occupation", "status", "has_met_party", "faction", "friend_of", "family_of", "knows_info"];
+var character_fields = ["tag", "first_name", "last_name", "occupation", "status", "has_met_party", "faction", "friend_of", "family_of", "knows_info", "has_quest"];
 var location_fields = ["location_tag", "location_name", "location_known", "in_region", "char_in_location", "location_visited"];
 var information_fields = ["information_tag", "info_desc", "info_known", "info_acted_on", "storyline", "goes_to_location", "goes_to_info"];
 var output_elements = [];
@@ -85,7 +85,7 @@ function display_character_list() {
 	clear_saved_info();
 	// For each character in the character tag list, print the character's info 
 	get_character_info();
-	final_output = "<h1>Characters</h1><table id='list-table'><tr><th>Tag</th><th>First Name</th><th>Last Name</th><th>Occupation</th><th>Status</th><th>Has Met Party</th><th>Faction</th><th>Friend Of</th><th>Family Of</th><th>Knows Info</th></tr>";
+	final_output = "<h1>Characters</h1><table id='list-table'><tr><th>Tag</th><th>First Name</th><th>Last Name</th><th>Occupation</th><th>Status</th><th>Has Met Party</th><th>Faction</th><th>Friend Of</th><th>Family Of</th><th>Knows Info</th><th>Has Quest</th></tr>";
 	setTimeout(() => {  
 		for (var i = 0; i < infoList.length; i++) {
 			print_character(tagList[i], infoList[i]);
