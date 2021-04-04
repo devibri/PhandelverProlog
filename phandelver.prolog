@@ -7,7 +7,7 @@ character_info_list(toblin_stonehill, [first_name, last_name, occupation, status
 character_info_list(elmar_barthen, [first_name, last_name, occupation, status, knows_info]).
 character_info_list(daren_edermath, [first_name, last_name, occupation, status, faction, knows_info, has_quest]).
 character_info_list(linene_graywind, [first_name, last_name, occupation, status]).
-character_info_list(halia_thornton, [first_name, last_name, occupation, status, faction, knows_info, has_quest]).
+character_info_list(halia_thornton, [first_name, last_name, occupation, status, faction, knows_info, has_quest, has_conditional]).
 character_info_list(qelline_alderleaf, [first_name, last_name, occupation, status, friend_of, family_of, knows_info]).
 character_info_list(sister_garaele, [first_name, last_name, occupation, status, faction, knows_info, has_quest]).
 character_info_list(harbin_wester, [first_name, last_name, occupation, status, knows_info, has_quest]).
@@ -23,11 +23,11 @@ character_info_list(ander, [first_name, status]).
 character_info_list(thistle, [first_name, status]).
 character_info_list(grista, [first_name, status]).
 character_info_list(carp, [first_name, status, friend_of, family_of, knows_info]).
-character_info_list(agatha, [first_name, status, knows_info]).
+character_info_list(agatha, [first_name, status, knows_info, has_conditional]).
 character_info_list(reidoth, [first_name, status, friend_of, knows_info, has_quest]).
-character_info_list(gundren_rockseeker, [first_name, last_name, status, knows_info, has_quest]).
+character_info_list(gundren_rockseeker, [first_name, last_name, status, knows_info, has_quest, has_conditional]).
 character_info_list(hamun, [first_name, occupation, status, knows_info, has_quest]).
-character_info_list(droop, [first_name, status, knows_info]).
+character_info_list(droop, [first_name, status, knows_info, has_conditional]).
 
 
 
@@ -182,12 +182,11 @@ knows_info(pip, secret_tunnel_knowledge).
 knows_info(freda, redbrands_and_halia).
 knows_info(carp, redbrand_hideout_location).
 knows_info(carp, secret_tunnel_location).
-knows_info(agatha, agatha_info).
-knows_info(reidoth, green_dragon).
 knows_info(gundren_rockseeker, wave_echo_cave_map).
 knows_info(hamun, hamun_quest).
 knows_info(hamun, finish_hamun_quest).
 knows_info(droop, redbrand_minion_info).
+knows_info(toblin_stonehill, learn_about_redbrands).
 
 :- dynamic(has_quest/2). 
 has_quest(halia_thornton, kill_redbrand_leader).
@@ -196,10 +195,16 @@ has_quest(daren_edermath, digging_old_owl_well).
 has_quest(sister_garaele, ask_agatha_about_book).
 has_quest(sildar_hallwinter, missing_iarno).
 has_quest(reidoth, green_dragon).
-has_quest(hamun, orcs_triboar_trail_quest).
+has_quest(hamun, orcs_triboar_trail_quest_hamun).
 has_quest(harbin_wester, orcs_triboar_trail_quest).
 has_quest(hamun, magic_tower).
 
+:- dynamic(has_conditional/2).
+has_conditional(halia_thornton, goblin_cragmaw_castle).
+has_conditional(halia_thornton, plan_to_take_over_redbrands).
+has_conditional(agatha, agatha_comb).
+has_conditional(gundren_rockseeker, wave_echo_cave_map).
+has_conditional(droop, redbrand_minion_info).
 
 
 
@@ -317,9 +322,6 @@ location_visited(stonehill_inn, true).
 
 %%%%%%%%%%%% INFORMATION INFO %%%%%%%%%%%%%
 
-
-
-
 :- dynamic(information_info_list/2).
 information_info_list(redbrand_hideout_location, [info_desc, storyline, goes_to_location, goes_to_info]).
 information_info_list(secret_tunnel_location, [info_desc, storyline, goes_to_location, goes_to_info]).
@@ -333,6 +335,7 @@ information_info_list(iarno_secret, [info_desc]).
 information_info_list(townmaster_and_redbrands, [info_desc, storyline]).
 information_info_list(redbrand_shakedown, [info_desc, storyline, goes_to_info]).
 information_info_list(agatha_info, [info_desc, storyline, goes_to_location, goes_to_info]).
+information_info_list(learn_about_redbrands, [info_desc, storyline]).
 
 :- dynamic(info/1).
 info(redbrand_hideout_location).
@@ -348,6 +351,7 @@ info(townmaster_and_redbrands).
 info(redbrand_shakedown).
 info(reidoth_location).
 info(agatha_info).
+info(learn_about_redbrands).
 
 
 % Descriptive info about world 
@@ -364,7 +368,7 @@ info_desc(iarno_secret, "The missing person, Iarno, is actually the leader of th
 info_desc(townmaster_and_redbrands, "Townmaster doesn't want players to mess with Redbrands, keep them in jail").
 info_desc(redbrand_shakedown, "The Redbrands are shaking down local businesses").
 info_desc(reidoth_location, "Reidoth at Thundertree knows the way to Cragmaw Castle or Wave Echo Cave").
-
+info_desc(learn_about_redbrands, "The Redbrands are a dangerous threat to the town of Phandalin").
 
 :- dynamic(info_known/2).
 
@@ -394,9 +398,8 @@ storyline(wave_echo_cave_map, wave_echo_cave_story).
 storyline(hamun_quest, either_location_story).
 storyline(redbrand_minion_info, cragmaw_castle_story).
 storyline(learn_about_redbrands, redbrand_story).
-storyline(find_redbrands, redbrand_story).
-storyline(find_cragmaw_castle, cragmaw_castle_story).
-storyline(find_wave_echo_cave, wave_echo_cave_story).
+storyline(cragmaw_castle, cragmaw_castle_story).
+storyline(wave_echo_cave, wave_echo_cave_story).
 storyline(remove_orc_camp, either_location_story).
 storyline(finish_hamun_quest, either_location_story).
 storyline(learn_tower_maker, either_location_story).
@@ -406,7 +409,6 @@ storyline(learn_tower_maker, either_location_story).
 goes_to_location(redbrand_hideout_location, tresendar_manor).
 goes_to_location(secret_tunnel_location, tresendar_manor).
 goes_to_location(secret_tunnel_knowledge, alderleaf_farm).
-goes_to_location(orcs_triboar_trail, orc_camp).
 goes_to_location(redbrands_and_halia, phandalin_miners_exchange).
 goes_to_location(redbrand_hangout, sleeping_giant_tap_house).
 goes_to_location(sister_garaele_exhausted, shrine_of_luck).
@@ -426,10 +428,9 @@ goes_to_location(hamun_quest, wave_echo_cave).
 goes_to_location(redbrand_minion_info, cragmaw_castle).
 
 :- dynamic(goes_to_info/2).
-goes_to_info(redbrand_hideout_location, find_redbrands).
-goes_to_info(secret_tunnel_location, find_redbrands).
+goes_to_info(redbrand_hideout_location, tresendar_manor).
+goes_to_info(secret_tunnel_location, tresendar_manor).
 goes_to_info(secret_tunnel_knowledge, secret_tunnel_location).
-goes_to_info(orcs_triboar_trail, remove_orc_camp).
 goes_to_info(dendrar_family_kidnapped, learn_about_redbrands).
 goes_to_info(redbrands_and_halia, kill_redbrand_leader).
 goes_to_info(redbrands_and_halia, goblin_cragmaw_castle).
@@ -438,31 +439,33 @@ goes_to_info(sister_garaele_exhausted, ask_agatha_about_book).
 goes_to_info(goblin_cragmaw_castle, learn_about_redbrands).
 goes_to_info(kill_redbrand_leader, learn_about_redbrands).
 goes_to_info(get_rid_of_redbrands, learn_about_redbrands).
-goes_to_info(digging_old_owl_well, hamun_quest).
-goes_to_info(ask_agatha_about_book, agatha_info).
+goes_to_info(ask_agatha_about_book, agatha_comb).
 goes_to_info(missing_iarno, learn_about_redbrands).
 goes_to_info(redbrand_shakedown, learn_about_redbrands).
 goes_to_info(reidoth_location, green_dragon).
-goes_to_info(agatha_info, find_cragmaw_castle).
-goes_to_info(agatha_info, find_wave_echo_cave).
-goes_to_info(agatha_info, learn_tower_maker).
-goes_to_info(green_dragon, find_wave_echo_cave).
-goes_to_info(green_dragon, find_cragmaw_castle).
-goes_to_info(wave_echo_cave_map, find_wave_echo_cave).
-goes_to_info(hamun_quest, remove_orc_camp).
-goes_to_info(hamun_quest, learn_tower_maker).
-goes_to_info(redbrand_minion_info, find_cragmaw_castle).
-goes_to_info(learn_about_redbrands, find_redbrands).
-goes_to_info(find_redbrands, redbrand_minion_info).
-goes_to_info(find_cragmaw_castle, wave_echo_cave_map).
-goes_to_info(remove_orc_camp, finish_hamun_quest).
-goes_to_info(finish_hamun_quest, find_wave_echo_cave).
-goes_to_info(learn_tower_maker, finish_hamun_quest).
-
+goes_to_info(green_dragon, wave_echo_cave).
+goes_to_info(green_dragon, cragmaw_castle).
+goes_to_info(wave_echo_cave_map, wave_echo_cave).
+goes_to_info(cragmaw_castle, wave_echo_cave_map).
+goes_to_info(redbrand_hideout_location, tresendar_manor).
+goes_to_info(secret_tunnel_location, tresendar_manor).
+goes_to_info(goblin_cragmaw_castle, tresendar_manor).
+goes_to_info(kill_redbrand_leader, tresendar_manor).
+goes_to_info(digging_old_owl_well, orcs_triboar_trail_quest_hamun).
+goes_to_info(orcs_triboar_trail, orcs_triboar_trail_quest).
+goes_to_info(digging_old_owl_well, magic_tower).
+goes_to_info(redbrand_minion_info, cragmaw_castle).
+goes_to_info(tresendar_manor, redbrand_minion_info).
+goes_to_info(agatha_comb, wave_echo_cave).
+goes_to_info(agatha_comb, cragmaw_castle).
+goes_to_info(magic_tower, cragmaw_castle).
+goes_to_info(magic_tower, wave_echo_cave).
+goes_to_info(orcs_triboar_trail_quest_hamun, cragmaw_castle).
+goes_to_info(orcs_triboar_trail_quest_hamun, wave_echo_cave).
 
 %%%%%%%%%%%% QUEST INFO %%%%%%%%%%%%%%
 
-:- dynamic(quest_info_list).
+:- dynamic(quest_info_list/2).
 quest_info_list(kill_redbrand_leader, [quest_desc, storyline, goes_to_location, goes_to_info]).
 quest_info_list(get_rid_of_redbrands, [quest_desc, storyline, goes_to_info]).
 quest_info_list(digging_old_owl_well, [quest_desc, storyline, goes_to_location, goes_to_info]).
@@ -470,7 +473,19 @@ quest_info_list(ask_agatha_about_book, [quest_desc, storyline, goes_to_location,
 quest_info_list(missing_iarno, [quest_desc, storyline, goes_to_info]).
 quest_info_list(green_dragon, [quest_desc, storyline, goes_to_location, goes_to_info]).
 quest_info_list(orcs_triboar_trail_quest, [quest_desc, storyline]).
+quest_info_list(orcs_triboar_trail_quest_hamun, [quest_desc, storyline]).
 quest_info_list(magic_tower, [quest_desc, storyline]).
+
+:- dynamic(quest/1).
+quest(kill_redbrand_leader).
+quest(get_rid_of_redbrands).
+quest(digging_old_owl_well).
+quest(ask_agatha_about_book).
+quest(missing_iarno).
+quest(green_dragon).
+quest(orcs_triboar_trail_quest).
+quest(orcs_triboar_trail_quest_hamun).
+quest(magic_tower).
 
 :- dynamic(quest_desc/2).
 quest_desc(kill_redbrand_leader, "Kill the Redbrand leader").
@@ -480,6 +495,7 @@ quest_desc(ask_agatha_about_book, "Ask about the location of the wizard's book")
 quest_desc(missing_iarno, "Find Iarno, a missing member of the Order of the Gauntlet").
 quest_desc(green_dragon, "Get rid of the green dragon at Thundertree in exchange for info on Wave Echo Cave / Cragmaw Castle").
 quest_desc(orcs_triboar_trail_quest, "Get rid of the orc camp at Triboar Trail"). 
+quest_desc(orcs_triboar_trail_quest_hamun, "Get rid of the orc camp at Triboar Trail in exchange for info on Wave Echo Cave / Cragmaw Castle"). 
 quest_desc(magic_tower, "Ask Agatha about who made the magic tower in exchange for the location of Wave Echo Cave").
 
 :- dynamic(quest_complete/2). 
@@ -488,12 +504,19 @@ quest_desc(magic_tower, "Ask Agatha about who made the magic tower in exchange f
 
 %%%%%%%%%%% CONDITIONAL INFO %%%%%%%%%%%
 
-:- dynamic(conditional_info_list).
+:- dynamic(conditional_info_list/2).
 conditional_info_list(goblin_cragmaw_castle, [conditional_desc, storyline, conditional_character, goes_to_location, goes_to_info]).
 conditional_info_list(plan_to_take_over_redbrands, [conditional_desc, storyline, conditional_character]).
 conditional_info_list(agatha_comb, [conditional_desc, storyline, conditional_character]).
 conditional_info_list(wave_echo_cave_map, [conditional_desc, storyline, conditional_charactergoes_to_location, goes_to_info]).
 conditional_info_list(redbrand_minion_info, [conditional_desc, storyline, conditional_character]).
+
+:- dynamic(conditional/1).
+conditional(goblin_cragmaw_castle).
+conditional(plan_to_take_over_redbrands).
+conditional(agatha_comb).
+conditional(wave_echo_cave_map).
+conditional(redbrand_minion_info).
 
 % NPC AI -- directions as to how to play this character, when they will reveal info, etc.
 :- dynamic(conditional_desc/2).
@@ -503,11 +526,5 @@ conditional_desc(agatha_comb, "Will give the party the honest answer to a questi
 conditional_desc(wave_echo_cave_map, "Has a map leading to Wave Echo Cave and will give to the party if rescued").
 conditional_desc(redbrand_minion_info, "If you save them from the bugbears messing with them, they will tell you the location of Cragmaw Castle").
 
-:- dynamic(conditional_character/2).
-conditional_character(goblin_cragmaw_castle, halia_thornton).
-conditional_character(plan_to_take_over_redbrands, halia_thornton).
-conditional_character(agatha_comb, agatha).
-conditional_character(wave_echo_cave_map, gundren_rockseeker).
-conditional_character(redbrand_minion_info, droop).
 
 :- dynamic(conditional_complete/2).

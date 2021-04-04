@@ -5,13 +5,13 @@ session.consult("phandelver.prolog");
 // Array of variable bindings, one per answer, returned by prolog query
 var bindings = [];
 var filterString = '';
-var activeList = "location";
+var activeList = "visualization";
 var infoList = [];
 var tagList = [];
 var output = "";
 var final_output = "";
 var output_connections = "";
-var character_fields = ["tag", "first_name", "last_name", "occupation", "status", "has_met_party", "faction", "friend_of", "family_of", "knows_info", "has_quest"];
+var character_fields = ["tag", "first_name", "last_name", "occupation", "status", "has_met_party", "faction", "friend_of", "family_of", "knows_info", "has_quest", "has_conditional"];
 var location_fields = ["location_tag", "location_name", "location_known", "in_region", "char_in_location", "location_visited"];
 var information_fields = ["information_tag", "info_desc", "info_known", "info_acted_on", "storyline", "goes_to_location", "goes_to_info"];
 var output_elements = [];
@@ -55,7 +55,7 @@ function display_active_list() {
 	} else if (activeList == "visualization") {
 		display_visualization(); 
 	} else {
-		console.log("ERROR: Tried to display non-existant list");
+		console.log("ERROR: Tried to display non-existent list");
 	}
 }
 
@@ -85,7 +85,7 @@ function display_character_list() {
 	clear_saved_info();
 	// For each character in the character tag list, print the character's info 
 	get_character_info();
-	final_output = "<h1>Characters</h1><table id='list-table'><tr><th>Tag</th><th>First Name</th><th>Last Name</th><th>Occupation</th><th>Status</th><th>Has Met Party</th><th>Faction</th><th>Friend Of</th><th>Family Of</th><th>Knows Info</th><th>Has Quest</th></tr>";
+	final_output = "<h1>Characters</h1><table id='list-table'><tr><th>Tag</th><th>First Name</th><th>Last Name</th><th>Occupation</th><th>Status</th><th>Has Met Party</th><th>Faction</th><th>Friend Of</th><th>Family Of</th><th>Knows Info</th><th>Has Quest</th><th>Has Conditional</th></tr>";
 	setTimeout(() => {  
 		for (var i = 0; i < infoList.length; i++) {
 			print_character(tagList[i], infoList[i]);
@@ -172,11 +172,9 @@ function add_to_table(tag, fields_list) {
 	for (var i = 1; i < output_elements.length; i+=2) {
 		all_info = all_info + output_elements[i] + " ";
 	}
-	//console.log(all_info);
 
 	// Check if the character matches the current search
 	if (all_info.toLowerCase().match(filterString.toLowerCase())) {
-		console.log("check if " + output_elements[0] + " equals " + fields_list[1]);
 		final_output = final_output + "<tr><td>" + tag + "</td>";
 		// Go through each of the character's pieces of info and add them to the table 
 		for (var i = 1; i < fields_list.length; i++) {
@@ -184,7 +182,6 @@ function add_to_table(tag, fields_list) {
 				final_output = final_output + "<td>";
 				output_elements.shift();
 				while (output_elements.includes(fields_list[i])) {
-					console.log("multiple");
 					final_output = final_output + output_elements.shift() + ", "; 
 					output_elements.shift();
 				}
@@ -197,7 +194,6 @@ function add_to_table(tag, fields_list) {
 			}
 		}
 		final_output = final_output + "</tr>";
-		console.log(final_output);
 	}
 }
 
@@ -462,13 +458,14 @@ function generate_visualization() {
 		for(var i = 0; i < bindings.length; i++) {
 			get_character_with_info(bindings[i]);
 		}
+		// Then get the quests associated with each character 
+		get_quests(); 
 		// Once you get the nodes, get the connections
-		get_connections();
+		//get_connections();
 	}
 	bindings = [];
 	session.query("info(Info), knows_info(CharTag, Info), info_desc(Info, InfoDesc).");
 	session.answers(get_callback(get_all_bindings));
-
 }
 
 function get_character_with_info(binding) {
@@ -481,7 +478,59 @@ function get_character_with_info(binding) {
 	}
 }
 
-function get_connections() {
+function get_quests() {
+	// for each quest, find the character associated with that quest
+	var get_all_bindings = function(bindings) {
+		for(var i = 0; i < bindings.length; i++) {
+			get_character_with_quest(bindings[i]);
+		}
+		get_conditionals(); 
+		// Once you get the nodes, get the connections
+		//get_connections();
+	}
+	bindings = [];
+	session.query("quest(Quest), has_quest(CharTag, Quest), quest_desc(Quest, QuestDesc).");
+	session.answers(get_callback(get_all_bindings));
+}
+
+
+function get_character_with_quest(binding) {
+	if (binding != null) {
+		var quest_tag = binding.lookup("Quest"); 
+		var char_tag = binding.lookup("CharTag");
+		var quest_desc = binding.lookup("QuestDesc");
+		var quest_desc_breaks = addBreaks(quest_desc); 
+		output = output + quest_tag + "[\"<p>(" + char_tag + ") " + quest_desc_breaks + "</p>\"]\n";
+	}
+}
+
+function get_conditionals() {
+	// for each conditional, find the character associated with that conditional
+	var get_all_bindings = function(bindings) {
+		for(var i = 0; i < bindings.length; i++) {
+			get_character_with_conditional(bindings[i]);
+		}
+		//get_conditionals(); 
+		// Once you get the nodes, get the connections
+		get_connections_info();
+	}
+	bindings = [];
+	session.query("conditional(Conditional), has_conditional(CharTag, Conditional), conditional_desc(Conditional, ConditionalDesc).");
+	session.answers(get_callback(get_all_bindings));
+}
+
+
+function get_character_with_conditional(binding) {
+	if (binding != null) {
+		var conditional_tag = binding.lookup("Conditional"); 
+		var char_tag = binding.lookup("CharTag");
+		var conditional_desc = binding.lookup("ConditionalDesc");
+		var conditional_desc_breaks = addBreaks(conditional_desc); 
+		output = output + conditional_tag + "[\"<p>(" + char_tag + ") " + conditional_desc_breaks + "</p>\"]\n";
+	}
+}
+
+function get_connections_info() {
 	output_connections = "";
 	var get_all_bindings = function(bindings) {
 		for(var i = 0; i < bindings.length; i++) {
@@ -489,9 +538,10 @@ function get_connections() {
 		}
 		// Once you have the nodes and connections, display the graph
 		display_graph();
+		//get_connections_locations();
 	}
 	bindings = [];
-	session.query("info(Info), goes_to_info(Info, InfoNext).");
+	session.query("goes_to_info(Info, InfoNext).");
 	session.answers(get_callback(get_all_bindings));
 }
 
