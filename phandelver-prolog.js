@@ -16,6 +16,7 @@ var location_fields = ["location_tag", "location_name", "location_known", "in_re
 var information_fields = ["information_tag", "info_desc", "info_known", "info_acted_on", "storyline", "goes_to_location", "goes_to_info"];
 var output_elements = [];
 var output_area = document.getElementById("output_area");
+var key_area = document.getElementById("key");
 
 mermaidAPI.initialize({startOnLoad: false});
 
@@ -124,6 +125,9 @@ function display_information_list() {
 
 function display_visualization() {
 	activeList = "visualization";
+	//Key: Story threads -- <span style="background-color: #FFA78E">Redbrands</span>  |  <span style="background-color: #F6DD8B">Cragmaw Castle</span>  |  <span style="background-color: #96acff">Wave Echo Cave</span>  |  <span style="background-color: #BCD6BB">Both Cragmaw Castle & Wave Echo Cave</span>
+	let key_text = 'Key: <span style="background-color: #FFA78E">Quest</span>  |  <span style="background-color: #F6DD8B">Conditional</span>  |  <span style="background-color: #BCD6BB">Information</span>  |  <span style="background-color: #CDCDCD">Location</span>';
+	key.innerHTML = key_text;
 	generate_visualization();
 }
 
@@ -474,7 +478,7 @@ function get_character_with_info(binding) {
 		var char_tag = binding.lookup("CharTag");
 		var info_desc = binding.lookup("InfoDesc");
 		var info_desc_breaks = addBreaks(info_desc); 
-		output = output + info_tag + "[\"<p>(" + char_tag + ") " + info_desc_breaks + "</p>\"]\n";
+		output = output + info_tag + "[\"<p>(" + char_tag + ") " + info_desc_breaks + "</p>\"]:::Info\n";
 	}
 }
 
@@ -500,7 +504,7 @@ function get_character_with_quest(binding) {
 		var char_tag = binding.lookup("CharTag");
 		var quest_desc = binding.lookup("QuestDesc");
 		var quest_desc_breaks = addBreaks(quest_desc); 
-		output = output + quest_tag + "[\"<p>(" + char_tag + ") " + quest_desc_breaks + "</p>\"]\n";
+		output = output + quest_tag + "[\"<p>(" + char_tag + ") " + quest_desc_breaks + "</p>\"]:::Quest\n";
 	}
 }
 
@@ -526,7 +530,7 @@ function get_character_with_conditional(binding) {
 		var char_tag = binding.lookup("CharTag");
 		var conditional_desc = binding.lookup("ConditionalDesc");
 		var conditional_desc_breaks = addBreaks(conditional_desc); 
-		output = output + conditional_tag + "[\"<p>(" + char_tag + ") " + conditional_desc_breaks + "</p>\"]\n";
+		output = output + conditional_tag + "[\"<p>(" + char_tag + ") " + conditional_desc_breaks + "</p>\"]:::Conditional\n";
 	}
 }
 
@@ -554,6 +558,9 @@ function get_connection(binding) {
 }
 
 function display_graph() {
+	output_connections = output_connections + "classDef Quest fill:#FFA78E,stroke:#FFF;\n" + 
+			"classDef Info fill:#BCD6BB,stroke:#FFF;\n" + 
+			"classDef Conditional fill:#F6DD8B,stroke:#FFF;"
 	var insertSvg = function(svgCode, bindFunctions){
 			var viz = document.getElementById("graphDiv");
             viz.innerHTML = svgCode;
