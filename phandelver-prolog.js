@@ -41,6 +41,7 @@ function display_active_list() {
 	clear_form(); 
 	clear_viz();
 	clear_search(); 
+	clear_key();
 	if (activeList == "character") {
 		display_character_list();
 		//display_character_form();
@@ -73,6 +74,10 @@ function clear_viz() {
 function clear_search() {
 	var search = document.getElementById("search-bar");
 	search.style.visibility = "hidden"; 
+}
+
+function clear_key() {
+	key.innerHTML = ""; 
 }
 
 function display_search() {
