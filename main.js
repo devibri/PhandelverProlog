@@ -98,7 +98,7 @@ function display_character_list() {
 	clear_saved_info();
 	// For each character in the character tag list, print the character's info 
 	get_character_info();
-	final_output = "<h1>Characters</h1><table id='list-table'><tr><th>Tag</th><th>First Name</th><th>Last Name</th><th>Occupation</th><th>Status</th><th>Has Met Party</th><th>Faction</th><th>Friend Of</th><th>Family Of</th><th>Knows Info</th><th>Has Quest</th><th>Has Conditional</th></tr>";
+	final_output = "<h1>Characters</h1><table id='list-table'><tr><th>Tag</th><th>First Name</th><th>Last Name</th><th>Occupation</th><th>Status</th><th>Has Met Party</th><th>Faction</th><th>Friend Of</th><th>Family Of</th><th>Knows Info</th><th>Has Quest</th><th>Has Conditional</th><th>Edit</th><th>Delete</th></tr>";
 	setTimeout(() => {  
 		for (var i = 0; i < infoList.length; i++) {
 			print_character(tagList[i], infoList[i]);
@@ -112,7 +112,7 @@ function display_location_list() {
 	clear_saved_info();
 	// For each location in the location tag list, print the location's info 
 	get_location_info();
-	final_output = "<h1>Locations</h1><table id='list-table'><tr><th>Tag</th><th>Name</th><th>Known by Party</th><th>In Region</th><th>Characters Here</th><th>Visited by Party</th></tr>";
+	final_output = "<h1>Locations</h1><table id='list-table'><tr><th>Tag</th><th>Name</th><th>Known by Party</th><th>In Region</th><th>Characters Here</th><th>Visited by Party</th><th>Edit</th><th>Delete</th></tr>";
 	setTimeout(() => {  
 		for (var i = 0; i < infoList.length; i++) {
 			print_location(tagList[i], infoList[i]);
@@ -126,7 +126,7 @@ function display_information_list() {
 	clear_saved_info();
 	// For each information in the information tag list, print the information's info 
 	get_information_info();
-	final_output = "<h1>Information</h1><table id='list-table'><tr><th>Tag</th><th>Description</th><th>Known by Party</th><th>Acted On</th><th>Storyline</th><th>Goes to Location</th><th>Goes to Information</th></tr>";
+	final_output = "<h1>Information</h1><table id='list-table'><tr><th>Tag</th><th>Description</th><th>Known by Party</th><th>Acted On</th><th>Storyline</th><th>Goes to Location</th><th>Goes to Information</th><th>Edit</th><th>Delete</th></tr>";
 	setTimeout(() => {  
 		for (var i = 0; i < infoList.length; i++) {
 			print_information(tagList[i], infoList[i]);
@@ -210,12 +210,12 @@ function add_to_table(tag, fields_list) {
 				final_output = final_output + "<td contenteditable='true'></td>";
 			}
 		}
-		// end of the row
-		final_output = final_output + "<td><input class='delete-row button' type='button' value='Delete' id='button' onClick='' /></td></tr>";
+		// end of the row								
+		final_output = final_output + "<td><button class='edit-row button' type='button'id='button' onClick=''><span class='glyphicon glyphicon-edit' /></button></td><td><button class='delete-row button'' type='button' id='button' onClick=''><span class='glyphicon glyphicon-remove' /></button></td></tr>";
 	}
 }
 
-$('body').on('click', 'input.delete-row', function() {
+$('body').on('click', 'button.delete-row', function() {
    $(this).parents('tr').remove();  
 });
 
