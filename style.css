@@ -39,7 +39,7 @@ body {
 }
 
 .button {
-  background-color: #999999ff; /* Green */
+  background-color: #999999ff; 
   border: none;
   color: white;
   padding: 15px 32px;
@@ -62,11 +62,13 @@ body {
 .search {
   margin-top: 10px;
   margin-left: 40px;
- 
 }
 
 .search input[type=text] {
    width: 30%;
+   margin-top:20px;
+   margin-left:20px;
+   background-color:#D4D4D4;
 }
 
 
