@@ -13,7 +13,7 @@ var final_output = "";
 var output_connections = "";
 var character_fields = ["tag", "first_name", "last_name", "occupation", "status", "has_met_party", "faction", "friend_of", "family_of", "knows_info", "has_quest", "has_conditional"];
 var location_fields = ["location_tag", "location_name", "location_known", "in_region", "char_in_location", "location_visited"];
-var information_fields = ["information_tag", "information_description", "information_known", "information_acted_on", "storyline", "goes_to_location", "goes_to_information"];
+var information_fields = ["information_tag", "info_desc", "info_known", "info_acted_on", "storyline", "goes_to_location", "goes_to_info"];
 var output_elements = [];
 var output_area = document.getElementById("output_area");
 var key_area = document.getElementById("key");
@@ -423,12 +423,12 @@ function add_location() {
 function add_info_to_database() { 
 	// Get the values from the form 
 	var infoTag = get_element("information_tag");
-	var infoDesc = get_element("information_description");
-	var infoKnown = get_element("information_known");
-	var infoActedOn = get_element("information_acted_on");
+	var infoDesc = get_element("info_desc");
+	var infoKnown = get_element("info_known");
+	var infoActedOn = get_element("info_acted_on");
 	var storyline = get_element("storyline");
 	var goesToLoc = get_element("goes_to_location");
-	var goesToInfo = get_element("goes_to_information");
+	var goesToInfo = get_element("goes_to_info");
 
 	var add_to_world = function(bindings) {
 	}
@@ -639,12 +639,12 @@ function display_location_form() {
 function display_information_form() {
 	var form = document.getElementById("form");
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="information_tag" value="" placeholder="Enter tag" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="information_description" value="" placeholder="Enter information description" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="information_known" value="" placeholder="Party knows information (ex. true)" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="information_acted_on" value="" placeholder="Party has acted on information (ex. true)" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="info_desc" value="" placeholder="Enter information description" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="info_known" value="" placeholder="Party knows information (ex. true)" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="info_acted_on" value="" placeholder="Party has acted on information (ex. true)" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="storyline" value="" placeholder="Adds to storyline" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_location" value="" placeholder="Informs party about location (enter tag)" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_information" value="" placeholder="Informs party about information (enter tag)" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_info" value="" placeholder="Informs party about information (enter tag)" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add information" id="button" onClick="add_information_to_table();" /></div>';
 }
 
@@ -665,12 +665,12 @@ function add_info() {
     // Append product to the table
     $("#list-table tbody").append("<tr>" +
         "<td>" + $("#information_tag").val() + "</td>" +
-        "<td>" + $("#information_description").val() + "</td>" +
-        "<td>" + $("#information_known").val() + "</td>" +
-        "<td>" + $("#information_acted_on").val() + "</td>" +
+        "<td>" + $("#info_desc").val() + "</td>" +
+        "<td>" + $("#info_acted_on").val() + "</td>" +
+        "<td>" + $("#info_acted_on").val() + "</td>" +
         "<td>" + $("#storyline").val() + "</td>" +
         "<td>" + $("#goes_to_location").val() + "</td>" +
-        "<td>" + $("#goes_to_information").val() + "</td>" +
+        "<td>" + $("#goes_to_info").val() + "</td>" +
         "</tr>");
 }
 
