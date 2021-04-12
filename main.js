@@ -1,6 +1,6 @@
 // Create the prolog sesssion and load phandelver.prolog.
 session = pl.create();
-session.consult("phandelver.prolog");
+session.consult("database.prolog");
 
 // Array of variable bindings, one per answer, returned by prolog query
 var bindings = [];
