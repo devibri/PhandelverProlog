@@ -5,7 +5,7 @@ session.consult("database.prolog");
 // Array of variable bindings, one per answer, returned by prolog query
 var bindings = [];
 var filterString = '';
-var activeList = "visualization";
+var activeList = "character";
 var infoList = [];
 var tagList = [];
 var output = "";
@@ -191,11 +191,11 @@ function add_to_table(tag, fields_list) {
 
 	// Check if the character matches the current search
 	if (all_info.toLowerCase().match(filterString.toLowerCase())) {
-		final_output = final_output + "<tr><td>" + tag + "</td>";
+		final_output = final_output + "<tr><td contenteditable='true'>" + tag + "</td>";
 		// Go through each of the character's pieces of info and add them to the table 
 		for (var i = 1; i < fields_list.length; i++) {
 			if (output_elements[0] == fields_list[i]) {
-				final_output = final_output + "<td>";
+				final_output = final_output + "<td contenteditable='true'>";
 				output_elements.shift();
 				while (output_elements.includes(fields_list[i])) {
 					final_output = final_output + output_elements.shift() + ", "; 
@@ -205,13 +205,19 @@ function add_to_table(tag, fields_list) {
 					final_output = final_output + output_elements.shift();
 				}
 				final_output = final_output + "</td>"
+			// If there is nothing found, just add an empty cell
 			} else {
-				final_output = final_output + "<td></td>";
+				final_output = final_output + "<td contenteditable='true'></td>";
 			}
 		}
-		final_output = final_output + "</tr>";
+		// end of the row
+		final_output = final_output + "<td><input class='delete-row button' type='button' value='Delete' id='button' onClick='' /></td></tr>";
 	}
 }
+
+$('body').on('click', 'input.delete-row', function() {
+   $(this).parents('tr').remove();  
+});
 
 /* Handing character info and output */
 
@@ -653,6 +659,7 @@ function search() {
     }
   }
 }
+
 // $.fn.editable.defaults.mode = 'inline';
 
 // $(document).ready(function() {
