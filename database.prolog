@@ -428,8 +428,6 @@ goes_to_location(hamun_quest, wave_echo_cave).
 goes_to_location(redbrand_minion_info, cragmaw_castle).
 
 :- dynamic(goes_to_info/2).
-goes_to_info(redbrand_hideout_location, tresendar_manor).
-goes_to_info(secret_tunnel_location, tresendar_manor).
 goes_to_info(secret_tunnel_knowledge, secret_tunnel_location).
 goes_to_info(dendrar_family_kidnapped, learn_about_redbrands).
 goes_to_info(redbrands_and_halia, kill_redbrand_leader).

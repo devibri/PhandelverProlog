@@ -37,11 +37,13 @@ function set_active_list(value) {
 
 // checks which list is active and displays that list 
 function display_active_list() {
+
 	clear_all_lists();
 	clear_form(); 
 	clear_viz();
 	clear_search(); 
 	clear_key();
+	clear_search_input();
 	if (activeList == "character") {
 		display_character_list();
 		//display_character_form();
@@ -78,6 +80,11 @@ function clear_search() {
 
 function clear_key() {
 	key.innerHTML = ""; 
+}
+
+function clear_search_input() {
+	var search = document.getElementById("search");
+	search.value = "";
 }
 
 function display_search() {
@@ -625,6 +632,27 @@ function display_information_form() {
 	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add information" id="button" onClick="add_information();" /></div>';
 }
 
+function search() {
+  // Declare variables
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("search");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("list-table");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
 // $.fn.editable.defaults.mode = 'inline';
 
 // $(document).ready(function() {
