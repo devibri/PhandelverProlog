@@ -95,3 +95,9 @@ td, th {
 tr:nth-child(even) {
   background-color: #dddddd;
 }
+
+div.output {             
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+}

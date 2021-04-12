@@ -5,7 +5,7 @@ session.consult("database.prolog");
 // Array of variable bindings, one per answer, returned by prolog query
 var bindings = [];
 var filterString = '';
-var activeList = "character";
+var activeList = "information";
 var infoList = [];
 var tagList = [];
 var output = "";
@@ -13,10 +13,11 @@ var final_output = "";
 var output_connections = "";
 var character_fields = ["tag", "first_name", "last_name", "occupation", "status", "has_met_party", "faction", "friend_of", "family_of", "knows_info", "has_quest", "has_conditional"];
 var location_fields = ["location_tag", "location_name", "location_known", "in_region", "char_in_location", "location_visited"];
-var information_fields = ["information_tag", "info_desc", "info_known", "info_acted_on", "storyline", "goes_to_location", "goes_to_info"];
+var information_fields = ["information_tag", "information_description", "information_known", "information_acted_on", "storyline", "goes_to_location", "goes_to_information"];
 var output_elements = [];
 var output_area = document.getElementById("output_area");
 var key_area = document.getElementById("key");
+var row = null;
 
 mermaidAPI.initialize({startOnLoad: false});
 
@@ -46,7 +47,7 @@ function display_active_list() {
 	clear_search_input();
 	if (activeList == "character") {
 		display_character_list();
-		//display_character_form();
+		display_character_form();
 		display_search(); 
 	} else if (activeList == "location") {
 		display_location_list();
@@ -98,12 +99,12 @@ function display_character_list() {
 	clear_saved_info();
 	// For each character in the character tag list, print the character's info 
 	get_character_info();
-	final_output = "<h1>Characters</h1><table id='list-table'><tr><th>Tag</th><th>First Name</th><th>Last Name</th><th>Occupation</th><th>Status</th><th>Has Met Party</th><th>Faction</th><th>Friend Of</th><th>Family Of</th><th>Knows Info</th><th>Has Quest</th><th>Has Conditional</th><th>Edit</th><th>Delete</th></tr>";
+	final_output = "<thead><h1>Characters</h1><table id='list-table'><tr><th>Tag</th><th>First Name</th><th>Last Name</th><th>Occupation</th><th>Status</th><th>Has Met Party</th><th>Faction</th><th>Friend Of</th><th>Family Of</th><th>Knows Info</th><th>Has Quest</th><th>Has Conditional</th><th>Edit</th><th>Delete</th></tr></thead><tbody>";
 	setTimeout(() => {  
 		for (var i = 0; i < infoList.length; i++) {
 			print_character(tagList[i], infoList[i]);
 		}
-		output_area.innerHTML = final_output + "</table>";
+		output_area.innerHTML = final_output + "</tbody></table>";
 	}, 500);
 }
 
@@ -112,12 +113,12 @@ function display_location_list() {
 	clear_saved_info();
 	// For each location in the location tag list, print the location's info 
 	get_location_info();
-	final_output = "<h1>Locations</h1><table id='list-table'><tr><th>Tag</th><th>Name</th><th>Known by Party</th><th>In Region</th><th>Characters Here</th><th>Visited by Party</th><th>Edit</th><th>Delete</th></tr>";
+	final_output = "<thead><h1>Locations</h1><table id='list-table'><tr><th>Tag</th><th>Name</th><th>Known by Party</th><th>In Region</th><th>Characters Here</th><th>Visited by Party</th><th>Edit</th><th>Delete</th></tr></thead><tbody>";
 	setTimeout(() => {  
 		for (var i = 0; i < infoList.length; i++) {
 			print_location(tagList[i], infoList[i]);
 		}
-		output_area.innerHTML = final_output + "</table>";
+		output_area.innerHTML = final_output + "</tbody></table>";
 	}, 500);
 }
 
@@ -126,12 +127,12 @@ function display_information_list() {
 	clear_saved_info();
 	// For each information in the information tag list, print the information's info 
 	get_information_info();
-	final_output = "<h1>Information</h1><table id='list-table'><tr><th>Tag</th><th>Description</th><th>Known by Party</th><th>Acted On</th><th>Storyline</th><th>Goes to Location</th><th>Goes to Information</th><th>Edit</th><th>Delete</th></tr>";
+	final_output = "<thead><h1>Information</h1><table id='list-table'><tr><th>Tag</th><th>Description</th><th>Known by Party</th><th>Acted On</th><th>Storyline</th><th>Goes to Location</th><th>Goes to Information</th><th>Edit</th><th>Delete</th></tr></thead><tbody>";
 	setTimeout(() => {  
 		for (var i = 0; i < infoList.length; i++) {
 			print_information(tagList[i], infoList[i]);
 		}
-		output_area.innerHTML = final_output + "</table>";
+		output_area.innerHTML = final_output + "</tbody></table>";
 	}, 500);
 }
 
@@ -211,13 +212,26 @@ function add_to_table(tag, fields_list) {
 			}
 		}
 		// end of the row								
-		final_output = final_output + "<td><button class='edit-row button' type='button'id='button' onClick=''><span class='glyphicon glyphicon-edit' /></button></td><td><button class='delete-row button'' type='button' id='button' onClick=''><span class='glyphicon glyphicon-remove' /></button></td></tr>";
+		final_output = final_output + "<td><button class='edit-row button' type='button'id='button' onClick='edit_row(this)'><span class='glyphicon glyphicon-edit' /></button></td><td><button class='delete-row button'' type='button' id='button' onClick=''><span class='glyphicon glyphicon-remove' /></button></td></tr>";
 	}
 }
 
+// When clicking on delete button, will delete the row of the table
 $('body').on('click', 'button.delete-row', function() {
    $(this).parents('tr').remove();  
 });
+
+// Adds the values of the table row to the form
+function edit_row(ctl) {
+    _row = $(ctl).parents("tr");
+    var cols = _row.children("td");
+    $("#productname").val($(cols[1]).text());
+    $("#introdate").val($(cols[2]).text());
+    $("#url").val($(cols[3]).text());
+    
+    // Change Update Button Text
+    $("#updateButton").text("Update");
+}
 
 /* Handing character info and output */
 
@@ -406,7 +420,7 @@ function add_location() {
 }
 
 // Addds a new information piece to the world from input 
-function add_information() { 
+function add_info_to_database() { 
 	// Get the values from the form 
 	var infoTag = get_element("information_tag");
 	var infoDesc = get_element("information_description");
@@ -416,13 +430,9 @@ function add_information() {
 	var goesToLoc = get_element("goes_to_location");
 	var goesToInfo = get_element("goes_to_information");
 
-	// Update the UI and clear the form 
 	var add_to_world = function(bindings) {
-		display_active_list();
-		for (var i = 0; i < information_fields.length; i++) {
-			clear_form_field(information_fields[i]);
-		}
 	}
+
 	bindings = [];
 	session.query(
 		"asserta(info(" + infoTag + "))." + 
@@ -635,7 +645,33 @@ function display_information_form() {
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="storyline" value="" placeholder="Adds to storyline" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_location" value="" placeholder="Informs party about location (enter tag)" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_information" value="" placeholder="Informs party about information (enter tag)" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add information" id="button" onClick="add_information();" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add information" id="button" onClick="add_information_to_table();" /></div>';
+}
+
+function add_information_to_table() {
+	// Make sure there's a valid ID / tag
+    if ($("#information_tag").val() != null && $("#information_tag").val() != '') {
+        add_info();
+        add_info_to_database();
+
+        // clear the form
+	    for (var i = 0; i < information_fields.length; i++) {
+			clear_form_field(information_fields[i]);
+		}
+    }
+}
+
+function add_info() {
+    // Append product to the table
+    $("#list-table tbody").append("<tr>" +
+        "<td>" + $("#information_tag").val() + "</td>" +
+        "<td>" + $("#information_description").val() + "</td>" +
+        "<td>" + $("#information_known").val() + "</td>" +
+        "<td>" + $("#information_acted_on").val() + "</td>" +
+        "<td>" + $("#storyline").val() + "</td>" +
+        "<td>" + $("#goes_to_location").val() + "</td>" +
+        "<td>" + $("#goes_to_information").val() + "</td>" +
+        "</tr>");
 }
 
 function search() {
@@ -659,15 +695,3 @@ function search() {
     }
   }
 }
-
-// $.fn.editable.defaults.mode = 'inline';
-
-// $(document).ready(function() {
-//     $('#username').editable({
-//     	success: function(response, newValue) {
-//     		console.log(newValue);
-//     	}
-//     });
-// });
-
-
