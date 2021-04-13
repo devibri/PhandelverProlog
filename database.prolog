@@ -364,7 +364,7 @@ info_desc(dendrar_family_kidnapped, "Thal Dendrar stood up to Redbrands; they ki
 info_desc(redbrands_and_halia, "Redbrands don't mess with Halia at Phandalin Miner's Exchange").
 info_desc(redbrand_hangout, "Redbrands hang out at Sleeping Giant Tap House and they are trouble").
 info_desc(sister_garaele_exhausted, "Sister Garaele recently returned to the Shrine of Luck injured and exhausted").
-info_desc(iarno_secret, "The missing person, Iarno, is actually the leader of the Redbrands and goes by the name Glasstaff").
+info_desc(iarno_secret, "The missing person Iarno is actually the leader of the Redbrands and goes by the name Glasstaff").
 info_desc(townmaster_and_redbrands, "Townmaster doesn't want players to mess with Redbrands, keep them in jail").
 info_desc(redbrand_shakedown, "The Redbrands are shaking down local businesses").
 info_desc(reidoth_location, "Reidoth at Thundertree knows the way to Cragmaw Castle or Wave Echo Cave").
@@ -490,7 +490,7 @@ quest_desc(kill_redbrand_leader, "Kill the Redbrand leader").
 quest_desc(get_rid_of_redbrands, "Take out the Redbrands").
 quest_desc(digging_old_owl_well, "Investigate the digging and appearances of undead at Old Owl Well").
 quest_desc(ask_agatha_about_book, "Ask about the location of the wizard's book"). 
-quest_desc(missing_iarno, "Find Iarno, a missing member of the Order of the Gauntlet").
+quest_desc(missing_iarno, "Find Iarno -- a missing member of the Order of the Gauntlet").
 quest_desc(green_dragon, "Get rid of the green dragon at Thundertree in exchange for info on Wave Echo Cave / Cragmaw Castle").
 quest_desc(orcs_triboar_trail_quest, "Get rid of the orc camp at Triboar Trail"). 
 quest_desc(orcs_triboar_trail_quest_hamun, "Get rid of the orc camp at Triboar Trail in exchange for info on Wave Echo Cave / Cragmaw Castle"). 

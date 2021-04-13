@@ -420,30 +420,61 @@ function add_location() {
 }
 
 // Addds a new information piece to the world from input 
-function add_info_to_database() { 
-	// Get the values from the form 
-	var infoTag = get_element("information_tag");
-	var infoDesc = get_element("info_desc");
-	var infoKnown = get_element("info_known");
-	var infoActedOn = get_element("info_acted_on");
-	var storyline = get_element("storyline");
-	var goesToLoc = get_element("goes_to_location");
-	var goesToInfo = get_element("goes_to_info");
+function add_info() { 
+	// Check that they're submitting a valid info tag
+	if ($("#information_tag").val() != null && $("#information_tag").val() != '') {
 
-	var add_to_world = function(bindings) {
+		// Get the values from the form 
+		var infoTag = $("#information_tag").val();
+		var query = "asserta(info(" + infoTag + ")).";
+		var information_info_list = "asserta(information_info_list(" + infoTag
+		var info_list_array = [];
+
+		//figure out if any values are blank, and if so, don't include them in query
+		if ($("#info_desc").val() != null && $("#info_desc").val() != '') {
+			query = query + "asserta(info_desc(" + infoTag + " , \"" + $("#info_desc").val() + "\"))."
+			info_list_array.push("info_desc"); 
+		}
+
+		if ($("#info_known").val() != null && $("#info_known").val() != '') {
+			query = query + "asserta(info_known(" + infoTag + " , \"" + $("#info_known").val() + "\"))."
+			info_list_array.push("info_known"); 
+		}
+
+		if ($("#info_acted_on").val() != null && $("#info_acted_on").val() != '') {
+			query = query + "asserta(info_acted_on(" + infoTag + " , \"" + $("#info_acted_on").val() + "\"))."
+			info_list_array.push("info_acted_on"); 
+		}
+
+		if ($("#storyline").val() != null && $("#storyline").val() != '') {
+			query = query + "asserta(storyline(" + infoTag + " , \"" + $("#storyline").val() + "\"))."
+			info_list_array.push("storyline"); 
+		}
+
+		if ($("#goes_to_location").val() != null && $("#goes_to_location").val() != '') {
+			query = query + "asserta(goes_to_location(" + infoTag + " , \"" + $("#goes_to_location").val() + "\"))."
+			info_list_array.push("goes_to_location"); 
+		}
+
+		if ($("#goes_to_info").val() != null && $("#goes_to_info").val() != '') {
+			query = query + "asserta(goes_to_info(" + infoTag + " , \"" + $("#goes_to_info").val() + "\"))."
+			info_list_array.push("goes_to_info"); 
+		}
+
+		information_info_list = information_info_list + ", [ " + info_list_array.toString() + "])).";
+		query = query + information_info_list; 
+
+		var add_to_world = function(bindings) {
+			display_active_list();
+			for (var i = 0; i < information_fields.length; i++) {
+				clear_form_field(information_fields[i]);
+			}
+		}
+
+		bindings = [];
+		session.query(query);			
+		session.answers(get_callback(add_to_world));
 	}
-
-	bindings = [];
-	session.query(
-		"asserta(info(" + infoTag + "))." + 
-		"asserta(info_desc(" + infoTag + " , " + infoDesc + " ))." + 
-		"asserta(info_known(" + infoTag + " , " + infoKnown + "))." + 
-		"asserta(info_acted_on(" + infoTag + " , " + infoActedOn + "))." + 
-		"asserta(storyline(" + infoTag + " , " + storyline + "))." + 
-		"asserta(goes_to_location(" + infoTag + " , " + goesToLoc + "))." + 
-		"asserta(goes_to_info(" + infoTag + " , " + goesToInfo + "))." + 
-		"asserta(information_info_list(" + infoTag + ", [info_desc, info_known, info_acted_on, storyline, goes_to_location, goes_to_info])).");
-	session.answers(get_callback(add_to_world));
 }
 
 
@@ -645,14 +676,14 @@ function display_information_form() {
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="storyline" value="" placeholder="Adds to storyline" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_location" value="" placeholder="Informs party about location (enter tag)" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_info" value="" placeholder="Informs party about information (enter tag)" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add information" id="button" onClick="add_information_to_table();" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add information" id="button" onClick="add_info();" /></div>';
 }
 
 function add_information_to_table() {
 	// Make sure there's a valid ID / tag
     if ($("#information_tag").val() != null && $("#information_tag").val() != '') {
-        add_info();
-        add_info_to_database();
+        add_info_row();
+        //add_info_to_database();
 
         // clear the form
 	    for (var i = 0; i < information_fields.length; i++) {
@@ -661,7 +692,7 @@ function add_information_to_table() {
     }
 }
 
-function add_info() {
+function add_info_row() {
     // Append product to the table
     $("#list-table tbody").append("<tr>" +
         "<td>" + $("#information_tag").val() + "</td>" +
