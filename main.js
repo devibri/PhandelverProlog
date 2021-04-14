@@ -18,6 +18,13 @@ var output_elements = [];
 var output_area = document.getElementById("output_area");
 var key_area = document.getElementById("key");
 var row = null;
+var information_tag; 
+var info_desc; 
+var info_known; 
+var info_acted_on; 
+var storyline; 
+var goes_to_location; 
+var goes_to_info; 
 
 mermaidAPI.initialize({startOnLoad: false});
 
@@ -38,7 +45,6 @@ function set_active_list(value) {
 
 // checks which list is active and displays that list 
 function display_active_list() {
-
 	clear_all_lists();
 	clear_form(); 
 	clear_viz();
@@ -127,7 +133,7 @@ function display_information_list() {
 	clear_saved_info();
 	// For each information in the information tag list, print the information's info 
 	get_information_info();
-	final_output = "<thead><h1>Information</h1><table id='list-table'><tr><th>Tag</th><th>Description</th><th>Known by Party</th><th>Acted On</th><th>Storyline</th><th>Goes to Location</th><th>Goes to Information</th><th>Edit</th><th>Delete</th></tr></thead><tbody>";
+	final_output = "<thead><h1>Character Knowledge</h1><table id='list-table'><tr><th>Tag</th><th>Description</th><th>Known by Party</th><th>Acted On</th><th>Storyline</th><th>Goes to Location</th><th>Goes to Information</th><th>Edit</th><th>Delete</th></tr></thead><tbody>";
 	setTimeout(() => {  
 		for (var i = 0; i < infoList.length; i++) {
 			print_information(tagList[i], infoList[i]);
@@ -192,11 +198,11 @@ function add_to_table(tag, fields_list) {
 
 	// Check if the character matches the current search
 	if (all_info.toLowerCase().match(filterString.toLowerCase())) {
-		final_output = final_output + "<tr><td contenteditable='true'>" + tag + "</td>";
+		final_output = final_output + "<tr><td>" + tag + "</td>";
 		// Go through each of the character's pieces of info and add them to the table 
 		for (var i = 1; i < fields_list.length; i++) {
 			if (output_elements[0] == fields_list[i]) {
-				final_output = final_output + "<td contenteditable='true'>";
+				final_output = final_output + "<td>";
 				output_elements.shift();
 				while (output_elements.includes(fields_list[i])) {
 					final_output = final_output + output_elements.shift() + ", "; 
@@ -208,29 +214,12 @@ function add_to_table(tag, fields_list) {
 				final_output = final_output + "</td>"
 			// If there is nothing found, just add an empty cell
 			} else {
-				final_output = final_output + "<td contenteditable='true'></td>";
+				final_output = final_output + "<td></td>";
 			}
 		}
 		// end of the row								
-		final_output = final_output + "<td><button class='edit-row button' type='button'id='button' onClick='edit_row(this)'><span class='glyphicon glyphicon-edit' /></button></td><td><button class='delete-row button'' type='button' id='button' onClick=''><span class='glyphicon glyphicon-remove' /></button></td></tr>";
+		final_output = final_output + "<td><button class='edit-row button' type='button'id='button' onClick='edit_row(this)'><span class='glyphicon glyphicon-edit' /></button></td><td><button class='delete-row button'' type='button' id='button' onClick='delete_row(this)'><span class='glyphicon glyphicon-remove' /></button></td></tr>";
 	}
-}
-
-// When clicking on delete button, will delete the row of the table
-$('body').on('click', 'button.delete-row', function() {
-   $(this).parents('tr').remove();  
-});
-
-// Adds the values of the table row to the form
-function edit_row(ctl) {
-    _row = $(ctl).parents("tr");
-    var cols = _row.children("td");
-    $("#productname").val($(cols[1]).text());
-    $("#introdate").val($(cols[2]).text());
-    $("#url").val($(cols[3]).text());
-    
-    // Change Update Button Text
-    $("#updateButton").text("Update");
 }
 
 /* Handing character info and output */
@@ -421,54 +410,55 @@ function add_location() {
 
 // Addds a new information piece to the world from input 
 function add_info() { 
+	console.log("calling add_info...");
 	// Check that they're submitting a valid info tag
-	if ($("#information_tag").val() != null && $("#information_tag").val() != '') {
-
+	if (information_tag != null && information_tag != '') {
+		console.log("infotag is : " + information_tag);
 		// Get the values from the form 
-		var infoTag = $("#information_tag").val();
+		var infoTag = information_tag;
 		var query = "asserta(info(" + infoTag + ")).";
 		var information_info_list = "asserta(information_info_list(" + infoTag
 		var info_list_array = [];
 
 		//figure out if any values are blank, and if so, don't include them in query
-		if ($("#info_desc").val() != null && $("#info_desc").val() != '') {
-			query = query + "asserta(info_desc(" + infoTag + " , \"" + $("#info_desc").val() + "\"))."
+		if (info_desc != null && info_desc != '') {
+			query = query + "asserta(info_desc(" + infoTag + " , \"" + info_desc + "\"))."
 			info_list_array.push("info_desc"); 
 		}
 
-		if ($("#info_known").val() != null && $("#info_known").val() != '') {
-			query = query + "asserta(info_known(" + infoTag + " , \"" + $("#info_known").val() + "\"))."
+		if (info_known != null && info_known != '') {
+			query = query + "asserta(info_known(" + infoTag + " , \"" + info_known + "\"))."
 			info_list_array.push("info_known"); 
 		}
 
-		if ($("#info_acted_on").val() != null && $("#info_acted_on").val() != '') {
-			query = query + "asserta(info_acted_on(" + infoTag + " , \"" + $("#info_acted_on").val() + "\"))."
+		if (info_acted_on != null && info_acted_on != '') {
+			query = query + "asserta(info_acted_on(" + infoTag + " , \"" + info_acted_on + "\"))."
 			info_list_array.push("info_acted_on"); 
 		}
 
-		if ($("#storyline").val() != null && $("#storyline").val() != '') {
-			query = query + "asserta(storyline(" + infoTag + " , \"" + $("#storyline").val() + "\"))."
+		if (storyline != null && storyline != '') {
+			query = query + "asserta(storyline(" + infoTag + " , \"" + storyline + "\"))."
 			info_list_array.push("storyline"); 
 		}
 
-		if ($("#goes_to_location").val() != null && $("#goes_to_location").val() != '') {
-			query = query + "asserta(goes_to_location(" + infoTag + " , \"" + $("#goes_to_location").val() + "\"))."
+		if (goes_to_location != null && goes_to_location != '') {
+			query = query + "asserta(goes_to_location(" + infoTag + " , \"" + goes_to_location + "\"))."
 			info_list_array.push("goes_to_location"); 
 		}
 
-		if ($("#goes_to_info").val() != null && $("#goes_to_info").val() != '') {
-			query = query + "asserta(goes_to_info(" + infoTag + " , \"" + $("#goes_to_info").val() + "\"))."
+		if (goes_to_info != null && goes_to_info != '') {
+			query = query + "asserta(goes_to_info(" + infoTag + " , \"" + goes_to_info + "\"))."
 			info_list_array.push("goes_to_info"); 
 		}
 
 		information_info_list = information_info_list + ", [ " + info_list_array.toString() + "])).";
 		query = query + information_info_list; 
+		console.log("query is: " + query);
 
 		var add_to_world = function(bindings) {
+			console.log("adding...");
 			display_active_list();
-			for (var i = 0; i < information_fields.length; i++) {
-				clear_form_field(information_fields[i]);
-			}
+        	clear_form_entries();
 		}
 
 		bindings = [];
@@ -476,6 +466,68 @@ function add_info() {
 		session.answers(get_callback(add_to_world));
 	}
 }
+
+function remove_info() { 
+
+		 information_tag = $("#information_tag").val(); 
+	info_desc = $("#info_desc").val(); 
+	info_known = $("#info_known").val(); 
+	info_acted_on = $("#info_acted_on").val(); 
+	storyline = $("#storyline").val(); 
+	goes_to_location = $("#goes_to_location").val(); 
+	goes_to_info = $("#goes_to_info").val(); 
+
+
+	// Get the values from the form 
+	var infoTag = information_tag;
+	var query = "retract(info(" + infoTag + ")).";
+	var information_info_list = "retract(information_info_list(" + infoTag
+	var info_list_array = [];
+
+		//figure out if any values are blank, and if so, don't include them in query
+		if (info_desc != null && info_desc != '') {
+			query = query + "retract(info_desc(" + infoTag + " , \"" + info_desc + "\"))."
+			info_list_array.push("info_desc"); 
+		}
+
+		if (info_known != null && info_known != '') {
+			query = query + "retract(info_known(" + infoTag + " , \"" + info_known + "\"))."
+			info_list_array.push("info_known"); 
+		}
+
+		if (info_acted_on != null && info_acted_on != '') {
+			query = query + "retract(info_acted_on(" + infoTag + " , \"" + info_acted_on + "\"))."
+			info_list_array.push("info_acted_on"); 
+		}
+
+		if (storyline != null && storyline != '') {
+			query = query + "retract(storyline(" + infoTag + " , \"" + storyline + "\"))."
+			info_list_array.push("storyline"); 
+		}
+
+		if (goes_to_location != null && goes_to_location != '') {
+			query = query + "retract(goes_to_location(" + infoTag + " , \"" + goes_to_location + "\"))."
+			info_list_array.push("goes_to_location"); 
+		}
+
+		if (goes_to_info != null && goes_to_info != '') {
+			query = query + "retract(goes_to_info(" + infoTag + " , \"" + goes_to_info + "\"))."
+			info_list_array.push("goes_to_info"); 
+		}
+
+		information_info_list = information_info_list + ", [ " + info_list_array.toString() + "])).";
+		query = query + information_info_list; 
+
+		console.log("remove query is : " + query);
+
+		var remove_from_world = function(bindings) {
+		}
+
+		bindings = [];
+		session.query(query);			
+		session.answers(get_callback(remove_from_world));
+	}
+
 
 
 
@@ -676,33 +728,73 @@ function display_information_form() {
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="storyline" value="" placeholder="Adds to storyline" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_location" value="" placeholder="Informs party about location (enter tag)" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_info" value="" placeholder="Informs party about information (enter tag)" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add information" id="button" onClick="add_info();" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add information" id="update_button" onClick="submit_info();" /></div>';
 }
 
-function add_information_to_table() {
-	// Make sure there's a valid ID / tag
-    if ($("#information_tag").val() != null && $("#information_tag").val() != '') {
-        add_info_row();
-        //add_info_to_database();
+function edit_row(ctl) {
+    row = $(ctl).parents("tr");
+    var cols = row.children("td");
+    $("#information_tag").val($(cols[0]).text());
+    $("#info_desc").val($(cols[1]).text());
+    $("#info_known").val($(cols[2]).text());
+    $("#info_acted_on").val($(cols[3]).text());
+    $("#storyline").val($(cols[4]).text());
+    $("#goes_to_location").val($(cols[5]).text());
+    $("#goes_to_info").val($(cols[6]).text());
 
-        // clear the form
-	    for (var i = 0; i < information_fields.length; i++) {
-			clear_form_field(information_fields[i]);
-		}
-    }
+    information_tag = $("#information_tag").val(); 
+	info_desc = $("#info_desc").val(); 
+	info_known = $("#info_known").val(); 
+	info_acted_on = $("#info_acted_on").val(); 
+	storyline = $("#storyline").val(); 
+	goes_to_location = $("#goes_to_location").val(); 
+	goes_to_info = $("#goes_to_info").val(); 
+
+    remove_info(); 
+    // Change Update Button Text
+    $("#update_button").prop('value', 'Update');
 }
 
-function add_info_row() {
-    // Append product to the table
-    $("#list-table tbody").append("<tr>" +
-        "<td>" + $("#information_tag").val() + "</td>" +
-        "<td>" + $("#info_desc").val() + "</td>" +
-        "<td>" + $("#info_acted_on").val() + "</td>" +
-        "<td>" + $("#info_acted_on").val() + "</td>" +
-        "<td>" + $("#storyline").val() + "</td>" +
-        "<td>" + $("#goes_to_location").val() + "</td>" +
-        "<td>" + $("#goes_to_info").val() + "</td>" +
-        "</tr>");
+function submit_info() {
+	information_tag = $("#information_tag").val(); 
+	info_desc = $("#info_desc").val(); 
+	info_known = $("#info_known").val(); 
+	info_acted_on = $("#info_acted_on").val(); 
+	storyline = $("#storyline").val(); 
+	goes_to_location = $("#goes_to_location").val(); 
+	goes_to_info = $("#goes_to_info").val(); 
+
+	add_info();
+}
+
+function delete_row(ctl) {
+	row = $(ctl).parents("tr");
+    var cols = row.children("td");
+    $("#information_tag").val($(cols[0]).text());
+    $("#info_desc").val($(cols[1]).text());
+    $("#info_known").val($(cols[2]).text());
+    $("#info_acted_on").val($(cols[3]).text());
+    $("#storyline").val($(cols[4]).text());
+    $("#goes_to_location").val($(cols[5]).text());
+    $("#goes_to_info").val($(cols[6]).text());
+
+    information_tag = $("#information_tag").val(); 
+	info_desc = $("#info_desc").val(); 
+	info_known = $("#info_known").val(); 
+	info_acted_on = $("#info_acted_on").val(); 
+	storyline = $("#storyline").val(); 
+	goes_to_location = $("#goes_to_location").val(); 
+	goes_to_info = $("#goes_to_info").val(); 
+	console.log("information tag is: " + information_tag);
+	remove_info();
+	display_active_list();
+    clear_form_entries();
+}
+
+function clear_form_entries() {
+	for (var i = 0; i < information_fields.length; i++) {
+		clear_form_field(information_fields[i]);
+	}
 }
 
 function search() {
