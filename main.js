@@ -105,7 +105,7 @@ function display_character_list() {
 	clear_saved_info();
 	// For each character in the character tag list, print the character's info 
 	get_character_info();
-	final_output = "<thead><h1>Characters</h1><table id='list-table'><tr><th>Tag</th><th>First Name</th><th>Last Name</th><th>Occupation</th><th>Status</th><th>Has Met Party</th><th>Faction</th><th>Friend Of</th><th>Family Of</th><th>Knows Info</th><th>Has Quest</th><th>Has Conditional</th><th>Edit</th><th>Delete</th></tr></thead><tbody>";
+	final_output = "<thead><h1>Characters</h1><table id='list-table' class='table'><tr><th>Tag</th><th>First Name</th><th>Last Name</th><th>Occupation</th><th>Status</th><th>Has Met Party</th><th>Faction</th><th>Friend Of</th><th>Family Of</th><th>Knows Info</th><th>Has Quest</th><th>Has Conditional</th><th>Edit</th><th>Delete</th></tr></thead><tbody>";
 	setTimeout(() => {  
 		for (var i = 0; i < infoList.length; i++) {
 			print_character(tagList[i], infoList[i]);
@@ -119,7 +119,7 @@ function display_location_list() {
 	clear_saved_info();
 	// For each location in the location tag list, print the location's info 
 	get_location_info();
-	final_output = "<thead><h1>Locations</h1><table id='list-table'><tr><th>Tag</th><th>Name</th><th>Known by Party</th><th>In Region</th><th>Characters Here</th><th>Visited by Party</th><th>Edit</th><th>Delete</th></tr></thead><tbody>";
+	final_output = "<thead><h1>Locations</h1><table id='list-table' class='table'><tr><th>Tag</th><th>Name</th><th>Known by Party</th><th>In Region</th><th>Characters Here</th><th>Visited by Party</th><th>Edit</th><th>Delete</th></tr></thead><tbody>";
 	setTimeout(() => {  
 		for (var i = 0; i < infoList.length; i++) {
 			print_location(tagList[i], infoList[i]);
@@ -133,7 +133,7 @@ function display_information_list() {
 	clear_saved_info();
 	// For each information in the information tag list, print the information's info 
 	get_information_info();
-	final_output = "<thead><h1>Character Knowledge</h1><table id='list-table'><tr><th>Tag</th><th>Description</th><th>Known by Party</th><th>Acted On</th><th>Storyline</th><th>Goes to Location</th><th>Goes to Information</th><th>Edit</th><th>Delete</th></tr></thead><tbody>";
+	final_output = "<thead><h1>Character Knowledge</h1><table id='list-table' class='table'><tr><th>Tag</th><th>Description</th><th>Known by Party</th><th>Acted On</th><th>Storyline</th><th>Goes to Location</th><th>Goes to Information</th><th>Edit</th><th>Delete</th></tr></thead><tbody>";
 	setTimeout(() => {  
 		for (var i = 0; i < infoList.length; i++) {
 			print_information(tagList[i], infoList[i]);
@@ -157,13 +157,13 @@ function display_visualization() {
  * Returns a callback function to pass to session.answers(). 
  * The parameter is the function for the callback to call (with the bindings as parameter)
  * when prolog has found all the answers. 
-*/
-function get_callback(funcWhenDone) {
-	var callbackFunc = function(answer) {
-		if (answer == false) {
-			funcWhenDone(bindings);
-		}
-		else {
+ */
+ function get_callback(funcWhenDone) {
+ 	var callbackFunc = function(answer) {
+ 		if (answer == false) {
+ 			funcWhenDone(bindings);
+ 		}
+ 		else {
 			// We've gotten another non-false answer - add it to the bindings.
 			bindings.push(answer);
 		}
@@ -213,10 +213,10 @@ function add_to_table(tag, fields_list) {
 				}
 				final_output = final_output + "</td>"
 			// If there is nothing found, just add an empty cell
-			} else {
-				final_output = final_output + "<td></td>";
-			}
+		} else {
+			final_output = final_output + "<td></td>";
 		}
+	}
 		// end of the row								
 		final_output = final_output + "<td><button class='edit-row button' type='button'id='button' onClick='edit_row(this)'><span class='glyphicon glyphicon-edit' /></button></td><td><button class='delete-row button'' type='button' id='button' onClick='delete_row(this)'><span class='glyphicon glyphicon-remove' /></button></td></tr>";
 	}
@@ -410,10 +410,8 @@ function add_location() {
 
 // Addds a new information piece to the world from input 
 function add_info() { 
-	console.log("calling add_info...");
 	// Check that they're submitting a valid info tag
 	if (information_tag != null && information_tag != '') {
-		console.log("infotag is : " + information_tag);
 		// Get the values from the form 
 		var infoTag = information_tag;
 		var query = "asserta(info(" + infoTag + ")).";
@@ -453,12 +451,10 @@ function add_info() {
 
 		information_info_list = information_info_list + ", [ " + info_list_array.toString() + "])).";
 		query = query + information_info_list; 
-		console.log("query is: " + query);
-
+		
 		var add_to_world = function(bindings) {
-			console.log("adding...");
 			display_active_list();
-        	clear_form_entries();
+			clear_form_entries();
 		}
 
 		bindings = [];
@@ -468,8 +464,7 @@ function add_info() {
 }
 
 function remove_info() { 
-
-		 information_tag = $("#information_tag").val(); 
+	information_tag = $("#information_tag").val(); 
 	info_desc = $("#info_desc").val(); 
 	info_known = $("#info_known").val(); 
 	info_acted_on = $("#info_acted_on").val(); 
@@ -477,56 +472,53 @@ function remove_info() {
 	goes_to_location = $("#goes_to_location").val(); 
 	goes_to_info = $("#goes_to_info").val(); 
 
-
 	// Get the values from the form 
 	var infoTag = information_tag;
 	var query = "retract(info(" + infoTag + ")).";
 	var information_info_list = "retract(information_info_list(" + infoTag
 	var info_list_array = [];
 
-		//figure out if any values are blank, and if so, don't include them in query
-		if (info_desc != null && info_desc != '') {
-			query = query + "retract(info_desc(" + infoTag + " , \"" + info_desc + "\"))."
-			info_list_array.push("info_desc"); 
-		}
-
-		if (info_known != null && info_known != '') {
-			query = query + "retract(info_known(" + infoTag + " , \"" + info_known + "\"))."
-			info_list_array.push("info_known"); 
-		}
-
-		if (info_acted_on != null && info_acted_on != '') {
-			query = query + "retract(info_acted_on(" + infoTag + " , \"" + info_acted_on + "\"))."
-			info_list_array.push("info_acted_on"); 
-		}
-
-		if (storyline != null && storyline != '') {
-			query = query + "retract(storyline(" + infoTag + " , \"" + storyline + "\"))."
-			info_list_array.push("storyline"); 
-		}
-
-		if (goes_to_location != null && goes_to_location != '') {
-			query = query + "retract(goes_to_location(" + infoTag + " , \"" + goes_to_location + "\"))."
-			info_list_array.push("goes_to_location"); 
-		}
-
-		if (goes_to_info != null && goes_to_info != '') {
-			query = query + "retract(goes_to_info(" + infoTag + " , \"" + goes_to_info + "\"))."
-			info_list_array.push("goes_to_info"); 
-		}
-
-		information_info_list = information_info_list + ", [ " + info_list_array.toString() + "])).";
-		query = query + information_info_list; 
-
-		console.log("remove query is : " + query);
-
-		var remove_from_world = function(bindings) {
-		}
-
-		bindings = [];
-		session.query(query);			
-		session.answers(get_callback(remove_from_world));
+	//figure out if any values are blank, and if so, don't include them in query
+	if (info_desc != null && info_desc != '') {
+		query = query + "retract(info_desc(" + infoTag + " , \"" + info_desc + "\"))."
+		info_list_array.push("info_desc"); 
 	}
+
+	if (info_known != null && info_known != '') {
+		query = query + "retract(info_known(" + infoTag + " , \"" + info_known + "\"))."
+		info_list_array.push("info_known"); 
+	}
+
+	if (info_acted_on != null && info_acted_on != '') {
+		query = query + "retract(info_acted_on(" + infoTag + " , \"" + info_acted_on + "\"))."
+		info_list_array.push("info_acted_on"); 
+	}
+
+	if (storyline != null && storyline != '') {
+		query = query + "retract(storyline(" + infoTag + " , \"" + storyline + "\"))."
+		info_list_array.push("storyline"); 
+	}
+
+	if (goes_to_location != null && goes_to_location != '') {
+		query = query + "retract(goes_to_location(" + infoTag + " , \"" + goes_to_location + "\"))."
+		info_list_array.push("goes_to_location"); 
+	}
+
+	if (goes_to_info != null && goes_to_info != '') {
+		query = query + "retract(goes_to_info(" + infoTag + " , \"" + goes_to_info + "\"))."
+		info_list_array.push("goes_to_info"); 
+	}
+
+	information_info_list = information_info_list + ", [ " + info_list_array.toString() + "])).";
+	query = query + information_info_list; 
+
+	var remove_from_world = function(bindings) {
+	}
+
+	bindings = [];
+	session.query(query);			
+	session.answers(get_callback(remove_from_world));
+}
 
 
 
@@ -543,12 +535,12 @@ function get_element(id) {
 
 // Add method to the String prototype to capitalize the first letter of the String.
 String.prototype.capitalize = function() {
-    return this.charAt(0).toUpperCase() + this.slice(1);
+	return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
 // Add method to the String prototype to capitalize the first letter of the String.
 String.prototype.lowercase = function() {
-    return this.charAt(0).toLowerCase() + this.slice(1);
+	return this.charAt(0).toLowerCase() + this.slice(1);
 }
 
 // Updates the term being searched for when user hits search button
@@ -670,15 +662,15 @@ function get_connection(binding) {
 
 function display_graph() {
 	output_connections = output_connections + "classDef Quest fill:#FFA78E,stroke:#FFF;\n" + 
-			"classDef Info fill:#BCD6BB,stroke:#FFF;\n" + 
-			"classDef Conditional fill:#F6DD8B,stroke:#FFF;"
+	"classDef Info fill:#BCD6BB,stroke:#FFF;\n" + 
+	"classDef Conditional fill:#F6DD8B,stroke:#FFF;"
 	var insertSvg = function(svgCode, bindFunctions){
-			var viz = document.getElementById("graphDiv");
-            viz.innerHTML = svgCode;
-            
-    };
-    var final_output = "graph LR\n" + output + output_connections;   
-    var graph = mermaid.mermaidAPI.render('viz_output', final_output, insertSvg);	
+		var viz = document.getElementById("graphDiv");
+		viz.innerHTML = svgCode;
+
+	};
+	var final_output = "graph LR\n" + output + output_connections;   
+	var graph = mermaid.mermaidAPI.render('viz_output', final_output, insertSvg);	
 }
 
 function addBreaks(str) {
@@ -689,7 +681,7 @@ function addBreaks(str) {
 		slicedDesc = slicedDesc + desc.slice(i, i+5).join(" ") + "<br />"; 
 	}
 	slicedDesc = slicedDesc + desc.slice(i).join(" "); 
-    return slicedDesc; 
+	return slicedDesc; 
 }
 
 
@@ -732,11 +724,11 @@ function display_information_form() {
 }
 
 function edit_row(ctl) {
-    row = $(ctl).parents("tr");
-    var cols = row.children("td");
-    add_values_to_form(cols);
-    set_info_values();
-    remove_info(); 
+	row = $(ctl).parents("tr");
+	var cols = row.children("td");
+	add_values_to_form(cols);
+	set_info_values();
+	remove_info(); 
     // Change Update Button Text
     $("#update_button").prop('value', 'Update');
 }
@@ -748,22 +740,22 @@ function submit_info() {
 
 function delete_row(ctl) {
 	row = $(ctl).parents("tr");
-    var cols = row.children("td");
-    add_values_to_form(cols);
-    set_info_values();
+	var cols = row.children("td");
+	add_values_to_form(cols);
+	set_info_values();
 	remove_info();
 	display_active_list();
-    clear_form_entries();
+	clear_form_entries();
 }
 
 function add_values_to_form(cols) {
 	$("#information_tag").val($(cols[0]).text());
-    $("#info_desc").val($(cols[1]).text());
-    $("#info_known").val($(cols[2]).text());
-    $("#info_acted_on").val($(cols[3]).text());
-    $("#storyline").val($(cols[4]).text());
-    $("#goes_to_location").val($(cols[5]).text());
-    $("#goes_to_info").val($(cols[6]).text());
+	$("#info_desc").val($(cols[1]).text());
+	$("#info_known").val($(cols[2]).text());
+	$("#info_acted_on").val($(cols[3]).text());
+	$("#storyline").val($(cols[4]).text());
+	$("#goes_to_location").val($(cols[5]).text());
+	$("#goes_to_info").val($(cols[6]).text());
 }
 
 function set_info_values() {
@@ -793,14 +785,24 @@ function search() {
 
   // Loop through all table rows, and hide those who don't match the search query
   for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[0];
-    if (td) {
-      txtValue = td.textContent || td.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
-    }
+  	//console.log("table row is:" + tr[i]);
+  	td = tr[i].getElementsByTagName("td")[0];
+  	var td_text = ""; 
+  	for (j = 0; j < tr[i].getElementsByTagName("td").length; j++) {
+  		console.log(j);
+  		var element = tr[i].getElementsByTagName("td")[j];
+  		if (element) {
+  			var text = element.textContent || element.innerText;
+  			td_text = td_text + text + " "; 
+  		}
+  	}
+  	if (td) {
+  		txtValue = td_text;
+  		if (txtValue.toUpperCase().indexOf(filter) > -1) {
+  			tr[i].style.display = "";
+  		} else {
+  			tr[i].style.display = "none";
+  		}
+  	}
   }
 }

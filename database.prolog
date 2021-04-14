@@ -350,7 +350,6 @@ info(iarno_secret).
 info(townmaster_and_redbrands).
 info(redbrand_shakedown).
 info(reidoth_location).
-info(agatha_info).
 info(learn_about_redbrands).
 
 
