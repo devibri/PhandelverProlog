@@ -734,28 +734,39 @@ function display_information_form() {
 function edit_row(ctl) {
     row = $(ctl).parents("tr");
     var cols = row.children("td");
-    $("#information_tag").val($(cols[0]).text());
-    $("#info_desc").val($(cols[1]).text());
-    $("#info_known").val($(cols[2]).text());
-    $("#info_acted_on").val($(cols[3]).text());
-    $("#storyline").val($(cols[4]).text());
-    $("#goes_to_location").val($(cols[5]).text());
-    $("#goes_to_info").val($(cols[6]).text());
-
-    information_tag = $("#information_tag").val(); 
-	info_desc = $("#info_desc").val(); 
-	info_known = $("#info_known").val(); 
-	info_acted_on = $("#info_acted_on").val(); 
-	storyline = $("#storyline").val(); 
-	goes_to_location = $("#goes_to_location").val(); 
-	goes_to_info = $("#goes_to_info").val(); 
-
+    add_values_to_form(cols);
+    set_info_values();
     remove_info(); 
     // Change Update Button Text
     $("#update_button").prop('value', 'Update');
 }
 
 function submit_info() {
+	set_info_values();
+	add_info();
+}
+
+function delete_row(ctl) {
+	row = $(ctl).parents("tr");
+    var cols = row.children("td");
+    add_values_to_form(cols);
+    set_info_values();
+	remove_info();
+	display_active_list();
+    clear_form_entries();
+}
+
+function add_values_to_form(cols) {
+	$("#information_tag").val($(cols[0]).text());
+    $("#info_desc").val($(cols[1]).text());
+    $("#info_known").val($(cols[2]).text());
+    $("#info_acted_on").val($(cols[3]).text());
+    $("#storyline").val($(cols[4]).text());
+    $("#goes_to_location").val($(cols[5]).text());
+    $("#goes_to_info").val($(cols[6]).text());
+}
+
+function set_info_values() {
 	information_tag = $("#information_tag").val(); 
 	info_desc = $("#info_desc").val(); 
 	info_known = $("#info_known").val(); 
@@ -764,31 +775,6 @@ function submit_info() {
 	goes_to_location = $("#goes_to_location").val(); 
 	goes_to_info = $("#goes_to_info").val(); 
 
-	add_info();
-}
-
-function delete_row(ctl) {
-	row = $(ctl).parents("tr");
-    var cols = row.children("td");
-    $("#information_tag").val($(cols[0]).text());
-    $("#info_desc").val($(cols[1]).text());
-    $("#info_known").val($(cols[2]).text());
-    $("#info_acted_on").val($(cols[3]).text());
-    $("#storyline").val($(cols[4]).text());
-    $("#goes_to_location").val($(cols[5]).text());
-    $("#goes_to_info").val($(cols[6]).text());
-
-    information_tag = $("#information_tag").val(); 
-	info_desc = $("#info_desc").val(); 
-	info_known = $("#info_known").val(); 
-	info_acted_on = $("#info_acted_on").val(); 
-	storyline = $("#storyline").val(); 
-	goes_to_location = $("#goes_to_location").val(); 
-	goes_to_info = $("#goes_to_info").val(); 
-	console.log("information tag is: " + information_tag);
-	remove_info();
-	display_active_list();
-    clear_form_entries();
 }
 
 function clear_form_entries() {
