@@ -346,61 +346,14 @@ function add_character() {
 		var character_info_list = "asserta(character_info_list(" + tag
 		var info_list_array = [];
 
-		//figure out if any values are blank, and if so, don't include them in query
-		if (first_name != null && first_name != '') {
-			query = query + "asserta(first_name(" + tag + " , \"" + first_name + "\"))."
-			info_list_array.push("first_name"); 
+		for (var i = 1; i < character_fields.length; i++) {
+			let field = character_fields[i];
+			if (eval(field) != null && eval(field) != '') {
+				query = query + "asserta(" + field + "(" + tag + " , \"" + eval(field) + "\"))."
+				info_list_array.push(character_fields[i]); 
+			}
 		}
 
-		if (last_name != null && last_name != '') {
-			query = query + "asserta(last_name(" + tag + " , \"" + last_name + "\"))."
-			info_list_array.push("last_name"); 
-		}
-
-		if (occupation != null && occupation != '') {
-			query = query + "asserta(occupation(" + tag + " , \"" + occupation + "\"))."
-			info_list_array.push("occupation"); 
-		}
-
-		if (status != null && status != '') {
-			query = query + "asserta(status(" + tag + " , \"" + status + "\"))."
-			info_list_array.push("status"); 
-		}
-
-		if (has_met_party != null && has_met_party != '') {
-			query = query + "asserta(has_met_party(" + tag + " , \"" + has_met_party + "\"))."
-			info_list_array.push("has_met_party"); 
-		}
-
-		if (faction != null && faction != '') {
-			query = query + "asserta(faction(" + tag + " , \"" + faction + "\"))."
-			info_list_array.push("faction"); 
-		}
-		
-		if (friend_of != null && friend_of != '') {
-			query = query + "asserta(friend_of(" + tag + " , \"" + friend_of + "\"))."
-			info_list_array.push("friend_of"); 
-		}
-
-		if (family_of != null && family_of != '') {
-			query = query + "asserta(family_of(" + tag + " , \"" + family_of + "\"))."
-			info_list_array.push("family_of"); 
-		}
-		
-		if (knows_info != null && knows_info != '') {
-			query = query + "asserta(knows_info(" + tag + " , \"" + knows_info + "\"))."
-			info_list_array.push("knows_info"); 
-		}
-
-		if (has_quest != null && has_quest != '') {
-			query = query + "asserta(has_quest(" + tag + " , \"" + has_quest + "\"))."
-			info_list_array.push("has_quest"); 
-		}
-
-		if (has_conditional != null && has_conditional != '') {
-			query = query + "asserta(has_conditional(" + tag + " , \"" + has_conditional + "\"))."
-			info_list_array.push("has_conditional"); 
-		}
 		character_info_list = character_info_list + ", [ " + info_list_array.toString() + "])).";
 		query = query + character_info_list; 
 		
@@ -417,31 +370,31 @@ function add_character() {
 
 // Addds a new location to the world from input 
 function add_location() { 
-	// Get the values from the form 
-	var locTag = get_element("location_tag");
-	var locName = get_element("location_name");
-	var locKnown = get_element("location_known");
-	var locInRegion = get_element("in_region");
-	var charInLocation = get_element("char_in_location");
-	var locVisited = get_element("location_visited");
+	if (location_tag != null && location_tag != '') {
+		var query = "asserta(location(" + location_tag + ")).";
+		var location_info_list = "asserta(location_info_list(" + location_tag
+		var info_list_array = [];
 
-	// Update the UI and clear the form 
-	var add_to_world = function(bindings) {
-		display_active_list();
-		for (var i = 0; i < location_fields.length; i++) {
-			clear_form_field(location_fields[i]);
+		for (var i = 1; i < location_fields.length; i++) {
+			let field = location_fields[i];
+			if (eval(field) != null && eval(field) != '') {
+				query = query + "asserta(" + field + "(" + location_tag + " , \"" + eval(field) + "\"))."
+				info_list_array.push(location_fields[i]); 
+			}
 		}
+
+		location_info_list = location_info_list + ", [ " + info_list_array.toString() + "])).";
+		query = query + location_info_list; 
+		
+		var add_to_world = function(bindings) {
+			display_active_list();
+			clear_form_entries();
+		}
+
+		bindings = [];
+		session.query(query);			
+		session.answers(get_callback(add_to_world));
 	}
-	bindings = [];
-	session.query(
-		"asserta(location(" + locTag + "))." + 
-		"asserta(location_name(" + locTag + " , " + locName + " ))." + 
-		"asserta(location_known(" + locTag + " , " + locKnown + "))." + 
-		"asserta(in_region(" + locTag + " , " + locInRegion + "))." + 
-		"asserta(char_in_location(" + locTag + " , " + charInLocation + "))." + 
-		"asserta(location_visited(" + locTag + " , " + locVisited + "))." + 
-		"asserta(location_info_list(" + locTag + ", [location_name, location_known, in_region, char_in_location, location_visited])).");
-	session.answers(get_callback(add_to_world));
 }
 
 // Addds a new information piece to the world from input 
@@ -454,7 +407,7 @@ function add_info() {
 
 		for (var i = 1; i < information_fields.length; i++) {
 			let field = information_fields[i];
-			if (field != null && field != '') {
+			if (eval(field) != null && eval(field) != '') {
 				query = query + "asserta(" + field + "(" + information_tag + " , \"" + eval(field) + "\"))."
 				info_list_array.push(information_fields[i]); 
 			}
@@ -473,20 +426,63 @@ function add_info() {
 	}
 }
 
-function remove_character() {
+function remove_character() {		
+	var query = "retract(character(" + tag + ")).";
+	var character_info_list = "retract(character_info_list(" + tag
+	var info_list_array = [];
 
+	for (var i = 1; i < character_fields.length; i++) {
+		let field = character_fields[i];
+		if (eval(field) != null && eval(field) != '') {
+			query = query + "retract(" + field + "(" + tag + " , \"" + eval(field) + "\"))."
+			info_list_array.push(character_fields[i]); 
+		}
+	}
+
+	character_info_list = character_info_list + ", [ " + info_list_array.toString() + "])).";
+	query = query + character_info_list; 
+		
+	var remove_from_world = function(bindings) {
+	}
+
+	bindings = [];
+	session.query(query);			
+	session.answers(get_callback(remove_from_world));
+}
+
+function remove_location() {
+	var query = "retract(location(" + location_tag + ")).";
+		var location_info_list = "retract(location_info_list(" + location_tag
+		var info_list_array = [];
+
+		for (var i = 1; i < location_fields.length; i++) {
+			let field = location_fields[i];
+			if (eval(field) != null && eval(field) != '') {
+				query = query + "retract(" + field + "(" + location_tag + " , \"" + eval(field) + "\"))."
+				info_list_array.push(location_fields[i]); 
+			}
+		}
+
+		location_info_list = location_info_list + ", [ " + info_list_array.toString() + "])).";
+		query = query + location_info_list; 
+		
+		var remove_from_world = function(bindings) {
+		}
+
+		bindings = [];
+		session.query(query);			
+		session.answers(get_callback(remove_from_world));
 }
 
 function remove_info() { 
-	var infoTag = information_tag;
-	var query = "retract(info(" + infoTag + ")).";
-	var information_info_list = "retract(information_info_list(" + infoTag
+	var query = "retract(info(" + information_tag + ")).";
+	var information_info_list = "retract(information_info_list(" + information_tag
 	var info_list_array = [];
 
 	for (var i = 1; i < information_fields.length; i++) {
 		let field = information_fields[i];
-		if (field != null && field != '') {
-			query = query + "retract(" + field + "(" + infoTag + " , \"" + eval(field) + "\"))."
+		if (eval(field) != null && eval(field) != '') {
+			query = query + "retract(" + field + "(" + information_tag + " , \"" + eval(field) + "\"))."
 			info_list_array.push(information_fields[i]); 
 		}
 	}
