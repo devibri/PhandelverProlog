@@ -18,18 +18,15 @@ var output_elements = [];
 var output_area = document.getElementById("output_area");
 var key_area = document.getElementById("key");
 var row = null;
-var information_tag; 
-var info_desc; 
-var info_known; 
-var info_acted_on; 
-var storyline; 
-var goes_to_location; 
-var goes_to_info; 
+
+// variables for the forms
+var tag, first_name, last_name, occupation, status, has_met_party, faction, friend_of, family_of, knows_info, has_quest, has_conditional;
+var location_tag, location_name, location_known, in_region, char_in_location, location_visited; 
+var information_tag, info_desc, info_known, info_acted_on, storyline, goes_to_location, goes_to_info; 
 
 mermaidAPI.initialize({startOnLoad: false});
 
 function clear_all_lists() {
-	//let output_area = document.getElementById("output_area");
 	output_area.innerHTML = ""; 
 }
 
@@ -144,12 +141,10 @@ function display_information_list() {
 
 function display_visualization() {
 	activeList = "visualization";
-	//Key: Story threads -- <span style="background-color: #FFA78E">Redbrands</span>  |  <span style="background-color: #F6DD8B">Cragmaw Castle</span>  |  <span style="background-color: #96acff">Wave Echo Cave</span>  |  <span style="background-color: #BCD6BB">Both Cragmaw Castle & Wave Echo Cave</span>
 	let key_text = 'Key: <span style="background-color: #FFA78E">Quest</span>  |  <span style="background-color: #F6DD8B">Conditional</span>  |  <span style="background-color: #BCD6BB">Information</span>  |  <span style="background-color: #CDCDCD">Location</span>';
 	key.innerHTML = key_text;
 	generate_visualization();
 }
-
 
 // Functionality for prolog / JS callbacks
 
@@ -344,113 +339,23 @@ function print_information(information_tag, information_info_list) {
 
 // Addds a new character to the world from input 
 function add_character() { 
-	// Get the values from the form 
-	var charTag = get_element("tag");
-	var charFirstName = get_element("first_name");
-	var charLastName = get_element("last_name");
-	var charOccupation = get_element("occupation");
-	var charStatus = get_element("status");
-	var charHasMetParty = get_element("has_met_party");
-	var charFaction = get_element("faction");
-	var charFriendOf = get_element("friend_of"); 
-	var charFamilyOf = get_element("family_of"); 
-	var charKnowsInfo = get_element("knows_info"); 
-
-	// Update the UI and clear the form 
-	var add_to_world = function(bindings) {
-		display_active_list();
-		for (var i = 0; i < character_fields.length; i++) {
-			clear_form_field(character_fields[i]);
-		}
-	}
-	bindings = [];
-	session.query(
-		"asserta(character(" + charTag + "))." + 
-		"asserta(first_name(" + charTag + " , " + charFirstName + " ))." + 
-		"asserta(last_name(" + charTag + " , " + charLastName + "))." + 
-		"asserta(occupation(" + charTag + " , " + charOccupation + "))." + 
-		"asserta(status(" + charTag + " , " + charStatus + "))." + 
-		"asserta(has_met_party(" + charTag + " , " + charHasMetParty + "))." + 
-		"asserta(faction(" + charTag + " , " + charFaction + "))." + 
-		"asserta(friend_of(" + charTag + " , " + charFriendOf + "))." + 
-		"asserta(family_of(" + charTag + " , " + charFamilyOf + "))." + 
-		"asserta(knows_info(" + charTag + " , " + charKnowsInfo + "))." + 
-		"asserta(character_info_list(" + charTag + ", [first_name, last_name, occupation, status, has_met_party, faction, friend_of, family_of, knows_info])).");
-	session.answers(get_callback(add_to_world));
-}
-
-// Addds a new location to the world from input 
-function add_location() { 
-	// Get the values from the form 
-	var locTag = get_element("location_tag");
-	var locName = get_element("location_name");
-	var locKnown = get_element("location_known");
-	var locInRegion = get_element("in_region");
-	var charInLocation = get_element("char_in_location");
-	var locVisited = get_element("location_visited");
-
-	// Update the UI and clear the form 
-	var add_to_world = function(bindings) {
-		display_active_list();
-		for (var i = 0; i < location_fields.length; i++) {
-			clear_form_field(location_fields[i]);
-		}
-	}
-	bindings = [];
-	session.query(
-		"asserta(location(" + locTag + "))." + 
-		"asserta(location_name(" + locTag + " , " + locName + " ))." + 
-		"asserta(location_known(" + locTag + " , " + locKnown + "))." + 
-		"asserta(in_region(" + locTag + " , " + locInRegion + "))." + 
-		"asserta(char_in_location(" + locTag + " , " + charInLocation + "))." + 
-		"asserta(location_visited(" + locTag + " , " + locVisited + "))." + 
-		"asserta(location_info_list(" + locTag + ", [location_name, location_known, in_region, char_in_location, location_visited])).");
-	session.answers(get_callback(add_to_world));
-}
-
-// Addds a new information piece to the world from input 
-function add_info() { 
-	// Check that they're submitting a valid info tag
-	if (information_tag != null && information_tag != '') {
-		// Get the values from the form 
-		var infoTag = information_tag;
-		var query = "asserta(info(" + infoTag + ")).";
-		var information_info_list = "asserta(information_info_list(" + infoTag
+	// Check that they're submitting a valid character tag
+	if (tag != null && tag != '') {
+		// Get the values from the form  
+		var query = "asserta(character(" + tag + ")).";
+		var character_info_list = "asserta(character_info_list(" + tag
 		var info_list_array = [];
 
-		//figure out if any values are blank, and if so, don't include them in query
-		if (info_desc != null && info_desc != '') {
-			query = query + "asserta(info_desc(" + infoTag + " , \"" + info_desc + "\"))."
-			info_list_array.push("info_desc"); 
+		for (var i = 1; i < character_fields.length; i++) {
+			let field = character_fields[i];
+			if (eval(field) != null && eval(field) != '') {
+				query = query + "asserta(" + field + "(" + tag + " , \"" + eval(field) + "\"))."
+				info_list_array.push(character_fields[i]); 
+			}
 		}
 
-		if (info_known != null && info_known != '') {
-			query = query + "asserta(info_known(" + infoTag + " , \"" + info_known + "\"))."
-			info_list_array.push("info_known"); 
-		}
-
-		if (info_acted_on != null && info_acted_on != '') {
-			query = query + "asserta(info_acted_on(" + infoTag + " , \"" + info_acted_on + "\"))."
-			info_list_array.push("info_acted_on"); 
-		}
-
-		if (storyline != null && storyline != '') {
-			query = query + "asserta(storyline(" + infoTag + " , \"" + storyline + "\"))."
-			info_list_array.push("storyline"); 
-		}
-
-		if (goes_to_location != null && goes_to_location != '') {
-			query = query + "asserta(goes_to_location(" + infoTag + " , \"" + goes_to_location + "\"))."
-			info_list_array.push("goes_to_location"); 
-		}
-
-		if (goes_to_info != null && goes_to_info != '') {
-			query = query + "asserta(goes_to_info(" + infoTag + " , \"" + goes_to_info + "\"))."
-			info_list_array.push("goes_to_info"); 
-		}
-
-		information_info_list = information_info_list + ", [ " + info_list_array.toString() + "])).";
-		query = query + information_info_list; 
+		character_info_list = character_info_list + ", [ " + info_list_array.toString() + "])).";
+		query = query + character_info_list; 
 		
 		var add_to_world = function(bindings) {
 			display_active_list();
@@ -463,50 +368,123 @@ function add_info() {
 	}
 }
 
-function remove_info() { 
-	information_tag = $("#information_tag").val(); 
-	info_desc = $("#info_desc").val(); 
-	info_known = $("#info_known").val(); 
-	info_acted_on = $("#info_acted_on").val(); 
-	storyline = $("#storyline").val(); 
-	goes_to_location = $("#goes_to_location").val(); 
-	goes_to_info = $("#goes_to_info").val(); 
+// Addds a new location to the world from input 
+function add_location() { 
+	if (location_tag != null && location_tag != '') {
+		var query = "asserta(location(" + location_tag + ")).";
+		var location_info_list = "asserta(location_info_list(" + location_tag
+		var info_list_array = [];
 
-	// Get the values from the form 
-	var infoTag = information_tag;
-	var query = "retract(info(" + infoTag + ")).";
-	var information_info_list = "retract(information_info_list(" + infoTag
+		for (var i = 1; i < location_fields.length; i++) {
+			let field = location_fields[i];
+			if (eval(field) != null && eval(field) != '') {
+				query = query + "asserta(" + field + "(" + location_tag + " , \"" + eval(field) + "\"))."
+				info_list_array.push(location_fields[i]); 
+			}
+		}
+
+		location_info_list = location_info_list + ", [ " + info_list_array.toString() + "])).";
+		query = query + location_info_list; 
+		
+		var add_to_world = function(bindings) {
+			display_active_list();
+			clear_form_entries();
+		}
+
+		bindings = [];
+		session.query(query);			
+		session.answers(get_callback(add_to_world));
+	}
+}
+
+// Addds a new information piece to the world from input 
+function add_info() { 
+	// Check that they're submitting a valid info tag
+	if (information_tag != null && information_tag != '') {
+		var query = "asserta(info(" + information_tag + ")).";
+		var information_info_list = "asserta(information_info_list(" + information_tag
+		var info_list_array = [];
+
+		for (var i = 1; i < information_fields.length; i++) {
+			let field = information_fields[i];
+			if (eval(field) != null && eval(field) != '') {
+				query = query + "asserta(" + field + "(" + information_tag + " , \"" + eval(field) + "\"))."
+				info_list_array.push(information_fields[i]); 
+			}
+		}
+
+		information_info_list = information_info_list + ", [ " + info_list_array.toString() + "])).";
+		query = query + information_info_list; 
+		var add_to_world = function(bindings) {
+			display_active_list();
+			clear_form_entries();
+		}
+
+		bindings = [];
+		session.query(query);			
+		session.answers(get_callback(add_to_world));
+	}
+}
+
+function remove_character() {		
+	var query = "retract(character(" + tag + ")).";
+	var character_info_list = "retract(character_info_list(" + tag
 	var info_list_array = [];
 
-	//figure out if any values are blank, and if so, don't include them in query
-	if (info_desc != null && info_desc != '') {
-		query = query + "retract(info_desc(" + infoTag + " , \"" + info_desc + "\"))."
-		info_list_array.push("info_desc"); 
+	for (var i = 1; i < character_fields.length; i++) {
+		let field = character_fields[i];
+		if (eval(field) != null && eval(field) != '') {
+			query = query + "retract(" + field + "(" + tag + " , \"" + eval(field) + "\"))."
+			info_list_array.push(character_fields[i]); 
+		}
 	}
 
-	if (info_known != null && info_known != '') {
-		query = query + "retract(info_known(" + infoTag + " , \"" + info_known + "\"))."
-		info_list_array.push("info_known"); 
+	character_info_list = character_info_list + ", [ " + info_list_array.toString() + "])).";
+	query = query + character_info_list; 
+		
+	var remove_from_world = function(bindings) {
 	}
 
-	if (info_acted_on != null && info_acted_on != '') {
-		query = query + "retract(info_acted_on(" + infoTag + " , \"" + info_acted_on + "\"))."
-		info_list_array.push("info_acted_on"); 
-	}
+	bindings = [];
+	session.query(query);			
+	session.answers(get_callback(remove_from_world));
+}
 
-	if (storyline != null && storyline != '') {
-		query = query + "retract(storyline(" + infoTag + " , \"" + storyline + "\"))."
-		info_list_array.push("storyline"); 
-	}
+function remove_location() {
+	var query = "retract(location(" + location_tag + ")).";
+		var location_info_list = "retract(location_info_list(" + location_tag
+		var info_list_array = [];
 
-	if (goes_to_location != null && goes_to_location != '') {
-		query = query + "retract(goes_to_location(" + infoTag + " , \"" + goes_to_location + "\"))."
-		info_list_array.push("goes_to_location"); 
-	}
+		for (var i = 1; i < location_fields.length; i++) {
+			let field = location_fields[i];
+			if (eval(field) != null && eval(field) != '') {
+				query = query + "retract(" + field + "(" + location_tag + " , \"" + eval(field) + "\"))."
+				info_list_array.push(location_fields[i]); 
+			}
+		}
 
-	if (goes_to_info != null && goes_to_info != '') {
-		query = query + "retract(goes_to_info(" + infoTag + " , \"" + goes_to_info + "\"))."
-		info_list_array.push("goes_to_info"); 
+		location_info_list = location_info_list + ", [ " + info_list_array.toString() + "])).";
+		query = query + location_info_list; 
+		
+		var remove_from_world = function(bindings) {
+		}
+
+		bindings = [];
+		session.query(query);			
+		session.answers(get_callback(remove_from_world));
+}
+
+function remove_info() { 
+	var query = "retract(info(" + information_tag + ")).";
+	var information_info_list = "retract(information_info_list(" + information_tag
+	var info_list_array = [];
+
+	for (var i = 1; i < information_fields.length; i++) {
+		let field = information_fields[i];
+		if (eval(field) != null && eval(field) != '') {
+			query = query + "retract(" + field + "(" + information_tag + " , \"" + eval(field) + "\"))."
+			info_list_array.push(information_fields[i]); 
+		}
 	}
 
 	information_info_list = information_info_list + ", [ " + info_list_array.toString() + "])).";
@@ -519,9 +497,6 @@ function remove_info() {
 	session.query(query);			
 	session.answers(get_callback(remove_from_world));
 }
-
-
-
 
 function clear_form_field(field) {
 	document.getElementById(field).value = "";
@@ -698,6 +673,7 @@ function display_character_form() {
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="family_of" value="" placeholder="Family of (enter tag)" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="knows_info" value="" placeholder="Knows info (enter tag)" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="button btn btn-secondary" type="button" value="Add character" id="button" onClick="add_character();" /></div>';
+
 }
 
 function display_location_form() {
@@ -708,7 +684,9 @@ function display_location_form() {
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="in_region" value="" placeholder="Enter region" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="char_in_location" value="" placeholder="Enter characters in location" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="location_visited" value="" placeholder="Party has visited location (ex. true)" /></div>';
+
 	form.innerHTML = form.innerHTML + '<div><input class="button btn btn-secondary" type="button" value="Add location" id="button" onClick="add_location();" /></div>';
+
 }
 
 function display_information_form() {
@@ -727,52 +705,135 @@ function edit_row(ctl) {
 	row = $(ctl).parents("tr");
 	var cols = row.children("td");
 	add_values_to_form(cols);
-	set_info_values();
-	remove_info(); 
+	set_values();
+
+	if (activeList == "character") {
+		remove_character();
+	} else if (activeList == "location") {
+		remove_location();
+	} else {
+		remove_info(); 
+	}
+	
     // Change Update Button Text
     $("#update_button").prop('value', 'Update');
 }
 
 function submit_info() {
-	set_info_values();
-	add_info();
+	set_values();
+	// if info
+	if (activeList == "character") {
+		add_character();
+	} else if (activeList == "location") {
+		add_location();
+	} else {
+		add_info();
+	}
+	
 }
 
 function delete_row(ctl) {
 	row = $(ctl).parents("tr");
 	var cols = row.children("td");
 	add_values_to_form(cols);
-	set_info_values();
-	remove_info();
+	set_values();
+	// if info 
+	if (activeList == "character") {
+		remove_character();
+	} else if (activeList == "location") {
+		remove_location();
+	} else {
+		remove_info(); 
+	}
 	display_active_list();
 	clear_form_entries();
 }
 
 function add_values_to_form(cols) {
-	$("#information_tag").val($(cols[0]).text());
-	$("#info_desc").val($(cols[1]).text());
-	$("#info_known").val($(cols[2]).text());
-	$("#info_acted_on").val($(cols[3]).text());
-	$("#storyline").val($(cols[4]).text());
-	$("#goes_to_location").val($(cols[5]).text());
-	$("#goes_to_info").val($(cols[6]).text());
+	if (activeList == "character") {
+		$("#tag").val($(cols[0]).text());
+		$("#first_name").val($(cols[1]).text());
+		$("#last_name").val($(cols[2]).text());
+		$("#occupation").val($(cols[3]).text());
+		$("#status").val($(cols[4]).text());
+		$("#has_met_party").val($(cols[5]).text());
+		$("#faction").val($(cols[6]).text());
+		$("#friend_of").val($(cols[7]).text());
+		$("#family_of").val($(cols[8]).text());
+		$("#knows_info").val($(cols[9]).text());
+		$("#has_quest").val($(cols[10]).text());
+		$("#has_conditional").val($(cols[11]).text());
+	} else if (activeList == "location") {
+		$("#location_tag").val($(cols[0]).text());
+		$("#location_name").val($(cols[1]).text());
+		$("#location_known").val($(cols[2]).text());
+		$("#in_region").val($(cols[3]).text());
+		$("#char_in_location").val($(cols[4]).text());
+		$("#location_visited").val($(cols[5]).text());
+	} else if (activeList == "information") {
+		$("#information_tag").val($(cols[0]).text());
+		$("#info_desc").val($(cols[1]).text());
+		$("#info_known").val($(cols[2]).text());
+		$("#info_acted_on").val($(cols[3]).text());
+		$("#storyline").val($(cols[4]).text());
+		$("#goes_to_location").val($(cols[5]).text());
+		$("#goes_to_info").val($(cols[6]).text());
+	} else {
+		console.log("ERROR: tried to edit on a page without a table");
+	}
 }
 
-function set_info_values() {
-	information_tag = $("#information_tag").val(); 
-	info_desc = $("#info_desc").val(); 
-	info_known = $("#info_known").val(); 
-	info_acted_on = $("#info_acted_on").val(); 
-	storyline = $("#storyline").val(); 
-	goes_to_location = $("#goes_to_location").val(); 
-	goes_to_info = $("#goes_to_info").val(); 
-
+function set_values() {
+	if (activeList == "character") {
+		tag = $("#tag").val(); 
+		first_name = $("#first_name").val(); 
+		last_name = $("#last_name").val(); 
+		occupation = $("#occupation").val(); 
+		status = $("#status").val(); 
+		has_met_party = $("#has_met_party").val(); 
+		faction = $("#faction").val(); 
+		friend_of = $("#friend_of").val(); 
+		family_of = $("#family_of").val(); 
+		knows_info = $("#knows_info").val(); 
+		has_quest = $("#has_quest").val(); 
+		has_conditional = $("#has_conditional").val(); 
+	} else if (activeList == "location") {
+		location_tag = $("#location_tag").val(); 
+		location_name = $("#location_name").val(); 
+		location_known = $("#location_known").val(); 
+		in_region = $("#in_region").val(); 
+		char_in_location = $("#char_in_location").val(); 
+		location_visited = $("#location_visited").val(); 
+	} else if (activeList == "information") {
+		information_tag = $("#information_tag").val(); 
+		info_desc = $("#info_desc").val(); 
+		info_known = $("#info_known").val(); 
+		info_acted_on = $("#info_acted_on").val(); 
+		storyline = $("#storyline").val(); 
+		goes_to_location = $("#goes_to_location").val(); 
+		goes_to_info = $("#goes_to_info").val(); 
+	} else {
+		console.log("ERROR: tried to edit on a page without a table");
+	}
 }
 
 function clear_form_entries() {
-	for (var i = 0; i < information_fields.length; i++) {
-		clear_form_field(information_fields[i]);
+	if (activeList == "character") {
+		for (var i = 0; i < character_fields.length; i++) {
+			clear_form_field(character_fields[i]);
+		}
+	} else if (activeList == "location") {
+		for (var i = 0; i < location_fields.length; i++) {
+			clear_form_field(location_fields[i]);
+		}
+	} else if (activeList == "information") {
+		for (var i = 0; i < information_fields.length; i++) {
+			clear_form_field(information_fields[i]);
+		}
+	} else {
+		console.log("ERROR: tried to edit on a page without a table");
 	}
+	
 }
 
 function search() {
