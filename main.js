@@ -672,7 +672,7 @@ function display_character_form() {
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="friend_of" value="" placeholder="Friend of (enter tag)" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="family_of" value="" placeholder="Family of (enter tag)" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="knows_info" value="" placeholder="Knows info (enter tag)" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add character" id="button" onClick="submit_info();" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="button btn btn-secondary" type="button" value="Add character" id="button" onClick="submit_info();" /></div>';
 }
 
 function display_location_form() {
@@ -683,7 +683,7 @@ function display_location_form() {
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="in_region" value="" placeholder="Enter region" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="char_in_location" value="" placeholder="Enter characters in location" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="location_visited" value="" placeholder="Party has visited location (ex. true)" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add location" id="button" onClick="submit_info();" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="button btn btn-secondary" type="button" value="Add location" id="button" onClick="submit_info();" /></div>';
 }
 
 function display_information_form() {
@@ -695,7 +695,7 @@ function display_information_form() {
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="storyline" value="" placeholder="Adds to storyline" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_location" value="" placeholder="Informs party about location (enter tag)" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_info" value="" placeholder="Informs party about information (enter tag)" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add information" id="update_button" onClick="submit_info();" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="button btn btn-secondary" type="button" value="Add information" id="update_button" onClick="submit_info();" /></div>';
 }
 
 function edit_row(ctl) {
