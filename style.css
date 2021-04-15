@@ -30,10 +30,11 @@
 .row {
   padding: 15px;
   padding-left: 20px;
+
 }
 
 .header {
-  background-color: #dddddd;
+  background-color: #F4EED7;
 }
 
 .key {
@@ -42,12 +43,11 @@
 .output-row {
   padding: 10px;
   margin: 20px;
-  background-color: #d9d9d9ff;
+  background-color: #FBEEC1;
 }
 
 body {
-  background-color: #f3f3f3ff;
-  font-family: Arial;
+  background-color: #FBEEC1;
 }
 
 .button {
@@ -58,8 +58,13 @@ body {
   text-align: center;
   text-decoration: none;
   display: inline-block;
+  font-family: 'Noto Sans', sans-serif;
   font-size: 16px;
   margin: 5px;
+}
+
+h1 {
+  font-family: 'Noto Sans', sans-serif;
 }
 
 
@@ -69,7 +74,8 @@ body {
   margin-top: 8px;
   margin-right: 16px;
   font-size: 17px;
-  background-color:#dddddd;
+  font-family: 'Noto Sans', sans-serif;
+  background-color:#EEECE2;
 }
 
 .search {
@@ -78,10 +84,11 @@ body {
 }
 
 .search input[type=text] {
-   width: 30%;
-   margin-top:0px;
-   margin-left:20px;
-   background-color:#dddddd;
+  width: 30%;
+  margin-top:0px;
+  margin-left:20px;
+  background-color:##EEECE2;
+  font-family: 'Noto Sans', sans-serif;
 }
 
 
@@ -91,6 +98,7 @@ body {
 
 p {
   font-size: 14px;
+  font-family: 'Raleway', sans-serif;
 }
 
 table {
@@ -98,12 +106,18 @@ table {
 }
 
 td, th {
-  border: 1px solid #dddddd;
+  border: 1px solid #F4EED7;
   text-align: left;
+  font-family: 'Noto Sans', sans-serif;
+  
+}
+
+th {
+  background-color: #F4EED7;
 }
 
 tr:nth-child(even) {
-  background-color: #dddddd;
+  background-color: #EEECE2;
 }
 
 div.output {             
