@@ -40,6 +40,11 @@
 .key {
   margin: 15px;
 }
+
+h1, h2, h3, h4, p, td {
+  font-family: 'Noto Sans', sans-serif;
+}
+
 .output-row {
   padding: 10px;
   margin: 20px;
@@ -61,10 +66,6 @@ body {
   font-family: 'Noto Sans', sans-serif;
   font-size: 16px;
   margin: 5px;
-}
-
-h1 {
-  font-family: 'Noto Sans', sans-serif;
 }
 
 
