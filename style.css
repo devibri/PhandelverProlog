@@ -33,7 +33,7 @@
 }
 
 .header {
-  background-color: #dddddd;
+    background-color: #F4EED7;
 }
 
 .key {
@@ -69,9 +69,12 @@ body {
   margin-top: 8px;
   margin-right: 16px;
   font-size: 17px;
-  background-color:#dddddd;
+    font-family: 'Noto Sans', sans-serif;
+  background-color:#EEECE2;
 }
-
+h1 {
+  font-family: 'Noto Sans', sans-serif;
+}
 .search {
   margin-top: 0px;
   margin-left: 20px;
@@ -81,7 +84,8 @@ body {
    width: 30%;
    margin-top:0px;
    margin-left:20px;
-   background-color:#dddddd;
+  background-color:##EEECE2;
+  font-family: 'Noto Sans', sans-serif;
 }
 
 
@@ -98,12 +102,12 @@ table {
 }
 
 td, th {
-  border: 1px solid #dddddd;
+  border: 1px solid #F4EED7;
   text-align: left;
 }
 
 tr:nth-child(even) {
-  background-color: #dddddd;
+  background-color: #EEECE2;
 }
 
 div.output {             
