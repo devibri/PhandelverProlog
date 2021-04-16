@@ -5,7 +5,7 @@ session.consult("database.prolog");
 // Array of variable bindings, one per answer, returned by prolog query
 var bindings = [];
 var filterString = '';
-var activeList = "character";
+var activeList = "information";
 var infoList = [];
 var tagList = [];
 var output = "";
@@ -200,11 +200,11 @@ function add_to_table(tag, fields_list) {
 				final_output = final_output + "<td>";
 				output_elements.shift();
 				while (output_elements.includes(fields_list[i])) {
-					final_output = final_output + output_elements.shift().replace(/^["'](.+(?=["']$))["']$/, '$1').replace(/\\/gi,'') + ", "; 
+					final_output = final_output + output_elements.shift() + ", "; 
 					output_elements.shift();
 				}
 				if (output_elements.length > 0) {
-					final_output = final_output + output_elements.shift().replace(/^["'](.+(?=["']$))["']$/, '$1').replace(/\\/gi,'');
+					final_output = final_output + output_elements.shift();
 				}
 				final_output = final_output + "</td>"
 			// If there is nothing found, just add an empty cell
