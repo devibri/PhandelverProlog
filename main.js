@@ -662,7 +662,6 @@ function addBreaks(str) {
 
 function display_character_form() {
 	var form = document.getElementById("form");
-	form.innerHTML = form.innerHTML + '<h3>Add character</h3>'
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="tag" value="" placeholder="Enter tag" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="first_name" value="" placeholder="Enter first name" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="last_name" value="" placeholder="Enter last name" /></div>';
@@ -678,7 +677,6 @@ function display_character_form() {
 
 function display_location_form() {
 	var form = document.getElementById("form");
-	form.innerHTML = form.innerHTML + '<h3>Add location</h3>'
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="location_tag" value="" placeholder="Enter tag" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="location_name" value="" placeholder="Enter location name" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="location_known" value="" placeholder="Party knows about location (ex. true)" /></div>';
@@ -690,7 +688,6 @@ function display_location_form() {
 
 function display_information_form() {
 	var form = document.getElementById("form");
-	form.innerHTML = form.innerHTML + '<h3>Add knowledge</h3>'
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="information_tag" value="" placeholder="Enter tag" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="info_desc" value="" placeholder="Enter information description" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="info_known" value="" placeholder="Party knows information (ex. true)" /></div>';
@@ -698,7 +695,7 @@ function display_information_form() {
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="storyline" value="" placeholder="Adds to storyline" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_location" value="" placeholder="Informs party about location (enter tag)" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_info" value="" placeholder="Informs party about information (enter tag)" /></div>';
-	form.innerHTML = form.innerHTML + '<div><input class="button btn btn-secondary" type="button" value="Add knowledge" id="update_button" onClick="submit_info();" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="button btn btn-secondary" type="button" value="Add information" id="update_button" onClick="submit_info();" /></div>';
 }
 
 function edit_row(ctl) {
