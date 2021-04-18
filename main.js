@@ -349,7 +349,11 @@ function add_character() {
 		for (var i = 1; i < character_fields.length; i++) {
 			let field = character_fields[i];
 			if (eval(field) != null && eval(field) != '') {
-				query = query + "asserta(" + field + "(" + tag + " , \"" + eval(field) + "\"))."
+				let result = eval(field);
+				result_array = result.split(', '); 
+				for (var j = 0; j < result_array.length; j++) {
+					query = query + "asserta(" + field + "(" + tag + " , \"" + result_array[j] + "\"))."
+				}
 				info_list_array.push(character_fields[i]); 
 			}
 		}
@@ -381,17 +385,16 @@ function add_location() {
 				let result = eval(field);
 				result_array = result.split(', '); 
 				for (var j = 0; j < result_array.length; j++) {
-					console.log("result is: " + result_array[j])
 					query = query + "asserta(" + field + "(" + location_tag + " , \"" + result_array[j] + "\"))."
 				}
 				//
 				info_list_array.push(location_fields[i]); 
 			}
 		}
-		console.log("add query is: " + query);
+		//console.log("add query is: " + query);
 		location_info_list = location_info_list + ", [ " + info_list_array.toString() + "])).";
 		query = query + location_info_list; 
-		console.log("done");
+		//console.log("done");
 		
 		var add_to_world = function(bindings) {
 			display_active_list();
@@ -414,16 +417,14 @@ function add_info() {
 
 		for (var i = 1; i < information_fields.length; i++) {
 			let field = information_fields[i];
+
 			if (eval(field) != null && eval(field) != '') {
 				let result = eval(field);
-				result_array = result.split(','); 
-				for (var j = 0; j < result_array.length; j++) {	
-					if (field == "location_name") {
-						query = query + "asserta(" + field + "(" + location_tag + " , \"" + result_array[j] + "\"))."
-					} else {
-						query = query + "asserta(" + field + "(" + location_tag + " , " + result_array[j] + "))."
-					}
+				result_array = result.split(', '); 
+				for (var j = 0; j < result_array.length; j++) {
+					query = query + "asserta(" + field + "(" + information_tag + " , \"" + result_array[j] + "\"))."
 				}
+				info_list_array.push(information_fields[i]); 
 			}
 		}
 
@@ -448,7 +449,15 @@ function remove_character() {
 	for (var i = 1; i < character_fields.length; i++) {
 		let field = character_fields[i];
 		if (eval(field) != null && eval(field) != '') {
-			query = query + "retract(" + field + "(" + tag + " , \"" + eval(field) + "\"))."
+			let result = eval(field);
+			result_array = result.split(','); 
+			for (var j = 0; j < result_array.length; j++) {	
+				if (field == "occupation") {
+					query = query + "retract(" + field + "(" + tag + " , \"" + result_array[j] + "\"))."
+				} else {
+					query = query + "retract(" + field + "(" + tag + " , " + result_array[j] + "))."
+				}
+			}
 			info_list_array.push(character_fields[i]); 
 		}
 	}
@@ -504,7 +513,15 @@ function remove_info() {
 	for (var i = 1; i < information_fields.length; i++) {
 		let field = information_fields[i];
 		if (eval(field) != null && eval(field) != '') {
-			query = query + "retract(" + field + "(" + information_tag + " , \"" + eval(field) + "\"))."
+			let result = eval(field);
+			result_array = result.split(','); 
+			for (var j = 0; j < result_array.length; j++) {	
+				if (field == "info_desc") {
+					query = query + "retract(" + field + "(" + information_tag + " , \"" + result_array[j] + "\"))."
+				} else {
+					query = query + "retract(" + field + "(" + information_tag + " , " + result_array[j] + "))."
+				}
+			}
 			info_list_array.push(information_fields[i]); 
 		}
 	}
