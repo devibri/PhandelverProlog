@@ -28,8 +28,8 @@
 }
 
 .row {
-  padding: 15px;
-  padding-left: 20px;
+  padding: 5px;
+  padding-left: 30px;
 }
 
 .header {
@@ -69,12 +69,14 @@ body {
   margin-top: 8px;
   margin-right: 16px;
   font-size: 17px;
-    font-family: 'Noto Sans', sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   background-color:#EEECE2;
 }
-h1 {
+
+h1, h2, h3, h4, h5, h6, p {
   font-family: 'Noto Sans', sans-serif;
 }
+
 .search {
   margin-top: 0px;
   margin-left: 20px;
