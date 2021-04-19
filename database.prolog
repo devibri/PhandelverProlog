@@ -166,8 +166,6 @@ family_of(qelline_alderleaf, carp).
 knows_info(toblin_stonehill, redbrand_hangout).
 knows_info(elmar_barthen, redbrand_shakedown).
 knows_info(daren_edermath, redbrand_hideout_location).
-knows_info(daren_edermath, get_rid_of_redbrands).
-knows_info(daren_edermath, digging_old_owl_well).
 knows_info(halia_thornton, goblin_cragmaw_castle).
 knows_info(halia_thornton, kill_redbrand_leader).
 knows_info(qelline_alderleaf, reidoth_location).
@@ -497,7 +495,7 @@ quest_desc(magic_tower, "Ask Agatha about who made the magic tower in exchange f
 
 :- dynamic(quest_complete/2). 
 
-
+:- dynamic(quest_known/2). 
 
 %%%%%%%%%%% CONDITIONAL INFO %%%%%%%%%%%
 

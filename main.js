@@ -5,16 +5,20 @@ session.consult("database.prolog");
 // Array of variable bindings, one per answer, returned by prolog query
 var bindings = [];
 var filterString = '';
-var activeList = "location";
+var activeList = "character";
 var infoList = [];
 var tagList = [];
+var questList = [];
 var output = "";
 var final_output = "";
 var output_connections = "";
 var character_fields = ["tag", "first_name", "last_name", "occupation", "status", "has_met_party", "faction", "friend_of", "family_of", "knows_info", "has_quest", "has_conditional"];
 var location_fields = ["location_tag", "location_name", "location_known", "in_region", "char_in_location", "location_visited"];
 var information_fields = ["information_tag", "info_desc", "info_known", "info_acted_on", "storyline", "goes_to_location", "goes_to_info"];
+var quest_fields = ["quest_tag", "quest_desc", "storyline", "quest_known", "quest_complete", "goes_to_location", "goes_to_info"];
+var conditonal_fields = ["information_tag", "info_desc", "info_known", "info_acted_on", "storyline", "goes_to_location", "goes_to_info"];
 var output_elements = [];
+
 var output_area = document.getElementById("output_area");
 var key_area = document.getElementById("key");
 var row = null;
@@ -59,6 +63,14 @@ function display_active_list() {
 	} else if (activeList == "information") {
 		display_information_list();
 		display_information_form();
+		display_search(); 
+	} else if (activeList == "quest") {
+		display_quest_list();
+		//display_quest_form();
+		display_search(); 
+	} else if (activeList == "conditional") {
+		display_conditional_list();
+		display_conditional_form();
 		display_search(); 
 	} else if (activeList == "visualization") {
 		display_visualization(); 
@@ -138,6 +150,21 @@ function display_information_list() {
 		output_area.innerHTML = final_output + "</tbody></table>";
 	}, 500);
 }
+
+function display_quest_list() {
+	activeList = "quest";
+	clear_saved_info();
+	// For each information in the quest tag list, print the quest's info 
+	get_quest_info();
+	final_output = "<thead><h1>Quests</h1><table id='list-table' class='table'><tr><th>Tag</th><th>Description</th><th>Storyline</th><th>Known by Party</th><th>Complete</th><th>Goes To Location</th><th>Goes to Information</th><th>Edit</th><th>Delete</th></tr></thead><tbody>";
+	setTimeout(() => {  
+		for (var i = 0; i < questList.length; i++) {
+			print_quest(tagList[i], questList[i]);
+		}
+		output_area.innerHTML = final_output + "</tbody></table>";
+	}, 500);
+}
+
 
 function display_visualization() {
 	activeList = "visualization";
@@ -335,6 +362,42 @@ function print_information(information_tag, information_info_list) {
 	add_to_table(information_tag, information_fields); 
 }
 
+function get_quest_info() {
+	var get_all_bindings = function(bindings) {
+		for(var i = 0; i < bindings.length; i++) {
+			get_quest(bindings[i]);
+		}
+	}
+	bindings = [];
+	session.query("quest(Quest), quest_info_list(Quest, Quest_Info_List).");
+	session.answers(get_callback(get_all_bindings));
+}
+
+function get_quest(binding) {
+	if (binding != null) {
+		var quest_name = binding.lookup("Quest"); 
+		var quest_info_list = binding.lookup("Quest_Info_List");
+		var list = quest_info_list.toJavaScript();
+		tagList.push(quest_name); 
+		questList.push(list);
+	}
+}
+
+// Takes the list of all info info lists, and for each element in the list, outputs it 
+function print_quest(quest_tag, quest_info_list) {
+	output = "";
+	output_elements = [];
+	var get_all_bindings = function(answer) {
+		print_list_info(answer);
+	}
+	for (var i = 0; i < quest_info_list.length; i++) {
+		session.query("Pred = " + quest_info_list[i] + ", findall([Pred, Quest], call( Pred, " + quest_tag + ", Quest), List).");
+		session.answer(get_all_bindings);
+	}
+	// Get the appropriate list and output the info if it matches the search
+	add_to_table(quest_tag, quest_fields); 
+}
+
 // Adding new entities to the database
 
 // Addds a new character to the world from input 
@@ -452,7 +515,7 @@ function remove_character() {
 			let result = eval(field);
 			result_array = result.split(','); 
 			for (var j = 0; j < result_array.length; j++) {	
-				if (field == "occupation") {
+				if (field == "occupation" || field == "faction") {
 					query = query + "retract(" + field + "(" + tag + " , \"" + result_array[j] + "\"))."
 				} else {
 					query = query + "retract(" + field + "(" + tag + " , " + result_array[j] + "))."
