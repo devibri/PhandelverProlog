@@ -324,7 +324,7 @@ location_visited(stonehill_inn, true).
 information_info_list(redbrand_hideout_location, [info_desc, storyline, goes_to_location, goes_to_info]).
 information_info_list(secret_tunnel_location, [info_desc, storyline, goes_to_location, goes_to_info]).
 information_info_list(secret_tunnel_knowledge, [info_desc, storyline, goes_to_location, goes_to_info]).
-information_info_list(orcs_triboar_trail, [info_desc, storyline, goes_to_location, goes_to_info]).
+information_info_list(orcs_triboar_trail, [info_desc, storyline, goes_to_info]).
 information_info_list(dendrar_family_kidnapped, [info_desc, storyline, goes_to_info]).
 information_info_list(redbrands_and_halia, [info_desc, storyline, goes_to_location, goes_to_info]).
 information_info_list(redbrand_hangout, [info_desc, storyline, goes_to_location, goes_to_info]).
@@ -362,7 +362,7 @@ info_desc(redbrands_and_halia, "Redbrands don't mess with Halia at Phandalin Min
 info_desc(redbrand_hangout, "Redbrands hang out at Sleeping Giant Tap House and they are trouble").
 info_desc(sister_garaele_exhausted, "Sister Garaele recently returned to the Shrine of Luck injured and exhausted").
 info_desc(iarno_secret, "The missing person Iarno is actually the leader of the Redbrands and goes by the name Glasstaff").
-info_desc(townmaster_and_redbrands, "Townmaster doesn't want players to mess with Redbrands, keep them in jail").
+info_desc(townmaster_and_redbrands, "Townmaster doesn't want players to mess with Redbrands").
 info_desc(redbrand_shakedown, "The Redbrands are shaking down local businesses").
 info_desc(reidoth_location, "Reidoth at Thundertree knows the way to Cragmaw Castle or Wave Echo Cave").
 info_desc(learn_about_redbrands, "The Redbrands are a dangerous threat to the town of Phandalin").
@@ -462,7 +462,7 @@ goes_to_info(orcs_triboar_trail_quest_hamun, wave_echo_cave).
 
 :- dynamic(quest_info_list/2).
 quest_info_list(kill_redbrand_leader, [quest_desc, storyline, goes_to_location, goes_to_info]).
-quest_info_list(get_rid_of_redbrands, [quest_desc, storyline, goes_to_info]).
+quest_info_list(get_rid_of_redbrands, [quest_desc, storyline]).
 quest_info_list(digging_old_owl_well, [quest_desc, storyline, goes_to_location, goes_to_info]).
 quest_info_list(ask_agatha_about_book, [quest_desc, storyline, goes_to_location, goes_to_info]).
 quest_info_list(missing_iarno, [quest_desc, storyline, goes_to_info]).

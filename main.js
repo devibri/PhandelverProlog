@@ -5,7 +5,7 @@ session.consult("database.prolog");
 // Array of variable bindings, one per answer, returned by prolog query
 var bindings = [];
 var filterString = '';
-var activeList = "character";
+var activeList = "information";
 var infoList = [];
 var tagList = [];
 var questList = [];
@@ -67,11 +67,11 @@ function display_active_list() {
 		display_search(); 
 	} else if (activeList == "quest") {
 		display_quest_list();
-		//display_quest_form();
+		display_quest_form();
 		display_search(); 
 	} else if (activeList == "conditional") {
 		display_conditional_list();
-		//display_conditional_form();
+		display_conditional_form();
 		display_search(); 
 	} else if (activeList == "visualization") {
 		display_visualization(); 
@@ -242,6 +242,7 @@ function add_to_table(tag, fields_list) {
 				output_elements.shift();
 				while (output_elements.includes(fields_list[i])) {
 					final_output = final_output + output_elements.shift().replace(/^["'](.+(?=["']$))["']$/, '$1').replace(/\\/gi,'') + ", "; 
+					//final_output = final_output + output_elements.shift() + ", ";//.replace(/^["'](.+(?=["']$))["']$/, '$1').replace(/\\/gi,'') + ", "; 
 					output_elements.shift();
 				}
 				if (output_elements.length > 0) {
@@ -414,7 +415,6 @@ function print_quest(quest_tag, quest_info_list) {
 
 function get_conditional_info() {
 	var get_all_bindings = function(bindings) {
-		console.log(bindings);
 		for(var i = 0; i < bindings.length; i++) {
 			get_conditional(bindings[i]);
 		}
@@ -501,24 +501,30 @@ function add_location() {
 				for (var j = 0; j < result_array.length; j++) {
 					query = query + "asserta(" + field + "(" + location_tag + " , \"" + result_array[j] + "\"))."
 				}
-				//
 				info_list_array.push(location_fields[i]); 
 			}
 		}
-		//console.log("add query is: " + query);
 		location_info_list = location_info_list + ", [ " + info_list_array.toString() + "])).";
 		query = query + location_info_list; 
-		//console.log("done");
 		
 		var add_to_world = function(bindings) {
 			display_active_list();
 			clear_form_entries();
+			//clear_variable_values();
 		}
 
 		bindings = [];
 		session.query(query);			
 		session.answers(get_callback(add_to_world));
 	}
+}
+
+function clear_variable_values() {
+	for (var i = 0; i < information_fields.length; i++) {
+		console.log(information_fields[i]);
+		information_fields[i] = "";
+	}
+
 }
 
 // Addds a new information piece to the world from input 
@@ -544,6 +550,72 @@ function add_info() {
 
 		information_info_list = information_info_list + ", [ " + info_list_array.toString() + "])).";
 		query = query + information_info_list; 
+		var add_to_world = function(bindings) {
+			display_active_list();
+			clear_form_entries();
+		}
+
+		bindings = [];
+		session.query(query);			
+		session.answers(get_callback(add_to_world));
+	}
+}
+
+function add_quest() { 
+	if (quest_tag != null && quest_tag != '') {
+		var query = "asserta(quest(" + quest_tag + ")).";
+		var quest_info_list = "asserta(quest_info_list(" + quest_tag
+		var info_list_array = [];
+
+		for (var i = 1; i < quest_fields.length; i++) { 
+			let field = quest_fields[i];
+			console.log("field is: " + field);
+			if (eval(field) != null && eval(field) != '') {
+				let result = eval(field);
+				result_array = result.split(', '); 
+				for (var j = 0; j < result_array.length; j++) {
+					query = query + "asserta(" + field + "(" + quest_tag + " , \"" + result_array[j] + "\"))."
+				}
+				info_list_array.push(quest_fields[i]); 
+			}
+		}
+		quest_info_list = quest_info_list + ", [ " + info_list_array.toString() + "])).";
+		query = query + quest_info_list; 
+		
+		var add_to_world = function(bindings) {
+			display_active_list();
+			clear_form_entries();
+		}
+
+		bindings = [];
+		session.query(query);			
+		session.answers(get_callback(add_to_world));
+	}
+}
+ 
+function add_conditional() { 
+	// Check that they're submitting a valid character tag
+	if (conditional_tag != null && conditional_tag != '') {
+		// Get the values from the form  
+		var query = "asserta(conditional(" + conditional_tag + ")).";
+		var conditional_info_list = "asserta(conditional_info_list(" + conditional_tag
+		var info_list_array = [];
+
+		for (var i = 1; i < conditional_fields.length; i++) {
+			let field = conditional_fields[i];
+			if (eval(field) != null && eval(field) != '') {
+				let result = eval(field);
+				result_array = result.split(', '); 
+				for (var j = 0; j < result_array.length; j++) {
+					query = query + "asserta(" + field + "(" + conditional_tag + " , \"" + result_array[j] + "\"))."
+				}
+				info_list_array.push(conditional_fields[i]); 
+			}
+		}
+
+		conditional_info_list = conditional_info_list + ", [ " + info_list_array.toString() + "])).";
+		query = query + conditional_info_list; 
+		
 		var add_to_world = function(bindings) {
 			display_active_list();
 			clear_form_entries();
@@ -607,7 +679,6 @@ function remove_location() {
 			info_list_array.push(location_fields[i]); 
 			}
 		}
-		console.log("retract query is: " + query);
 		location_info_list = location_info_list + ", [ " + info_list_array.toString() + "])).";
 		query = query + location_info_list; 
 		
@@ -643,6 +714,76 @@ function remove_info() {
 	information_info_list = information_info_list + ", [ " + info_list_array.toString() + "])).";
 	query = query + information_info_list; 
 
+	var remove_from_world = function(bindings) {
+		//clear_variable_values();
+	}
+
+	bindings = [];
+	session.query(query);			
+	session.answers(get_callback(remove_from_world));
+}
+
+function remove_quest() { 
+	var query = "retract(quest(" + quest_tag + ")).";
+	var quest_info_list = "retract(quest_info_list(" + quest_tag
+	var info_list_array = [];
+
+	for (var i = 1; i < quest_fields.length; i++) {
+		let field = quest_fields[i];
+		if (eval(field) != null && eval(field) != '') {
+			let result = eval(field);
+			result_array = result.split(','); 
+			for (var j = 0; j < result_array.length; j++) {	
+				if (field == "quest_desc") {
+					query = query + "retract(" + field + "(" + quest_tag + " , \"" + result_array[j] + "\"))."
+				} else {
+					query = query + "retract(" + field + "(" + quest_tag + " , " + result_array[j] + "))."
+				}
+			}
+			info_list_array.push(quest_fields[i]); 
+		}
+	}
+
+	quest_info_list = quest_info_list + ", [ " + info_list_array.toString() + "])).";
+	query = query + quest_info_list; 
+	console.log(query);
+
+	var remove_from_world = function(bindings) {
+	}
+
+	bindings = [];
+	session.query(query);			
+	session.answers(get_callback(remove_from_world));
+}
+
+function remove_conditional() {		
+	var query = "retract(conditional(" + conditional_tag + ")).";
+	var conditional_info_list = "retract(conditional_info_list(" + conditional_tag
+	var info_list_array = [];
+
+	for (var i = 1; i < conditional_fields.length; i++) {
+		console.log(conditional_fields);
+		let field = conditional_fields[i];
+		if (eval(field) != null && eval(field) != '') {
+			console.log("field: " + field + ", :" + eval(field) + "\n");
+			let result = eval(field);
+			result_array = result.split(','); 
+			for (var j = 0; j < result_array.length; j++) {	
+				if (field == "conditional_desc") {
+					query = query + "retract(" + field + "(" + conditional_tag + " , \"" + result_array[j] + "\"))."
+				} else {
+					query = query + "retract(" + field + "(" + conditional_tag + " , " + result_array[j] + "))."
+				}
+			}
+			info_list_array.push(conditional_fields[i]); 
+		}
+	}
+
+
+	conditional_info_list = conditional_info_list + ", [ " + info_list_array.toString() + "])).";
+	query = query + conditional_info_list; 
+	console.log(query);
+		
 	var remove_from_world = function(bindings) {
 	}
 
@@ -745,7 +886,6 @@ function get_conditionals() {
 		for(var i = 0; i < bindings.length; i++) {
 			get_character_with_conditional(bindings[i]);
 		}
-		//get_conditionals(); 
 		// Once you get the nodes, get the connections
 		get_connections_info();
 	}
@@ -826,6 +966,8 @@ function display_character_form() {
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="friend_of" value="" placeholder="Friend of (enter tag)" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="family_of" value="" placeholder="Family of (enter tag)" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="knows_info" value="" placeholder="Knows info (enter tag)" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="has_quest" value="" placeholder="Has quest (enter tag)" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="has_conditional" value="" placeholder="Has conditional (enter tag)" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add character" id="button" onClick="submit_info();" /></div>';
 }
 
@@ -854,6 +996,31 @@ function display_information_form() {
 	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add knowledge" id="update_button" onClick="submit_info();" /></div>';
 }
 
+function display_quest_form() {
+	var form = document.getElementById("form");
+	form.innerHTML = form.innerHTML + '<h3>Add quest</h3>'
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="quest_tag" value="" placeholder="Enter tag" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="quest_desc" value="" placeholder="Enter quest description" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="storyline" value="" placeholder="Adds to storyline" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="quest_known" value="" placeholder="Party knows quest (ex. true)" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="quest_complete" value="" placeholder="Party has completed quest (ex. true)" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_location" value="" placeholder="Informs party about location (enter tag)" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_info" value="" placeholder="Informs party about information (enter tag)" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add quest" id="update_button" onClick="submit_info();" /></div>';
+}
+
+function display_conditional_form() {
+	var form = document.getElementById("form");
+	form.innerHTML = form.innerHTML + '<h3>Add conditional</h3>'
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="conditional_tag" value="" placeholder="Enter tag" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="conditional_desc" value="" placeholder="Enter description" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="storyline" value="" placeholder="Adds to storyline" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="conditional_complete" value="" placeholder="Party has satisfied conditional (ex. true)" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_location" value="" placeholder="Informs party about location (enter tag)" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_info" value="" placeholder="Informs party about information (enter tag)" /></div>';
+	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add conditional" id="update_button" onClick="submit_info();" /></div>';
+}
+
 function edit_row(ctl) {
 	row = $(ctl).parents("tr");
 	var cols = row.children("td");
@@ -864,8 +1031,12 @@ function edit_row(ctl) {
 		remove_character();
 	} else if (activeList == "location") {
 		remove_location();
-	} else {
+	} else if (activeList == "information") {
 		remove_info(); 
+	} else if (activeList == "quest") {
+		remove_quest();
+	} else {
+		remove_conditional(); 
 	}
 	
     // Change Update Button Text
@@ -879,8 +1050,12 @@ function submit_info() {
 		add_character();
 	} else if (activeList == "location") {
 		add_location();
+	} else if (activeList == "information") {
+		add_info(); 
+	} else if (activeList == "quest") {
+		add_quest();
 	} else {
-		add_info();
+		add_conditional(); 
 	}
 	
 }
@@ -895,8 +1070,12 @@ function delete_row(ctl) {
 		remove_character();
 	} else if (activeList == "location") {
 		remove_location();
-	} else {
+	}  else if (activeList == "information") {
 		remove_info(); 
+	} else if (activeList == "quest") {
+		remove_quest();
+	} else {
+		remove_conditional(); 
 	}
 	display_active_list();
 	clear_form_entries();
@@ -929,6 +1108,22 @@ function add_values_to_form(cols) {
 		$("#info_known").val($(cols[2]).text());
 		$("#info_acted_on").val($(cols[3]).text());
 		$("#storyline").val($(cols[4]).text());
+		$("#goes_to_location").val($(cols[5]).text());
+		$("#goes_to_info").val($(cols[6]).text());
+	} else if (activeList == "quest") {
+		$("#quest_tag").val($(cols[0]).text());
+		$("#quest_desc").val($(cols[1]).text());
+		$("#storyline").val($(cols[2]).text());
+		$("#quest_known").val($(cols[3]).text());
+		$("#quest_complete").val($(cols[4]).text());
+		$("#goes_to_location").val($(cols[5]).text());
+		$("#goes_to_info").val($(cols[6]).text());
+	} else if (activeList == "conditional") {
+		$("#conditional_tag").val($(cols[0]).text());
+		$("#conditional_desc").val($(cols[1]).text());
+		$("#storyline").val($(cols[2]).text());
+		$("#quest_known").val($(cols[3]).text());
+		$("#conditonal_complete").val($(cols[4]).text());
 		$("#goes_to_location").val($(cols[5]).text());
 		$("#goes_to_info").val($(cols[6]).text());
 	} else {
@@ -965,6 +1160,21 @@ function set_values() {
 		storyline = $("#storyline").val(); 
 		goes_to_location = $("#goes_to_location").val(); 
 		goes_to_info = $("#goes_to_info").val(); 
+	} else if (activeList == "quest") {
+		quest_tag = $("#quest_tag").val(); 
+		quest_desc = $("#quest_desc").val(); 
+		storyline = $("#storyline").val(); 
+		quest_known = $("#quest_known").val(); 
+		quest_complete = $("#quest_complete").val(); 
+		goes_to_location = $("#goes_to_location").val(); 
+		goes_to_info = $("#goes_to_info").val(); 
+	} else if (activeList == "conditional") {
+		conditional_tag = $("#conditional_tag").val(); 
+		conditional_desc = $("#conditional_desc").val(); 
+		storyline = $("#storyline").val(); 
+		conditonal_complete = $("#conditonal_complete").val(); 
+		goes_to_location = $("#goes_to_location").val(); 
+		goes_to_info = $("#goes_to_info").val(); 
 	} else {
 		console.log("ERROR: tried to edit on a page without a table");
 	}
@@ -982,6 +1192,14 @@ function clear_form_entries() {
 	} else if (activeList == "information") {
 		for (var i = 0; i < information_fields.length; i++) {
 			clear_form_field(information_fields[i]);
+		}
+	} else if (activeList == "quest") {
+		for (var i = 0; i < quest_fields.length; i++) {
+			clear_form_field(quest_fields[i]);
+		}
+	} else if (activeList == "conditional") {
+		for (var i = 0; i < conditional_fields.length; i++) {
+			clear_form_field(conditional_fields[i]);
 		}
 	} else {
 		console.log("ERROR: tried to edit on a page without a table");
