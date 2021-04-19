@@ -9,6 +9,7 @@ var activeList = "character";
 var infoList = [];
 var tagList = [];
 var questList = [];
+var conditionalList = [];
 var output = "";
 var final_output = "";
 var output_connections = "";
@@ -16,7 +17,7 @@ var character_fields = ["tag", "first_name", "last_name", "occupation", "status"
 var location_fields = ["location_tag", "location_name", "location_known", "in_region", "char_in_location", "location_visited"];
 var information_fields = ["information_tag", "info_desc", "info_known", "info_acted_on", "storyline", "goes_to_location", "goes_to_info"];
 var quest_fields = ["quest_tag", "quest_desc", "storyline", "quest_known", "quest_complete", "goes_to_location", "goes_to_info"];
-var conditonal_fields = ["information_tag", "info_desc", "info_known", "info_acted_on", "storyline", "goes_to_location", "goes_to_info"];
+var conditional_fields = ["conditional_tag", "conditional_desc", "storyline", "conditonal_complete", "goes_to_location", "goes_to_info"];
 var output_elements = [];
 
 var output_area = document.getElementById("output_area");
@@ -70,7 +71,7 @@ function display_active_list() {
 		display_search(); 
 	} else if (activeList == "conditional") {
 		display_conditional_list();
-		display_conditional_form();
+		//display_conditional_form();
 		display_search(); 
 	} else if (activeList == "visualization") {
 		display_visualization(); 
@@ -165,6 +166,19 @@ function display_quest_list() {
 	}, 500);
 }
 
+function display_conditional_list() {
+	activeList = "conditional";
+	clear_saved_info();
+	// For each information in the quest tag list, print the quest's info 
+	get_conditional_info();
+	final_output = "<thead><h1>Conditionals</h1><table id='list-table' class='table'><tr><th>Tag</th><th>Description</th><th>Storyline</th></th><th>Complete</th><th>Goes To Location</th><th>Goes to Information</th><th>Edit</th><th>Delete</th></tr></thead><tbody>";
+	setTimeout(() => {  
+		for (var i = 0; i < conditionalList.length; i++) {
+			print_conditional(tagList[i], conditionalList[i]);
+		}
+		output_area.innerHTML = final_output + "</tbody></table>";
+	}, 500);
+}
 
 function display_visualization() {
 	activeList = "visualization";
@@ -396,6 +410,43 @@ function print_quest(quest_tag, quest_info_list) {
 	}
 	// Get the appropriate list and output the info if it matches the search
 	add_to_table(quest_tag, quest_fields); 
+}
+
+function get_conditional_info() {
+	var get_all_bindings = function(bindings) {
+		console.log(bindings);
+		for(var i = 0; i < bindings.length; i++) {
+			get_conditional(bindings[i]);
+		}
+	}
+	bindings = [];
+	session.query("conditional(Conditional), conditional_info_list(Conditional, Conditional_Info_List).");
+	session.answers(get_callback(get_all_bindings));
+}
+
+function get_conditional(binding) {
+	if (binding != null) {
+		var conditional_name = binding.lookup("Conditional"); 
+		var conditional_info_list = binding.lookup("Conditional_Info_List");
+		var list = conditional_info_list.toJavaScript();
+		tagList.push(conditional_name); 
+		conditionalList.push(list);
+	}
+}
+
+// Takes the list of all info info lists, and for each element in the list, outputs it 
+function print_conditional(conditional_tag, conditional_info_list) {
+	output = "";
+	output_elements = [];
+	var get_all_bindings = function(answer) {
+		print_list_info(answer);
+	}
+	for (var i = 0; i < conditional_info_list.length; i++) {
+		session.query("Pred = " + conditional_info_list[i] + ", findall([Pred, Conditional], call( Pred, " + conditional_tag + ", Conditional), List).");
+		session.answer(get_all_bindings);
+	}
+	// Get the appropriate list and output the info if it matches the search
+	add_to_table(conditional_tag, conditional_fields); 
 }
 
 // Adding new entities to the database

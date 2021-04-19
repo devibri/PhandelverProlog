@@ -499,12 +499,7 @@ quest_desc(magic_tower, "Ask Agatha about who made the magic tower in exchange f
 
 %%%%%%%%%%% CONDITIONAL INFO %%%%%%%%%%%
 
-:- dynamic(conditional_info_list/2).
-conditional_info_list(goblin_cragmaw_castle, [conditional_desc, storyline, conditional_character, goes_to_location, goes_to_info]).
-conditional_info_list(plan_to_take_over_redbrands, [conditional_desc, storyline, conditional_character]).
-conditional_info_list(agatha_comb, [conditional_desc, storyline, conditional_character]).
-conditional_info_list(wave_echo_cave_map, [conditional_desc, storyline, conditional_charactergoes_to_location, goes_to_info]).
-conditional_info_list(redbrand_minion_info, [conditional_desc, storyline, conditional_character]).
+
 
 :- dynamic(conditional/1).
 conditional(goblin_cragmaw_castle).
@@ -513,13 +508,20 @@ conditional(agatha_comb).
 conditional(wave_echo_cave_map).
 conditional(redbrand_minion_info).
 
+:- dynamic(conditional_info_list/2).
+conditional_info_list(goblin_cragmaw_castle, [conditional_desc, storyline, goes_to_location, goes_to_info]).
+conditional_info_list(plan_to_take_over_redbrands, [conditional_desc, storyline]).
+conditional_info_list(agatha_comb, [conditional_desc, storyline]).
+conditional_info_list(wave_echo_cave_map, [conditional_desc, storyline, goes_to_location, goes_to_info]).
+conditional_info_list(redbrand_minion_info, [conditional_desc, storyline]).
+
 % NPC AI -- directions as to how to play this character, when they will reveal info, etc.
 :- dynamic(conditional_desc/2).
-conditional_desc(goblin_cragmaw_castle, "Tells the party that the goblin working for the Redbrands might know the way to Cragmaw Castle in order to get the players to work for them").
-conditional_desc(plan_to_take_over_redbrands, "Has secret plans to take over the Redbrands once the leader of the Redbrands is dead").
-conditional_desc(agatha_comb, "Will give the party the honest answer to a question if you give them the comb or flatter them").
-conditional_desc(wave_echo_cave_map, "Has a map leading to Wave Echo Cave and will give to the party if rescued").
-conditional_desc(redbrand_minion_info, "If you save them from the bugbears messing with them, they will tell you the location of Cragmaw Castle").
+conditional_desc(goblin_cragmaw_castle, "Halia tells the party that the goblin working for the Redbrands might know the way to Cragmaw Castle in order to get the players to work for her").
+conditional_desc(plan_to_take_over_redbrands, "Halia has secret plans to take over the Redbrands once the leader of the Redbrands is dead").
+conditional_desc(agatha_comb, "Agatha will give the party the honest answer to a question if you give them the comb or flatter her").
+conditional_desc(wave_echo_cave_map, "Gundren has a map leading to Wave Echo Cave and will give to the party if rescued").
+conditional_desc(redbrand_minion_info, "If you save Droop from the bugbears messing with them Droop will tell you the location of Cragmaw Castle").
 
 
 :- dynamic(conditional_complete/2).
