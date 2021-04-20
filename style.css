@@ -74,10 +74,10 @@ body {
   font-family: 'Noto Sans', sans-serif;
   background-color:#EEECE2;
 }
-
+/*
 h1, h2, h3, h4, h5, h6, p {
   font-family: 'Noto Sans', sans-serif;
-}
+}*/
 
 .search {
   margin-top: 0px;
@@ -96,10 +96,10 @@ h1, h2, h3, h4, h5, h6, p {
 .form input[type=text] {
   width: 90%;
 }
-
+/*
 p {
   font-size: 14px;
-}
+}*/
 
 table {
   border-collapse: collapse; 

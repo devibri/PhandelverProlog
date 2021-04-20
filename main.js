@@ -55,25 +55,31 @@ function display_active_list() {
 	clear_search(); 
 	clear_key();
 	clear_search_input();
+	clear_add_button();
 	if (activeList == "character") {
 		display_character_list();
 		display_character_form();
+		display_add_button()
 		display_search(); 
 	} else if (activeList == "location") {
 		display_location_list();
 		display_location_form();
+		display_add_button()
 		display_search(); 
 	} else if (activeList == "information") {
 		display_information_list();
 		display_information_form();
+		display_add_button()
 		display_search(); 
 	} else if (activeList == "quest") {
 		display_quest_list();
 		display_quest_form();
+		display_add_button()
 		display_search(); 
 	} else if (activeList == "conditional") {
 		display_conditional_list();
 		display_conditional_form();
+		display_add_button()
 		display_search(); 
 	} else if (activeList == "visualization") {
 		display_visualization(); 
@@ -111,6 +117,15 @@ function display_search() {
 	search.style.visibility = "visible"; 
 }
 
+function clear_add_button() {
+	var button = document.getElementById("openButton");
+	button.style.visibility = "hidden"; 
+}
+
+function display_add_button() {
+		var button = document.getElementById("openButton");
+	button.style.visibility = "visible"; 
+}
 // handles getting the info for characters and outputting it 
 function display_character_list() {
 	activeList = "character";
