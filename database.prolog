@@ -192,7 +192,7 @@ has_quest(daren_edermath, digging_old_owl_well).
 has_quest(sister_garaele, ask_agatha_about_book).
 has_quest(sildar_hallwinter, missing_iarno).
 has_quest(reidoth, green_dragon).
-has_quest(hamun, orcs_triboar_trail_quest_hamun).
+has_quest(hamun, orcs_hamun).
 has_quest(harbin_wester, orcs_triboar_trail_quest).
 has_quest(hamun, magic_tower).
 
@@ -444,7 +444,7 @@ goes_to_info(redbrand_hideout_location, tresendar_manor).
 goes_to_info(secret_tunnel_location, tresendar_manor).
 goes_to_info(goblin_cragmaw_castle, tresendar_manor).
 goes_to_info(kill_redbrand_leader, tresendar_manor).
-goes_to_info(digging_old_owl_well, orcs_triboar_trail_quest_hamun).
+goes_to_info(digging_old_owl_well, orcs_hamun).
 goes_to_info(orcs_triboar_trail, orcs_triboar_trail_quest).
 goes_to_info(digging_old_owl_well, magic_tower).
 goes_to_info(redbrand_minion_info, cragmaw_castle).
@@ -453,8 +453,6 @@ goes_to_info(agatha_comb, wave_echo_cave).
 goes_to_info(agatha_comb, cragmaw_castle).
 goes_to_info(magic_tower, cragmaw_castle).
 goes_to_info(magic_tower, wave_echo_cave).
-goes_to_info(orcs_triboar_trail_quest_hamun, cragmaw_castle).
-goes_to_info(orcs_triboar_trail_quest_hamun, wave_echo_cave).
 
 %%%%%%%%%%%% QUEST INFO %%%%%%%%%%%%%%
 
@@ -466,7 +464,7 @@ quest_info_list(ask_agatha_about_book, [quest_desc, storyline, goes_to_location,
 quest_info_list(missing_iarno, [quest_desc, storyline, goes_to_info]).
 quest_info_list(green_dragon, [quest_desc, storyline, goes_to_location, goes_to_info]).
 quest_info_list(orcs_triboar_trail_quest, [quest_desc, storyline]).
-quest_info_list(orcs_triboar_trail_quest_hamun, [quest_desc, storyline]).
+quest_info_list(orcs_hamun, [quest_desc, storyline]).
 quest_info_list(magic_tower, [quest_desc, storyline]).
 
 :- dynamic(quest/1).
@@ -477,7 +475,7 @@ quest(ask_agatha_about_book).
 quest(missing_iarno).
 quest(green_dragon).
 quest(orcs_triboar_trail_quest).
-quest(orcs_triboar_trail_quest_hamun).
+quest(orcs_hamun).
 quest(magic_tower).
 
 :- dynamic(quest_desc/2).
@@ -488,7 +486,7 @@ quest_desc(ask_agatha_about_book, "Ask about the location of the wizard's book")
 quest_desc(missing_iarno, "Find Iarno -- a missing member of the Order of the Gauntlet").
 quest_desc(green_dragon, "Get rid of the green dragon at Thundertree in exchange for info on Wave Echo Cave / Cragmaw Castle").
 quest_desc(orcs_triboar_trail_quest, "Get rid of the orc camp at Triboar Trail"). 
-quest_desc(orcs_triboar_trail_quest_hamun, "Get rid of the orc camp at Triboar Trail in exchange for info on Wave Echo Cave / Cragmaw Castle"). 
+quest_desc(orcs_hamun, "Get rid of the orc camp at Triboar Trail in exchange for info on Wave Echo Cave / Cragmaw Castle"). 
 quest_desc(magic_tower, "Ask Agatha about who made the magic tower in exchange for the location of Wave Echo Cave").
 
 :- dynamic(quest_complete/2). 

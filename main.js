@@ -83,7 +83,7 @@ function display_active_list() {
 }
 
 function clear_form() {
-	var form = document.getElementById("form");
+	let form = document.getElementById("myForm");
 	form.innerHTML = "";
 }
 
@@ -257,7 +257,7 @@ function add_to_table(tag, fields_list) {
 		}
 	}
 		// end of the row								
-		final_output = final_output + "<td><button class='edit-row button' type='button'id='button' onClick='edit_row(this)'><span class='glyphicon glyphicon-edit' /></button></td><td><button class='delete-row button'' type='button' id='button' onClick='delete_row(this)'><span class='glyphicon glyphicon-remove' /></button></td></tr>";
+		final_output = final_output + "<td width='1%'><button class='edit-row button' type='button'id='button' onClick='edit_row(this)'><span class='glyphicon glyphicon-edit' /></button></td><td width='1%'><button class='delete-row button'' type='button' id='button' onClick='delete_row(this)'><span class='glyphicon glyphicon-remove' /></button></td></tr>";
 	}
 }
 
@@ -948,8 +948,7 @@ function addBreaks(str) {
 
 
 function display_character_form() {
-	var form = document.getElementById("form");
-	form.innerHTML = form.innerHTML + '<h3>Add character</h3>'
+	var form = document.getElementById("myForm");
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="tag" value="" placeholder="Enter tag" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="first_name" value="" placeholder="Enter first name" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="last_name" value="" placeholder="Enter last name" /></div>';
@@ -963,11 +962,11 @@ function display_character_form() {
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="has_quest" value="" placeholder="Has quest (enter tag)" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="has_conditional" value="" placeholder="Has conditional (enter tag)" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add character" id="button" onClick="submit_info();" /></div>';
+	form.innerHTML = form.innerHTML + '<div><button type="submit" class="btn cancel" onclick="closeForm()">Close</button></div>'
 }
 
 function display_location_form() {
-	var form = document.getElementById("form");
-	form.innerHTML = form.innerHTML + '<h3>Add location</h3>'
+	var form = document.getElementById("myForm");
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="location_tag" value="" placeholder="Enter tag" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="location_name" value="" placeholder="Enter location name" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="location_known" value="" placeholder="Party knows about location (ex. true)" /></div>';
@@ -975,11 +974,11 @@ function display_location_form() {
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="char_in_location" value="" placeholder="Enter characters in location" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="location_visited" value="" placeholder="Party has visited location (ex. true)" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add location" id="button" onClick="submit_info();" /></div>';
+	form.innerHTML = form.innerHTML + '<div><button type="submit" class="btn cancel" onclick="closeForm()">Close</button></div>'
 }
 
 function display_information_form() {
-	var form = document.getElementById("form");
-	form.innerHTML = form.innerHTML + '<h3>Add knowledge</h3>'
+	var form = document.getElementById("myForm");
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="information_tag" value="" placeholder="Enter tag" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="info_desc" value="" placeholder="Enter information description" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="info_known" value="" placeholder="Party knows information (ex. true)" /></div>';
@@ -988,11 +987,11 @@ function display_information_form() {
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_location" value="" placeholder="Informs party about location (enter tag)" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_info" value="" placeholder="Informs party about information (enter tag)" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add knowledge" id="update_button" onClick="submit_info();" /></div>';
+	form.innerHTML = form.innerHTML + '<div><button type="submit" class="btn cancel" onclick="closeForm()">Close</button></div>'
 }
 
 function display_quest_form() {
-	var form = document.getElementById("form");
-	form.innerHTML = form.innerHTML + '<h3>Add quest</h3>'
+	var form = document.getElementById("myForm");
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="quest_tag" value="" placeholder="Enter tag" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="quest_desc" value="" placeholder="Enter quest description" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="storyline" value="" placeholder="Adds to storyline" /></div>';
@@ -1001,11 +1000,11 @@ function display_quest_form() {
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_location" value="" placeholder="Informs party about location (enter tag)" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_info" value="" placeholder="Informs party about information (enter tag)" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add quest" id="update_button" onClick="submit_info();" /></div>';
+	form.innerHTML = form.innerHTML + '<div><button type="submit" class="btn cancel" onclick="closeForm()">Close</button></div>'
 }
 
 function display_conditional_form() {
-	var form = document.getElementById("form");
-	form.innerHTML = form.innerHTML + '<h3>Add conditional</h3>'
+	var form = document.getElementById("myForm");
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="conditional_tag" value="" placeholder="Enter tag" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="conditional_desc" value="" placeholder="Enter description" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="storyline" value="" placeholder="Adds to storyline" /></div>';
@@ -1013,9 +1012,11 @@ function display_conditional_form() {
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_location" value="" placeholder="Informs party about location (enter tag)" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="textinput" type="text" id="goes_to_info" value="" placeholder="Informs party about information (enter tag)" /></div>';
 	form.innerHTML = form.innerHTML + '<div><input class="button" type="button" value="Add conditional" id="update_button" onClick="submit_info();" /></div>';
+	form.innerHTML = form.innerHTML + '<div><button type="submit" class="btn cancel" onclick="closeForm()">Close</button></div>'
 }
 
 function edit_row(ctl) {
+	openForm();
 	row = $(ctl).parents("tr");
 	var cols = row.children("td");
 	add_values_to_form(cols);
@@ -1050,6 +1051,7 @@ function submit_info() {
 	} else {
 		add_conditional(); 
 	}
+	closeForm()
 }
 
 function delete_row(ctl) {
@@ -1226,3 +1228,11 @@ function search() {
   	}
   }
 }
+
+function openForm() {
+  document.getElementById("myForm").style.display = "block";
+}
+
+function closeForm() {
+  document.getElementById("myForm").style.display = "none";
+} 
