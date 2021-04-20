@@ -5,7 +5,7 @@ session.consult("database.prolog");
 // Array of variable bindings, one per answer, returned by prolog query
 var bindings = [];
 var filterString = '';
-var activeList = "information";
+var activeList = "conditional";
 var infoList = [];
 var tagList = [];
 var questList = [];
@@ -17,7 +17,7 @@ var character_fields = ["tag", "first_name", "last_name", "occupation", "status"
 var location_fields = ["location_tag", "location_name", "location_known", "in_region", "char_in_location", "location_visited"];
 var information_fields = ["information_tag", "info_desc", "info_known", "info_acted_on", "storyline", "goes_to_location", "goes_to_info"];
 var quest_fields = ["quest_tag", "quest_desc", "storyline", "quest_known", "quest_complete", "goes_to_location", "goes_to_info"];
-var conditional_fields = ["conditional_tag", "conditional_desc", "storyline", "conditonal_complete", "goes_to_location", "goes_to_info"];
+var conditional_fields = ["conditional_tag", "conditional_desc", "storyline", "conditional_complete", "goes_to_location", "goes_to_info"];
 var output_elements = [];
 
 var output_area = document.getElementById("output_area");
@@ -28,6 +28,8 @@ var row = null;
 var tag, first_name, last_name, occupation, status, has_met_party, faction, friend_of, family_of, knows_info, has_quest, has_conditional;
 var location_tag, location_name, location_known, in_region, char_in_location, location_visited; 
 var information_tag, info_desc, info_known, info_acted_on, storyline, goes_to_location, goes_to_info; 
+var quest_tag, quest_desc, storyline, quest_known, quest_complete, goes_to_location, goes_to_info; 
+var conditional_tag, conditional_desc, storyline, conditional_complete, goes_to_location, goes_to_info;
 
 mermaidAPI.initialize({startOnLoad: false});
 
@@ -159,8 +161,8 @@ function display_quest_list() {
 	get_quest_info();
 	final_output = "<thead><h1>Quests</h1><table id='list-table' class='table'><tr><th>Tag</th><th>Description</th><th>Storyline</th><th>Known by Party</th><th>Complete</th><th>Goes To Location</th><th>Goes to Information</th><th>Edit</th><th>Delete</th></tr></thead><tbody>";
 	setTimeout(() => {  
-		for (var i = 0; i < questList.length; i++) {
-			print_quest(tagList[i], questList[i]);
+		for (var i = 0; i < infoList.length; i++) {
+			print_quest(tagList[i], infoList[i]);
 		}
 		output_area.innerHTML = final_output + "</tbody></table>";
 	}, 500);
@@ -173,8 +175,8 @@ function display_conditional_list() {
 	get_conditional_info();
 	final_output = "<thead><h1>Conditionals</h1><table id='list-table' class='table'><tr><th>Tag</th><th>Description</th><th>Storyline</th></th><th>Complete</th><th>Goes To Location</th><th>Goes to Information</th><th>Edit</th><th>Delete</th></tr></thead><tbody>";
 	setTimeout(() => {  
-		for (var i = 0; i < conditionalList.length; i++) {
-			print_conditional(tagList[i], conditionalList[i]);
+		for (var i = 0; i < infoList.length; i++) {
+			print_conditional(tagList[i], infoList[i]);
 		}
 		output_area.innerHTML = final_output + "</tbody></table>";
 	}, 500);
@@ -334,8 +336,6 @@ function print_location(location_tag, location_info_list) {
 		session.answer(get_all_bindings);
 	}
 	// Get the appropriate list and output the character if it matches the search
-	//var output_area = document.getElementById("output_area");
-	//check_against_search_filter(location_tag, output, output_area); 
 	add_to_table(location_tag, location_fields); 
 }
 
@@ -394,7 +394,7 @@ function get_quest(binding) {
 		var quest_info_list = binding.lookup("Quest_Info_List");
 		var list = quest_info_list.toJavaScript();
 		tagList.push(quest_name); 
-		questList.push(list);
+		infoList.push(list);
 	}
 }
 
@@ -430,7 +430,7 @@ function get_conditional(binding) {
 		var conditional_info_list = binding.lookup("Conditional_Info_List");
 		var list = conditional_info_list.toJavaScript();
 		tagList.push(conditional_name); 
-		conditionalList.push(list);
+		infoList.push(list);
 	}
 }
 
@@ -521,7 +521,6 @@ function add_location() {
 
 function clear_variable_values() {
 	for (var i = 0; i < information_fields.length; i++) {
-		console.log(information_fields[i]);
 		information_fields[i] = "";
 	}
 
@@ -569,7 +568,6 @@ function add_quest() {
 
 		for (var i = 1; i < quest_fields.length; i++) { 
 			let field = quest_fields[i];
-			console.log("field is: " + field);
 			if (eval(field) != null && eval(field) != '') {
 				let result = eval(field);
 				result_array = result.split(', '); 
@@ -746,7 +744,6 @@ function remove_quest() {
 
 	quest_info_list = quest_info_list + ", [ " + info_list_array.toString() + "])).";
 	query = query + quest_info_list; 
-	console.log(query);
 
 	var remove_from_world = function(bindings) {
 	}
@@ -762,10 +759,8 @@ function remove_conditional() {
 	var info_list_array = [];
 
 	for (var i = 1; i < conditional_fields.length; i++) {
-		console.log(conditional_fields);
 		let field = conditional_fields[i];
 		if (eval(field) != null && eval(field) != '') {
-			console.log("field: " + field + ", :" + eval(field) + "\n");
 			let result = eval(field);
 			result_array = result.split(','); 
 			for (var j = 0; j < result_array.length; j++) {	
@@ -782,7 +777,6 @@ function remove_conditional() {
 
 	conditional_info_list = conditional_info_list + ", [ " + info_list_array.toString() + "])).";
 	query = query + conditional_info_list; 
-	console.log(query);
 		
 	var remove_from_world = function(bindings) {
 	}
@@ -1045,7 +1039,6 @@ function edit_row(ctl) {
 
 function submit_info() {
 	set_values();
-	// if info
 	if (activeList == "character") {
 		add_character();
 	} else if (activeList == "location") {
@@ -1057,7 +1050,6 @@ function submit_info() {
 	} else {
 		add_conditional(); 
 	}
-	
 }
 
 function delete_row(ctl) {
@@ -1122,15 +1114,13 @@ function add_values_to_form(cols) {
 		$("#conditional_tag").val($(cols[0]).text());
 		$("#conditional_desc").val($(cols[1]).text());
 		$("#storyline").val($(cols[2]).text());
-		$("#quest_known").val($(cols[3]).text());
-		$("#conditonal_complete").val($(cols[4]).text());
-		$("#goes_to_location").val($(cols[5]).text());
-		$("#goes_to_info").val($(cols[6]).text());
+		$("#conditional_complete").val($(cols[3]).text());
+		$("#goes_to_location").val($(cols[4]).text());
+		$("#goes_to_info").val($(cols[5]).text());
 	} else {
 		console.log("ERROR: tried to edit on a page without a table");
 	}
 }
-
 function set_values() {
 	if (activeList == "character") {
 		tag = $("#tag").val(); 
@@ -1172,7 +1162,7 @@ function set_values() {
 		conditional_tag = $("#conditional_tag").val(); 
 		conditional_desc = $("#conditional_desc").val(); 
 		storyline = $("#storyline").val(); 
-		conditonal_complete = $("#conditonal_complete").val(); 
+		conditional_complete = $("#conditional_complete").val(); 
 		goes_to_location = $("#goes_to_location").val(); 
 		goes_to_info = $("#goes_to_info").val(); 
 	} else {

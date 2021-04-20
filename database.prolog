@@ -180,7 +180,6 @@ knows_info(pip, secret_tunnel_knowledge).
 knows_info(freda, redbrands_and_halia).
 knows_info(carp, redbrand_hideout_location).
 knows_info(carp, secret_tunnel_location).
-knows_info(gundren_rockseeker, wave_echo_cave_map).
 knows_info(hamun, hamun_quest).
 knows_info(hamun, finish_hamun_quest).
 knows_info(droop, redbrand_minion_info).
@@ -440,7 +439,6 @@ goes_to_info(redbrand_shakedown, learn_about_redbrands).
 goes_to_info(reidoth_location, green_dragon).
 goes_to_info(green_dragon, wave_echo_cave).
 goes_to_info(green_dragon, cragmaw_castle).
-goes_to_info(wave_echo_cave_map, wave_echo_cave).
 goes_to_info(cragmaw_castle, wave_echo_cave_map).
 goes_to_info(redbrand_hideout_location, tresendar_manor).
 goes_to_info(secret_tunnel_location, tresendar_manor).
@@ -510,10 +508,10 @@ conditional(redbrand_minion_info).
 
 :- dynamic(conditional_info_list/2).
 conditional_info_list(goblin_cragmaw_castle, [conditional_desc, storyline, goes_to_location, goes_to_info]).
-conditional_info_list(plan_to_take_over_redbrands, [conditional_desc, storyline]).
-conditional_info_list(agatha_comb, [conditional_desc, storyline]).
-conditional_info_list(wave_echo_cave_map, [conditional_desc, storyline, goes_to_location, goes_to_info]).
-conditional_info_list(redbrand_minion_info, [conditional_desc, storyline]).
+conditional_info_list(plan_to_take_over_redbrands, [conditional_desc]).
+conditional_info_list(agatha_comb, [conditional_desc]).
+conditional_info_list(wave_echo_cave_map, [conditional_desc, storyline, goes_to_location]).
+conditional_info_list(redbrand_minion_info, [conditional_desc]).
 
 % NPC AI -- directions as to how to play this character, when they will reveal info, etc.
 :- dynamic(conditional_desc/2).
