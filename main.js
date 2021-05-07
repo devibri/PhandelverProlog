@@ -259,11 +259,11 @@ function add_to_table(tag, fields_list) {
 				let type = output_elements.shift();
 				if (type == "friend_of" || type == "family_of" || type == "knows_info" || type == "has_quest" || type == "has_conditional" || type == "char_in_location" || type == "goes_to_location" || type == "goes_to_info") {
 					while (output_elements.includes(fields_list[i])) {
-					final_output = final_output + "<a onclick='goToPage()' href='#'>" + output_elements.shift().replace(/^["'](.+(?=["']$))["']$/, '$1').replace(/\\/gi,'') + "</a>, "; 
+					final_output = final_output + `<a onClick='go_to_page("${type}")' href='#'>` + output_elements.shift().replace(/^["'](.+(?=["']$))["']$/, '$1').replace(/\\/gi,'') + "</a>, "; 
 					output_elements.shift();
 					}
 					if (output_elements.length > 0) {
-						final_output = final_output + "<a onclick='goToPage()' href='#'>" + output_elements.shift().replace(/^["'](.+(?=["']$))["']$/, '$1').replace(/\\/gi,'') + "</a>";
+						final_output = final_output + `<a onClick='go_to_page("${type}")' href='#'>` + output_elements.shift().replace(/^["'](.+(?=["']$))["']$/, '$1').replace(/\\/gi,'') + "</a>";
 					}
 				} else {
 					while (output_elements.includes(fields_list[i])) {
@@ -286,6 +286,9 @@ function add_to_table(tag, fields_list) {
 	}
 }
 
+function go_to_page(type) {
+	console.log(type);
+}
 /* Handing character info and output */
 
 // Gets character tags and the list of all the info associated with each character
