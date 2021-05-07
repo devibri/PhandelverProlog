@@ -256,15 +256,25 @@ function add_to_table(tag, fields_list) {
 		for (var i = 1; i < fields_list.length; i++) {
 			if (output_elements[0] == fields_list[i]) {
 				final_output = final_output + "<td>";
-				output_elements.shift();
-				while (output_elements.includes(fields_list[i])) {
-					final_output = final_output + output_elements.shift().replace(/^["'](.+(?=["']$))["']$/, '$1').replace(/\\/gi,'') + ", "; 
-					//final_output = final_output + output_elements.shift() + ", ";//.replace(/^["'](.+(?=["']$))["']$/, '$1').replace(/\\/gi,'') + ", "; 
+				let type = output_elements.shift();
+				if (type == "friend_of" || type == "family_of" || type == "knows_info" || type == "has_quest" || type == "has_conditional" || type == "char_in_location" || type == "goes_to_location" || type == "goes_to_info") {
+					while (output_elements.includes(fields_list[i])) {
+					final_output = final_output + "<a onclick='goToPage()' href='#'>" + output_elements.shift().replace(/^["'](.+(?=["']$))["']$/, '$1').replace(/\\/gi,'') + "</a>, "; 
 					output_elements.shift();
+					}
+					if (output_elements.length > 0) {
+						final_output = final_output + "<a onclick='goToPage()' href='#'>" + output_elements.shift().replace(/^["'](.+(?=["']$))["']$/, '$1').replace(/\\/gi,'') + "</a>";
+					}
+				} else {
+					while (output_elements.includes(fields_list[i])) {
+					final_output = final_output + output_elements.shift().replace(/^["'](.+(?=["']$))["']$/, '$1').replace(/\\/gi,'') + ", "; 
+					output_elements.shift();
+					}
+					if (output_elements.length > 0) {
+						final_output = final_output + output_elements.shift().replace(/^["'](.+(?=["']$))["']$/, '$1').replace(/\\/gi,'');
+					}
 				}
-				if (output_elements.length > 0) {
-					final_output = final_output + output_elements.shift().replace(/^["'](.+(?=["']$))["']$/, '$1').replace(/\\/gi,'');
-				}
+				
 				final_output = final_output + "</td>"
 			// If there is nothing found, just add an empty cell
 		} else {
@@ -525,7 +535,6 @@ function add_location() {
 		var add_to_world = function(bindings) {
 			display_active_list();
 			clear_form_entries();
-			//clear_variable_values();
 		}
 
 		bindings = [];
