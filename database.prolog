@@ -28,7 +28,7 @@ character_info_list(reidoth, [first_name, status, friend_of, knows_info, has_que
 character_info_list(gundren_rockseeker, [first_name, last_name, status, knows_info, has_quest, has_conditional]).
 character_info_list(hamun, [first_name, occupation, status, knows_info, has_quest]).
 character_info_list(droop, [first_name, status, knows_info, has_conditional]).
-
+character_info_list(iarno_glasstaff, [first_name, last_name, occupation, status, faction]).
 
 
 % The characters in the world.
@@ -59,6 +59,7 @@ character(gundren_rockseeker).
 character(hamun).
 character(droop).
 character(party).
+character(iarno_glasstaff).
 
 :- dynamic(first_name/2).
 first_name(toblin_stonehill, toblin).
@@ -86,6 +87,7 @@ first_name(reidoth, reidoth).
 first_name(gundren_rockseeker, gundren).
 first_name(hamun, hamun).
 first_name(droop, droop).
+first_name(iarno_glasstaff, iarno).
 
 :- dynamic(last_name/2).
 last_name(toblin_stonehill, stonehill).
@@ -98,7 +100,7 @@ last_name(sister_garaele, garaele).
 last_name(harbin_wester, wester).
 last_name(sildar_hallwinter, hallwinter).
 last_name(gundren_rockseeker, rockseeker).
-
+last_name(iarno_glasstaff, glasstaff).
 
 :- dynamic(occupation/2).
 occupation(toblin_stonehill, "Innkeeper").
@@ -111,6 +113,7 @@ occupation(sister_garaele, "Elf cleric of Tymora").
 occupation(harbin_wester, "Townmaster of Phandalin").
 occupation(narth, "Farmer").
 occupation(hamun, "Necromancer").
+occupation(iarno_glasstaff, "Redbrand leader").
 
 :- dynamic(status/2).
 status(toblin_stonehill, alive).
@@ -138,6 +141,7 @@ status(reidoth, alive).
 status(gundren_rockseeker, alive).
 status(hamun, alive).
 status(droop, alive).
+status(iarno_glasstaff, alive).
 
 % Has met the party 
 :- dynamic(has_met_party/2).
@@ -150,6 +154,7 @@ faction(halia_thornton, "Zhentarim").
 faction(sister_garaele, "Harper").
 faction(sildar_hallwinter, "Lords' Alliance").
 faction(redbrands, "Redbrands").
+faction(iarno_glasstaff, "Redbrands").
 
 :- dynamic(friend_of/2).
 friend_of(qelline_alderleaf, reidoth).
@@ -310,6 +315,8 @@ char_in_location(alderleaf_farm, carp).
 char_in_location(thundertree, reidoth).
 char_in_location(agathas_lair, agatha).
 char_in_location(cragmaw_castle, gundren_rockseeker).
+char_in_location(tresendar_manor, redbrands).
+char_in_location(tresendar_manor, iarno_glasstaff).
 
 :- dynamic(location_visited/2).
 location_visited(stonehill_inn, true).
