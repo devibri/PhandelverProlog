@@ -19,6 +19,7 @@ var information_fields = ["information_tag", "info_desc", "info_known", "info_ac
 var quest_fields = ["quest_tag", "quest_desc", "storyline", "quest_known", "quest_complete", "goes_to_location", "goes_to_info"];
 var conditional_fields = ["conditional_tag", "conditional_desc", "storyline", "conditional_complete", "goes_to_location", "goes_to_info"];
 var output_elements = [];
+var output_id = "";
 
 var output_area = document.getElementById("output_area");
 var key_area = document.getElementById("key");
@@ -251,7 +252,7 @@ function add_to_table(tag, fields_list) {
 
 	// Check if the character matches the current search
 	if (all_info.toLowerCase().match(filterString.toLowerCase())) {
-		final_output = final_output + "<tr><td>" + tag + "</td>";
+		final_output = final_output + "<tr><td>" + `<p id="${tag}">` + tag + "</p></td>";
 		// Go through each of the character's pieces of info and add them to the table 
 		for (var i = 1; i < fields_list.length; i++) {
 			if (output_elements[0] == fields_list[i]) {
@@ -259,22 +260,23 @@ function add_to_table(tag, fields_list) {
 				let type = output_elements.shift();
 				if (type == "friend_of" || type == "family_of" || type == "knows_info" || type == "has_quest" || type == "has_conditional" || type == "char_in_location" || type == "goes_to_location" || type == "goes_to_info") {
 					while (output_elements.includes(fields_list[i])) {
-					final_output = final_output + `<a onClick='go_to_page("${type}")' href='#'>` + output_elements.shift().replace(/^["'](.+(?=["']$))["']$/, '$1').replace(/\\/gi,'') + "</a>, "; 
-					output_elements.shift();
+						let output_element = output_elements.shift().replace(/^["'](.+(?=["']$))["']$/, '$1').replace(/\\/gi,'');
+						final_output = final_output + `<a onClick='go_to_page("${output_element}", "${type}")'>` + output_element + "</a>, "; 
+						output_elements.shift();
 					}
 					if (output_elements.length > 0) {
-						final_output = final_output + `<a onClick='go_to_page("${type}")' href='#'>` + output_elements.shift().replace(/^["'](.+(?=["']$))["']$/, '$1').replace(/\\/gi,'') + "</a>";
+						let output_element = output_elements.shift().replace(/^["'](.+(?=["']$))["']$/, '$1').replace(/\\/gi,'');
+						final_output = final_output + `<a onClick='go_to_page("${ output_element}", "${type}")'>` +  output_element + "</a>";
 					}
 				} else {
 					while (output_elements.includes(fields_list[i])) {
-					final_output = final_output + output_elements.shift().replace(/^["'](.+(?=["']$))["']$/, '$1').replace(/\\/gi,'') + ", "; 
-					output_elements.shift();
+						final_output = final_output + output_elements.shift().replace(/^["'](.+(?=["']$))["']$/, '$1').replace(/\\/gi,'') + ", "; 
+						output_elements.shift();
 					}
 					if (output_elements.length > 0) {
 						final_output = final_output + output_elements.shift().replace(/^["'](.+(?=["']$))["']$/, '$1').replace(/\\/gi,'');
 					}
 				}
-				
 				final_output = final_output + "</td>"
 			// If there is nothing found, just add an empty cell
 		} else {
@@ -286,8 +288,27 @@ function add_to_table(tag, fields_list) {
 	}
 }
 
-function go_to_page(type) {
+function go_to_page(output_element, type) {
+	console.log(output_element);
 	console.log(type);
+	// Go to the character page
+	if (type == "friend_of" || type == "family_of" || type == "char_in_location" ) {
+		set_active_list("character");
+	} else if (type == "goes_to_location") {
+		set_active_list("location");
+	} else if (type == "knows_info" ||  type == "goes_to_info") {
+		set_active_list("information");
+	} else if (type == "has_quest") {
+		set_active_list("quest");
+	} else if (type == "has_conditional") {
+		set_active_list("conditional");
+	} 
+	setTimeout(() => {  
+		document.getElementById(output_element).scrollIntoView({behavior: 'smooth'});
+		document.getElementById(output_element).style.backgroundColor = 'yellow';
+	}, 500);
+	//location.hash = output_element;
+	//
 }
 /* Handing character info and output */
 
