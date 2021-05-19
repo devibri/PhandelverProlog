@@ -96,16 +96,10 @@ h1, h2, h3, h4, h5, h6, p {
 .form input[type=text] {
   width: 90%;
 }
-/*
-p {
-  font-size: 14px;
-}*/
 
 table {
   border-collapse: collapse; 
   border-spacing: 0px;
-/*  table-layout: fixed;
-  width: 100%;*/
   width: 100%;
   table-layout: auto;
 }
@@ -117,18 +111,11 @@ td, th {
 
 table td {
   word-wrap: break-word;
-/*  word-break: break-all;*/
 }
 
 tr:nth-child(even) {
   background-color: #EEECE2;
 }
-/*
-div.output {             
-  overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
-}*/
 
 /* Button used to open the contact form - fixed at the bottom of the page */
 .open-button {
@@ -142,6 +129,7 @@ div.output {
   bottom: 23px;
   right: 28px;
   width: 280px;
+  z-index: 8;
 }
 
 /* The popup form - hidden by default */
@@ -152,7 +140,14 @@ div.output {
   right: 15px;
   border: 3px solid #f1f1f1;
   z-index: 9;
+  background-color: white;
+  padding: 6px;
 }
+
+.form-popup input {
+  margin: 3px;
+}
+
 
 /* Add styles to the form container */
 .form-container {
