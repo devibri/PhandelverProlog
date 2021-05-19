@@ -528,7 +528,7 @@ function add_character() {
 			display_active_list();
 			clear_form_entries();
 		}
-
+		console.log(query);
 		bindings = [];
 		session.query(query);			
 		session.answers(get_callback(add_to_world));
@@ -859,13 +859,6 @@ function update_filter_string() {
 	var search_term = document.getElementById("search").value;
 	filterString = search_term.toString();
 	display_active_list(); 
-}
-
-// Checks if the thing being outputted to list matches the search filter; if so, output it 
-function check_against_search_filter(tag, output, output_list) {
-	if (output.toLowerCase().match(filterString.toLowerCase())) {
-		output_list.innerHTML = output_list.innerHTML + "<div class='output-row'>" + "<strong>tag:</strong> " + tag + "&emsp;" + output +  "</div>"; 
-	}
 }
 
 function generate_visualization() {
